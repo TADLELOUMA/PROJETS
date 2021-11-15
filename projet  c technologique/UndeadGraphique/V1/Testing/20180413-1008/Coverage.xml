@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Linux-cc"
+	BuildStamp="20180413-1008-Experimental"
+	Name="madmax"
+	Generator="ctest-3.7.2"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Linux"
+	Hostname="madmax"
+	OSRelease="4.9.0-5-amd64"
+	OSVersion="#1 SMP Debian 4.9.65-3+deb9u2 (2018-01-04)"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="158"
+	ProcessorCacheSize="8192"
+	NumberOfLogicalCPU="8"
+	NumberOfPhysicalCPU="1"
+	TotalVirtualMemory="0"
+	TotalPhysicalMemory="15903"
+	LogicalProcessorsPerPhysical="8"
+	ProcessorClockFrequency="1417.68"
+	>
+	<Coverage>
+		<StartDateTime>Apr 13 12:39 CEST</StartDateTime>
+		<StartTime>1523615949</StartTime>
+		<File Name="game.c" FullPath="./game.c" Covered="true">
+			<LOCTested>209</LOCTested>
+			<LOCUnTested>181</LOCUnTested>
+			<PercentCoverage>53.59</PercentCoverage>
+			<CoverageMetric>0.55</CoverageMetric>
+		</File>
+		<File Name="game_io.c" FullPath="./game_io.c" Covered="true">
+			<LOCTested>0</LOCTested>
+			<LOCUnTested>163</LOCUnTested>
+			<PercentCoverage>0.00</PercentCoverage>
+			<CoverageMetric>0.06</CoverageMetric>
+		</File>
+		<File Name="solver.c" FullPath="./solver.c" Covered="true">
+			<LOCTested>91</LOCTested>
+			<LOCUnTested>40</LOCUnTested>
+			<PercentCoverage>69.47</PercentCoverage>
+			<CoverageMetric>0.72</CoverageMetric>
+		</File>
+		<File Name="testAM.c" FullPath="./testAM.c" Covered="true">
+			<LOCTested>203</LOCTested>
+			<LOCUnTested>42</LOCUnTested>
+			<PercentCoverage>82.86</PercentCoverage>
+			<CoverageMetric>0.84</CoverageMetric>
+		</File>
+		<File Name="testSAM.c" FullPath="./testSAM.c" Covered="true">
+			<LOCTested>56</LOCTested>
+			<LOCUnTested>14</LOCUnTested>
+			<PercentCoverage>80.00</PercentCoverage>
+			<CoverageMetric>0.82</CoverageMetric>
+		</File>
+		<File Name="testSEY.c" FullPath="./testSEY.c" Covered="true">
+			<LOCTested>74</LOCTested>
+			<LOCUnTested>16</LOCUnTested>
+			<PercentCoverage>82.22</PercentCoverage>
+			<CoverageMetric>0.84</CoverageMetric>
+		</File>
+		<File Name="test_DIAK.c" FullPath="./test_DIAK.c" Covered="true">
+			<LOCTested>64</LOCTested>
+			<LOCUnTested>10</LOCUnTested>
+			<PercentCoverage>86.49</PercentCoverage>
+			<CoverageMetric>0.88</CoverageMetric>
+		</File>
+		<LOCTested>697</LOCTested>
+		<LOCUntested>466</LOCUntested>
+		<LOC>1163</LOC>
+		<PercentCoverage>59.93</PercentCoverage>
+		<EndDateTime>Apr 13 12:39 CEST</EndDateTime>
+		<EndTime>1523615950</EndTime>
+		<ElapsedMinutes>0.00</ElapsedMinutes>
+	</Coverage>
+</Site>

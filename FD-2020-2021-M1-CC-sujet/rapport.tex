@@ -1,0 +1,151 @@
+\documentclass[a4paper]{book}
+\usepackage{fullpage}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+
+\usepackage{latexsym}
+\usepackage{fancyhdr}
+\usepackage{makeidx}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{moreverb}
+\usepackage{listings}
+
+\newcommand{\altarica}{{\sc AltaRica}}
+
+\begin{document}
+
+\title{Master 1, Conceptions Formelles\\
+Projet du module \altarica\\
+Synthèse (assistée) d'un contrôleur du niveau d'une cuve}
+
+\date{}
+
+\author{Nom1 \and Nom2 \and Nom3}
+
+\maketitle
+
+\chapter{Le sujet}
+\input{tank}
+
+\chapter{Le rapport}
+Le rapport est sur 20 points.
+
+\section{Rôle du fichier {\tt GNUmakefile} (2 points)}
+% A COMPLETER en expliquant les enchainements des calculs effectués.
+
+\section{Rôle de la constante {\tt nbFailures} et de l'assertion associée (1 point)}
+% A COMPLETER en expliquant le rôle de la constante.
+
+\section{Résultats avec le contrôleur initial {\tt Ctrl}}
+\subsection{Calcul d'un contrôleur}
+\subsubsection{Avec 0 défaillance (0.5 point)}
+\lstinputlisting{Res/System0FCtrl.res}
+\lstinputlisting{Res/System0FCtrl0F1I.res}
+\lstinputlisting{Res/System0FCtrl0F2I.res}
+%\lstinputlisting{Res/System0FCtrl0F3I.res}
+%\lstinputlisting{Res/System0FCtrl0F4I.res}
+\paragraph{Interprétation des résultats}
+% A COMPLETER
+
+\subsubsection{Avec 1 défaillance (0.5 point)}
+\lstinputlisting{Res/System1FCtrl.res}
+\lstinputlisting{Res/System1FCtrl1F1I.res}
+\lstinputlisting{Res/System1FCtrl1F2I.res}
+\lstinputlisting{Res/System1FCtrl1F3I.res}
+%\lstinputlisting{Res/System1FCtrl1F4I.res}
+\paragraph{Interprétation des résultats}
+% A COMPLETER
+
+\subsubsection{Avec 2 défaillances (0.5 point)}
+\lstinputlisting{Res/System2FCtrl.res}
+\lstinputlisting{Res/System2FCtrl2F1I.res}
+\lstinputlisting{Res/System2FCtrl2F2I.res}
+\lstinputlisting{Res/System2FCtrl2F3I.res}
+\lstinputlisting{Res/System2FCtrl2F4I.res}
+\paragraph{Interprétation des résultats}
+% A COMPLETER
+
+\subsubsection{Avec 3 défaillances (0.5 point)}
+\lstinputlisting{Res/System3FCtrl.res}
+\lstinputlisting{Res/System3FCtrl3F1I.res}
+\lstinputlisting{Res/System3FCtrl3F2I.res}
+\lstinputlisting{Res/System3FCtrl3F3I.res}
+%\lstinputlisting{Res/System3FCtrl3F4I.res}
+\paragraph{Interprétation des résultats}
+% A COMPLETER
+
+\subsection{Calcul des contrôleurs optimisés (2 points)}
+\lstinputlisting{ControleursOpt/Optimisation.alt}
+% A COMPLETER en expliquant en quoi consiste l'optimisation mise en place.
+
+\paragraph{Avec 0 défaillance}
+\lstinputlisting{Res/System0FCtrl0F2I_Opt.res}
+% A COMPLETER en analysant les contrôleurs optimisés obtenus.
+
+\section{Construction d'un contrôleur initial plus performant}
+\subsection{Rôle du composant {\tt ValveVirtual}(2 points)}
+% A COMPLETER en expliquant sa sémantique et son rôle.
+
+\subsection{Rôle du composant {\tt CtrlVV} (5 points)}
+% A COMPLETER en expliquant les mécanismes mis en oeuvre, leurs rôles et les avantages de ce contrôleur par rapport au précédent CtrlVV.
+
+\section{Résultats avec le contrôleur {\tt CtrlVV}}
+\subsection{Calcul d'un contrôleur}
+\subsubsection{Avec 0 défaillance (0.5 point)}
+\lstinputlisting{Res/System0FCtrlVV.res}
+\lstinputlisting{Res/System0FCtrlVV0F1I.res}
+\lstinputlisting{Res/System0FCtrlVV0F2I.res}
+%\lstinputlisting{Res/System0FCtrlVV0F3I.res}
+%\lstinputlisting{Res/System0FCtrlVV0F4I.res}
+\paragraph{Interprétation des résultats}
+% A COMPLETER
+
+\subsubsection{Avec 1 défaillance (0.5 point)}
+\lstinputlisting{Res/System1FCtrlVV.res}
+\lstinputlisting{Res/System1FCtrlVV1F1I.res}
+\lstinputlisting{Res/System1FCtrlVV1F2I.res}
+\lstinputlisting{Res/System1FCtrlVV1F3I.res}
+\lstinputlisting{Res/System1FCtrlVV1F4I.res}
+\paragraph{Interprétation des résultats}
+% A COMPLETER
+
+\subsubsection{Avec 2 défaillances (0.5 point)}
+\lstinputlisting{Res/System2FCtrlVV.res}
+\lstinputlisting{Res/System2FCtrlVV2F1I.res}
+\lstinputlisting{Res/System2FCtrlVV2F2I.res}
+\lstinputlisting{Res/System2FCtrlVV2F3I.res}
+%\lstinputlisting{Res/System2FCtrlVV2F4I.res}
+\paragraph{Interprétation des résultats}
+% A COMPLETER
+
+\subsubsection{Avec 3 défaillances (0.5 point)}
+\lstinputlisting{Res/System3FCtrlVV.res}
+\lstinputlisting{Res/System3FCtrlVV3F1I.res}
+\lstinputlisting{Res/System3FCtrlVV3F2I.res}
+\lstinputlisting{Res/System3FCtrlVV3F3I.res}
+%\lstinputlisting{Res/System3FCtrlVV3F4I.res}
+\paragraph{Interprétation des résultats}
+% A COMPLETER
+
+\subsection{Calcul des contrôleurs optimisés (2 points)}
+% A COMPLETER en analysant les contrôleurs optimisés obtenus.
+\paragraph{Avec 0 défaillance}\ \\
+\lstinputlisting{Res/System0FCtrlVV0F2I_Opt.res}
+
+\paragraph{Avec 1 défaillance}\ \\
+\lstinputlisting{Res/System1FCtrlVV1F4I_Opt.res}
+
+\paragraph{Avec 2 défaillances}\ \\
+\lstinputlisting{Res/System2FCtrlVV2F3I_Opt.res}
+
+\paragraph{Avec 3 défaillances}\ \\
+\lstinputlisting{Res/System3FCtrlVV3F3I_Opt.res}
+
+\section{Conclusion (2 points)}
+% A COMPLETER
+
+\end{document}

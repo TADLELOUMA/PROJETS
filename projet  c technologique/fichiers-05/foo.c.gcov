@@ -1,0 +1,41 @@
+        -:    0:Source:foo.c
+        -:    0:Graph:foo.gcno
+        -:    0:Data:foo.gcda
+        -:    0:Runs:7
+        -:    0:Programs:1
+        -:    1:#include <stdio.h>
+        -:    2:#include <stdlib.h>
+        -:    3:#include <assert.h>
+        -:    4:
+        -:    5:
+        7:    6:int main (int argc, char * argv[])
+        -:    7:{
+        -:    8:    int i, total;
+        -:    9:    int nb;
+        -:   10:
+        7:   11:    if (argc != 2) {
+    #####:   12:        printf("Ce programme prend un entier positif ou nul en paramètre \n");
+    #####:   13:        return EXIT_FAILURE;
+        -:   14:    }
+        -:   15:
+        7:   16:    nb = atoi(argv[1]);
+        7:   17:    assert (nb >= 0);
+        -:   18:
+        7:   19:    total = 0;
+        -:   20:
+       49:   21:    for (i = nb; i < 10; i++)
+       42:   22:      total += i;
+        -:   23:
+        7:   24:    if (total < 0)
+    #####:   25:      printf("Erreur\n");
+        -:   26:
+        7:   27:    if (total < 45)
+        6:   28:        printf ("Echec\n");
+        -:   29:    else
+        1:   30:        if (total > 45)
+    #####:   31:            printf ("Encore un Echec\n");
+        -:   32:        else
+        1:   33:            printf ("Succès\n");
+        -:   34:
+        7:   35:    return 0;
+        -:   36:}

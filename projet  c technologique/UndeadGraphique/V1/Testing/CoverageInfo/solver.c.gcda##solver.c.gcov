@@ -1,0 +1,274 @@
+        -:    0:Source:/net/cremi/thdiallo/projet  c technologique/V1/solver.c
+        -:    0:Graph:/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir/solver.c.gcno
+        -:    0:Data:/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir/solver.c.gcda
+        -:    0:Runs:11
+        -:    0:Programs:1
+        -:    1:#include"game.h"
+        -:    2:#include<stdlib.h>
+        -:    3:#include<stdio.h>
+        -:    4:#include"game_io.h"
+        -:    5:#include<string.h>
+        -:    6:
+    #####:    7:int affichergrille (game jeu){
+    #####:    8:  printf("  Z:%d V:%d G:%d S:%d   \n",required_nb_monsters(jeu, ZOMBIE),required_nb_monsters(jeu, VAMPIRE),required_nb_monsters(jeu, GHOST),required_nb_monsters(jeu, SPIRIT));
+    #####:    9:  printf("\n");
+        -:   10:  //afficher le nombre de monstre visibles de chaque coté(N,S,E,O)
+        -:   11:
+        -:   12:  //cote NORD
+    #####:   13:  printf("      ");
+    #####:   14:  for(int i=0;i<game_width(jeu);i++){
+    #####:   15:    printf("%d ",required_nb_seen(jeu, N, i));
+        -:   16:  }
+    #####:   17:  printf("      \n");
+    #####:   18:  printf("\n");
+        -:   19:
+        -:   20:  //affichage du contenu de chaque case de notre grille ET les cotes EST OUEST
+    #####:   21:  int h=game_height(jeu)-1;
+    #####:   22:  int w =game_width(jeu);
+    #####:   23:    for(int y=h;y>=0;y--){
+        -:   24:  //for(int v=3; v>=0; v--){
+    #####:   25:      printf("|  %d  ",required_nb_seen(jeu, W, h));
+    #####:   26:    for(int x=0;x<w;x++){
+        -:   27:     //for(int k=0;k<4;k++){
+    #####:   28:     content contenu=get_content(jeu,x,y);
+    #####:   29:      switch (contenu) {
+        -:   30:        case  MIRROR:
+    #####:   31:         printf("/ ");
+    #####:   32:         break;
+        -:   33:        case  ANTIMIRROR:
+    #####:   34:          printf("\\ ");
+    #####:   35:          break;
+        -:   36:        case  VMIRROR:
+    #####:   37:           printf("| ");
+    #####:   38:           break;
+        -:   39:        case  HMIRROR:
+    #####:   40:            printf("- ");
+    #####:   41:            break;
+        -:   42:        case  VAMPIRE:
+    #####:   43:             printf("V ");
+    #####:   44:             break;
+        -:   45:        case  GHOST:
+    #####:   46:              printf("G ");
+    #####:   47:              break;
+        -:   48:        case  ZOMBIE:
+    #####:   49:               printf("Z ");
+    #####:   50:               break;
+        -:   51:        case  SPIRIT:
+    #####:   52:                printf("S ");
+    #####:   53:                break;
+        -:   54:        case EMPTY:
+    #####:   55:        printf("  ");
+    #####:   56:        break;
+        -:   57:      }
+        -:   58:
+        -:   59:      }
+    #####:   60:      printf("  %d  |\n",required_nb_seen(jeu, E, h));
+    #####:   61:      h--;
+        -:   62:  }
+        -:   63:
+    #####:   64:  printf("\n");
+    #####:   65:  printf("       ");
+    #####:   66:  for(int i=0;i<game_width(jeu);i++){
+    #####:   67:    printf("%d ",required_nb_seen(jeu, S, i));
+        -:   68:  }
+    #####:   69:  printf("      \n");
+    #####:   70:  printf("\n");
+        -:   71:
+    #####:   72:  return EXIT_SUCCESS;
+        -:   73:  }
+        -:   74:
+    #####:   75:  void afficherMonstre(content monstre){
+    #####:   76:    switch (monstre) {
+        -:   77:      case  MIRROR:
+    #####:   78:       printf("/ ");
+    #####:   79:       break;
+        -:   80:      case  ANTIMIRROR:
+    #####:   81:        printf("\\ ");
+    #####:   82:        break;
+        -:   83:      case  VMIRROR:
+    #####:   84:         printf("| ");
+    #####:   85:         break;
+        -:   86:      case  HMIRROR:
+    #####:   87:          printf("- ");
+    #####:   88:          break;
+        -:   89:      case  VAMPIRE:
+    #####:   90:           printf("V ");
+    #####:   91:           break;
+        -:   92:      case  GHOST:
+    #####:   93:            printf("G ");
+    #####:   94:            break;
+        -:   95:      case  ZOMBIE:
+    #####:   96:             printf("Z ");
+    #####:   97:             break;
+        -:   98:      case  SPIRIT:
+    #####:   99:              printf("S ");
+    #####:  100:              break;
+        -:  101:       default:
+    #####:  102:      printf(" . ");
+    #####:  103:      break;
+        -:  104:
+        -:  105:    }
+    #####:  106:  }
+        -:  107:
+    #####:  108:  bool is_game_possible(game g){
+    #####:  109:    if ( current_nb_monsters(g,ZOMBIE) > required_nb_monsters(g,ZOMBIE)){			//verifie que le nombre de zombie requis est egal au nombre de zombie dans la grille
+    #####:  110:      return false;									//sinon la fonction renvoie false
+        -:  111:    }
+    #####:  112:    if ( current_nb_monsters(g,GHOST) > required_nb_monsters(g,GHOST)){			//verifie que le nombre de ghost requis est egal au nombre de ghost dans la grille
+    #####:  113:      return false;									//sinon la fonction renvoie false
+        -:  114:    }
+    #####:  115:    if ( current_nb_monsters(g,VAMPIRE) > required_nb_monsters(g,VAMPIRE)){		//verifie que le nombre de vampire requis est egal au nombre de vampire dans la grille
+    #####:  116:      return false;									//sinon la fonction renvoie false
+        -:  117:    }
+    #####:  118:    if ( current_nb_monsters(g,SPIRIT) > required_nb_monsters(g,SPIRIT)){			//verifie que le nombre de vampire requis est egal au nombre de vampire dans la grille
+    #####:  119:      return false;									//sinon la fonction renvoie false
+        -:  120:    }
+    #####:  121:    for(int u = 0; u < game_width(g); u++){				//boucle sur le nombre de lignes
+        -:  122:      //verifie que le nombre de monstre que l'on doit voir à chaque position et bien egal au nombre de monstre que l'on voit
+    #####:  123:          if (required_nb_seen(g , N , u) < current_nb_seen(g , N , u)){
+    #####:  124:              return false;
+        -:  125:          }
+        -:  126:    }
+    #####:  127:    for(int u = 0; u < game_width(g); u++){				//boucle sur le nombre de lignes
+        -:  128:      //verifie que le nombre de monstre que l'on doit voir à chaque position et bien egal au nombre de monstre que l'on voit
+    #####:  129:          if (required_nb_seen(g , S , u) < current_nb_seen(g , S , u)){
+    #####:  130:              return false;
+        -:  131:          }
+        -:  132:    }
+    #####:  133:    for(int u = 0; u < game_height(g); u++){				//boucle sur le nombre de lignes
+        -:  134:      //verifie que le nombre de monstre que l'on doit voir à chaque position et bien egal au nombre de monstre que l'on voit
+    #####:  135:          if (required_nb_seen(g , E , u) < current_nb_seen(g , E , u)){
+    #####:  136:              return false;
+        -:  137:          }
+        -:  138:    }
+    #####:  139:    for(int u = 0; u < game_height(g); u++){				//boucle sur le nombre de lignes
+        -:  140:      //verifie que le nombre de monstre que l'on doit voir à chaque position et bien egal au nombre de monstre que l'on voit
+    #####:  141:          if (required_nb_seen(g , W , u) < current_nb_seen(g , W , u)){
+    #####:  142:              return false;
+        -:  143:          }
+        -:  144:    }
+        -:  145:
+    #####:  146:    return true;	// si il n'est rentrée dans aucune des conditions c'est que le jeu est finie donc renvoie true
+        -:  147:  }
+        -:  148:
+        -:  149:
+    #####:  150:bool sol_recursive(game jeu, int position, bool retour){
+        -:  151:
+    #####:  152:  if (jeu == NULL){
+    #####:  153:   exit(EXIT_FAILURE);
+        -:  154:  }
+    #####:  155:  if (position < 0){
+    #####:  156:    return false;
+        -:  157:  }
+    #####:  158:  if (position == game_width(jeu)*game_height(jeu)){
+    #####:  159:    if(is_game_over(jeu) == true){
+    #####:  160:      affichergrille(jeu);
+    #####:  161:      return true;
+        -:  162:    }
+    #####:  163:    return false;
+        -:  164:  }
+    #####:  165:  int x = position%game_width(jeu);
+    #####:  166:  int y = position/game_height(jeu);
+        -:  167:  // printf("la position courante est : %d\n",position);
+        -:  168:  // printf("la largeur est : %d\n",x);
+        -:  169:  // printf("la hauteur est : %d\n",y);
+        -:  170:  // printf("le contenu de la position courante est :");
+        -:  171:  // afficherMonstre(get_content(jeu,x,y));
+        -:  172:  // printf("\n");
+    #####:  173:  content c=get_content(jeu,x,y);
+    #####:  174:  if( c== MIRROR || c == HMIRROR || c == VMIRROR || c == ANTIMIRROR ){
+        -:  175:    //affichergrille(jeu);
+    #####:  176:    if(retour==true){
+    #####:  177:      return sol_recursive(jeu,position - 1,true);
+        -:  178:    }else{
+    #####:  179:      return sol_recursive(jeu, position + 1,false);
+        -:  180:    }
+        -:  181:
+        -:  182:  }
+    #####:  183:  if (get_content(jeu,x,y)== EMPTY){
+    #####:  184:    add_monster(jeu,VAMPIRE,x,y);
+        -:  185:    //affichergrille(jeu);
+    #####:  186:    if(is_game_possible(jeu)){
+        -:  187:      //affichergrille(jeu);
+    #####:  188:      return sol_recursive(jeu,position + 1,false);
+        -:  189:    }
+        -:  190:    else{
+        -:  191:      //affichergrille(jeu);
+    #####:  192:      return sol_recursive(jeu,position,false);
+        -:  193:
+        -:  194:    }
+        -:  195:  }
+    #####:  196:  else if (get_content(jeu,x,y)== VAMPIRE){
+    #####:  197:    add_monster(jeu,GHOST,x,y);
+    #####:  198:    if (is_game_possible(jeu)){
+        -:  199:      //affichergrille(jeu);
+    #####:  200:      return sol_recursive(jeu,position + 1,false);
+        -:  201:    }else{
+        -:  202:      //affichergrille(jeu);
+    #####:  203:      return sol_recursive(jeu,position,false);
+        -:  204:    }
+        -:  205:  }
+    #####:  206:  else if (get_content(jeu,x,y)== GHOST){
+        -:  207:    //printf("fantom");
+    #####:  208:    add_monster(jeu,ZOMBIE,x,y);
+    #####:  209:    if (is_game_possible(jeu)){
+        -:  210:      //affichergrille(jeu);
+    #####:  211:      return sol_recursive(jeu,position + 1,false);
+        -:  212:    }else{
+        -:  213:      //affichergrille(jeu);
+    #####:  214:      return sol_recursive(jeu,position,false);
+        -:  215:    }
+        -:  216:  }
+    #####:  217:  else if (get_content(jeu,x,y)== ZOMBIE){
+    #####:  218:    add_monster(jeu,SPIRIT,x,y);
+    #####:  219:    if (is_game_possible(jeu)){
+        -:  220:      //affichergrille(jeu);
+    #####:  221:      return sol_recursive(jeu,position + 1,false);
+        -:  222:    }else{
+        -:  223:      //affichergrille(jeu);
+    #####:  224:      return sol_recursive(jeu,position,false);
+        -:  225:    }
+        -:  226:  }
+        -:  227:  else{
+    #####:  228:    add_monster(jeu,EMPTY,x,y);
+    #####:  229:    return sol_recursive(jeu,position - 1,true);
+        -:  230:  }
+        -:  231:}
+        -:  232:bool s=false;
+    #####:  233:void FIND_ALL(game jeu){
+    #####:  234:  int size = game_width(jeu) * game_height(jeu) -1;
+        -:  235:  //bool t=false;
+    #####:  236:  s=sol_recursive(jeu,0,false);
+    #####:  237:  while(s){
+    #####:  238:    s=sol_recursive(jeu,size,true);
+        -:  239:    //printf("%d",size);
+    #####:  240:    affichergrille(jeu);
+        -:  241:  }
+    #####:  242:}
+        -:  243:
+        -:  244:
+        -:  245:
+        -:  246:
+        -:  247:
+        -:  248://la fonvtion main
+        -:  249:
+        -:  250:// int main(int argc,char *argv[]){
+        -:  251://   if(argc !=4){
+        -:  252://     fprintf(stderr,"manque d'arguments");
+        -:  253://     exit(EXIT_FAILURE);
+        -:  254://   }
+        -:  255://   if(strcmp(argv[1],"FIND_ONE") != 0 && strcmp(argv[1],"NB_SOL") != 0 && strcmp(argv[1],"FIND_ALL") != 0){
+        -:  256://     exit(EXIT_FAILURE);
+        -:  257://   }
+        -:  258://   game jeu = load_game(argv[2]);
+        -:  259://   if(strcmp(argv[1],"FIND_ONE")==0){
+        -:  260://     sol_recursive(jeu,0,false);
+        -:  261://     save_game(jeu,argv[3]);
+        -:  262://     affichergrille(jeu);
+        -:  263://   }
+        -:  264://   if(strcmp(argv[1],"FIND_ALL")==0){
+        -:  265://     FIND_ALL(jeu);
+        -:  266://
+        -:  267://   }
+        -:  268://   return EXIT_SUCCESS;
+        -:  269:// }

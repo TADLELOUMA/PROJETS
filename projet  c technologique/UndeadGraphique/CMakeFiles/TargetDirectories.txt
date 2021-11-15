@@ -1,0 +1,5 @@
+/net/cremi/thdiallo/projet  c technologique/UndeadGraphique/CMakeFiles/rebuild_cache.dir
+/net/cremi/thdiallo/projet  c technologique/UndeadGraphique/CMakeFiles/game.dir
+/net/cremi/thdiallo/projet  c technologique/UndeadGraphique/CMakeFiles/demo.dir
+/net/cremi/thdiallo/projet  c technologique/UndeadGraphique/CMakeFiles/model.dir
+/net/cremi/thdiallo/projet  c technologique/UndeadGraphique/CMakeFiles/edit_cache.dir

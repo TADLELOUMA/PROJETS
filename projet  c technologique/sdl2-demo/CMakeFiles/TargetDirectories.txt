@@ -1,0 +1,4 @@
+/net/cremi/thdiallo/projet  c technologique/sdl2-demo/CMakeFiles/edit_cache.dir
+/net/cremi/thdiallo/projet  c technologique/sdl2-demo/CMakeFiles/rebuild_cache.dir
+/net/cremi/thdiallo/projet  c technologique/sdl2-demo/CMakeFiles/model.dir
+/net/cremi/thdiallo/projet  c technologique/sdl2-demo/CMakeFiles/demo.dir

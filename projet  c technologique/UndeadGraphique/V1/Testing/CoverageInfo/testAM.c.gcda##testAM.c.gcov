@@ -1,0 +1,347 @@
+        -:    0:Source:/net/cremi/thdiallo/projet  c technologique/V1/testAM.c
+        -:    0:Graph:/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir/testAM.c.gcno
+        -:    0:Data:/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir/testAM.c.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include <stdlib.h>
+        -:    2:#include <stdbool.h>
+        -:    3:#include <assert.h>
+        -:    4:#include <stdio.h>
+        -:    5:#include "game_io.h"
+        -:    6:#include "game.h"
+        -:    7:
+        -:    8:#define NB_DIR 4
+        -:    9:#define NB_COL 4
+        -:   10:#define NB_LINE 4
+        -:   11:
+        -:   12:
+        -:   13:bool rep=true;
+        1:   14:bool test_new_game_ext(){
+        1:   15:  bool rep=true;
+        1:   16:  game jeu = new_game_ext(NB_COL,NB_LINE);
+        1:   17:  assert(jeu);
+        1:   18:  if(game_width(jeu) != NB_COL || game_height(jeu) != NB_LINE){
+    #####:   19:    fprintf(stderr, "erreur au niveau de height et width de la fonction new_game_ext \n");
+        -:   20:  }
+        5:   21: 	for (int i=0; i < NB_COL; i++){
+       20:   22: 		for(int j=0;j < NB_LINE;j++){
+       16:   23: 			if(get_content(jeu, i, j)!=EMPTY){
+    #####:   24: 				rep = false;
+    #####:   25: 				fprintf(stderr,("Error new_game_ext les cases ne sont pas vides\n"));
+    #####:   26:        delete_game (jeu);
+    #####:   27:        return false;
+        -:   28:      }
+        -:   29:    }
+        -:   30:  }
+        -:   31:
+        5:   32:  for(int i = 0; i < NB_DIR; i++){
+        4:   33:    if(required_nb_seen(jeu, N,i) != 0 || required_nb_seen(jeu, S,i) != 0  || required_nb_seen(jeu, E,i) != 0 || required_nb_seen(jeu, W,i) != 0){
+    #####:   34:      fprintf(stderr, "error au niveau de required_nb_seen \n");
+    #####:   35:      rep = false;
+        -:   36:    }
+        -:   37:  }
+        1:   38:  if(required_nb_monsters(jeu, ZOMBIE) != 0 || required_nb_monsters (jeu, VAMPIRE) != 0 || required_nb_monsters (jeu, GHOST)  != 0 || required_nb_monsters(jeu ,SPIRIT) != 0){
+    #####:   39:    fprintf(stderr, "error au niveau de required_nb_monsters \n");
+    #####:   40:    rep = false;
+        -:   41:  }
+        1:   42:  delete_game(jeu);
+        1:   43:  return rep;
+        -:   44:
+        -:   45:}
+        -:   46:
+        1:   47:bool test_add_monster(){
+        1:   48:   game jeu= new_game_ext(NB_COL,NB_LINE);
+        1:   49:   assert(jeu);
+        1:   50:   add_monster(jeu,VAMPIRE,0,1);
+        1:   51:   add_monster(jeu,ZOMBIE,1,0);
+        1:   52:   add_monster(jeu,GHOST,2,0);
+        1:   53:   add_monster(jeu,SPIRIT,1,1);
+        -:   54:
+        1:   55:   if(get_content(jeu,0,1) != VAMPIRE || get_content(jeu, 1,0) != ZOMBIE || get_content(jeu, 2,0) != GHOST || get_content(jeu,1,1) != SPIRIT){
+    #####:   56:     fprintf(stderr, "error in function add_monster 2 \n");
+    #####:   57:     delete_game(jeu);
+    #####:   58:     return false;
+        -:   59:   }
+        1:   60:   if(add_monster(jeu,VAMPIRE, 0, 1) != true || add_monster(jeu,VAMPIRE, 1, 0) != true || add_monster(jeu,VAMPIRE,2, 0) != true || add_monster(jeu,VAMPIRE, 1, 1) != true){
+    #####:   61:     fprintf(stderr, "error in function add_monster 1 \n");
+    #####:   62:     delete_game(jeu);
+    #####:   63:     return false;
+        -:   64:
+        -:   65:   }
+        1:   66:  delete_game(jeu);
+        1:   67:  return true;
+        -:   68:}
+        -:   69:
+        2:   70:bool test_add_mirror_ext(){
+        2:   71:  game jeu = new_game_ext(NB_COL,NB_LINE);
+        2:   72:  assert(jeu);
+        2:   73:  add_mirror_ext(jeu, ANTIMIRROR,0,3);
+        2:   74:  add_mirror_ext(jeu, MIRROR,3,3);
+        2:   75:  add_mirror_ext(jeu, VMIRROR,0,2);
+        2:   76:  add_mirror_ext(jeu, HMIRROR,0,0);
+        -:   77:
+        2:   78:  if(get_content(jeu,0,3) != ANTIMIRROR ||get_content(jeu,3,3) != MIRROR || get_content(jeu,0,2) != VMIRROR  || get_content(jeu,0,0) != HMIRROR  ){
+    #####:   79:    fprintf(stderr, "erro in add_mirror_ext \n");
+    #####:   80:    delete_game(jeu);
+    #####:   81:    rep = false;
+        -:   82:  }
+        2:   83:  delete_game(jeu);
+        2:   84:  return rep;
+        -:   85:
+        -:   86:}
+        -:   87:
+        -:   88:
+        1:   89:bool test_is_game_over (){
+        1:   90:    bool rep = true;
+        1:   91:      game jeu =new_game ();
+        1:   92:      assert(jeu);
+        1:   93:      if(is_game_over(jeu) == false){
+    #####:   94:        fprintf(stderr,"error in is_game_over 1 \n");
+    #####:   95:        rep = false;
+        -:   96:      }
+        -:   97:
+        1:   98:      add_mirror_ext(jeu, ANTIMIRROR, 0, 3);
+        1:   99:      add_mirror_ext(jeu, MIRROR, 3, 3);
+        1:  100:      add_mirror_ext(jeu,ANTIMIRROR, 0, 2);
+        1:  101:      add_mirror_ext(jeu, ANTIMIRROR, 2, 1);
+        1:  102:      add_mirror_ext(jeu, MIRROR, 3, 1);
+        1:  103:      add_mirror_ext(jeu, ANTIMIRROR, 0, 0);
+        1:  104:      add_mirror_ext(jeu, ANTIMIRROR, 3, 0);
+        -:  105:
+        1:  106:      add_monster(jeu,ZOMBIE,0,1);
+        1:  107:      add_monster(jeu,ZOMBIE,1,0);
+        1:  108:      add_monster(jeu,GHOST,2,0);
+        1:  109:      add_monster(jeu,GHOST,1,1);
+        1:  110:      add_monster(jeu,ZOMBIE,1,2);
+        1:  111:      add_monster(jeu,ZOMBIE,2,2);
+        1:  112:      add_monster(jeu,ZOMBIE,3,2);
+        1:  113:      add_monster(jeu,VAMPIRE,1,3);
+        1:  114:      add_monster(jeu,VAMPIRE,2,3);
+        -:  115:
+        -:  116:
+        1:  117:      set_required_nb_monsters(jeu, ZOMBIE,5);
+        1:  118:      set_required_nb_monsters(jeu, VAMPIRE,2);
+        1:  119:      set_required_nb_monsters(jeu, GHOST,2);
+        1:  120:      set_required_nb_monsters(jeu,SPIRIT,0);
+        -:  121:
+        1:  122:      set_required_nb_seen(jeu, N, 0, 0);
+        1:  123:      set_required_nb_seen(jeu, N, 1, 3);
+        1:  124:      set_required_nb_seen(jeu, N, 2, 3);
+        1:  125:      set_required_nb_seen(jeu, N, 3, 0);
+        -:  126:
+        1:  127:      set_required_nb_seen(jeu, S, 0, 0);
+        1:  128:      set_required_nb_seen(jeu, S, 1, 3);
+        1:  129:      set_required_nb_seen(jeu, S, 2, 2);
+        1:  130:      set_required_nb_seen(jeu, S, 3, 3);
+        -:  131:
+        1:  132:      set_required_nb_seen(jeu, W, 3, 3);
+        1:  133:      set_required_nb_seen(jeu, W, 2, 3);
+        1:  134:      set_required_nb_seen(jeu, W, 1, 2);
+        1:  135:      set_required_nb_seen(jeu, W, 0, 0);
+        -:  136:
+        1:  137:      set_required_nb_seen(jeu, E, 3, 2);
+        1:  138:      set_required_nb_seen(jeu, E, 2, 3);
+        1:  139:      set_required_nb_seen(jeu, E, 1, 0);
+        1:  140:      set_required_nb_seen(jeu, E, 0, 0);
+        -:  141:
+        -:  142:
+        1:  143:      if(is_game_over(jeu) == false){
+    #####:  144:        fprintf(stderr, "erreur sur la fonction is_game_over \n");
+    #####:  145:        rep = false;
+        -:  146:      }
+        1:  147:     delete_game(jeu);
+        1:  148:     return rep;
+        -:  149:}
+        -:  150:
+        1:  151:bool test_restart_game(){
+        1:  152:  game jeu = new_game_ext(NB_COL,NB_LINE);
+        1:  153:  assert(jeu);
+        1:  154:  add_monster(jeu,VAMPIRE,0,1);
+        1:  155:  add_monster(jeu,ZOMBIE,1,0);
+        1:  156:  add_monster(jeu,GHOST,2,0);
+        1:  157:  add_monster(jeu,SPIRIT,1,1);
+        -:  158:
+        1:  159:  restart_game(jeu);
+        -:  160:
+        1:  161:  if(get_content(jeu,0,1) != EMPTY || get_content(jeu, 1,0) != EMPTY || get_content(jeu, 2,0) != EMPTY || get_content(jeu,1,1) != EMPTY){
+    #####:  162:    fprintf(stderr, "error in function add_monster");
+    #####:  163:    rep = false;
+        -:  164:  }
+        1:  165:  delete_game(jeu);
+        1:  166:  return rep;
+        -:  167:
+        -:  168:}
+        1:  169:bool test_game_width(){
+        1:  170:  game jeu = new_game_ext(NB_COL,NB_LINE);
+        1:  171:  assert(jeu);
+        1:  172:  if(game_width(jeu) != NB_COL){
+    #####:  173:    fprintf(stderr, "error in function game_width");
+    #####:  174:    rep = false;
+        -:  175:  }
+        1:  176:  delete_game(jeu);
+        1:  177:  return rep;
+        -:  178:}
+        1:  179:bool test_game_height(){
+        1:  180:  game jeu = new_game_ext(NB_COL,NB_LINE);
+        1:  181:  assert(jeu);
+        1:  182:  if(game_height(jeu) != NB_LINE){
+    #####:  183:    fprintf(stderr, "error in function game_height");
+    #####:  184:    rep = false;
+        -:  185:  }
+        1:  186:  delete_game(jeu);
+        1:  187:  return rep;
+        -:  188:}
+        -:  189:
+        -:  190:
+        1:  191:bool test_copy_game(){
+        1:  192:  game jeu = new_game_ext(NB_COL,NB_LINE);
+        1:  193:    assert(jeu);
+        1:  194:    game copy = copy_game(jeu);
+        1:  195:    assert(jeu);
+        1:  196:    if(required_nb_monsters(jeu,ZOMBIE) != required_nb_monsters(copy,ZOMBIE) || required_nb_monsters(jeu,VAMPIRE) != required_nb_monsters(copy,VAMPIRE) || required_nb_monsters(jeu,GHOST) != required_nb_monsters(copy,GHOST) || required_nb_monsters(jeu,SPIRIT) != required_nb_monsters(copy,SPIRIT)){
+    #####:  197:      fprintf(stderr, "error in function copy_game");
+    #####:  198:      rep = false;
+        -:  199:    }
+        1:  200:    if(game_width(jeu) != game_width(copy) || game_height(jeu) != game_height(copy)){
+    #####:  201:      fprintf(stderr, "error in function game_height");
+    #####:  202:      rep = false;
+        -:  203:    }
+        5:  204:    for (int i = 0; i < NB_DIR; i++){
+        4:  205:    if ((required_nb_seen(jeu, S, i) != required_nb_seen(copy, S, i)) || (required_nb_seen(jeu, N, i) != required_nb_seen(copy, N, i)) || (required_nb_seen(jeu, W, i) != required_nb_seen(copy, W, i)) || (required_nb_seen(jeu, E, i) != required_nb_seen(copy, E, i))){
+    #####:  206:      fprintf(stderr, "echec on copy les labels sont differents");
+    #####:  207:      rep = false;
+        -:  208:    }
+        -:  209:  }
+        5:  210:  for (int i = 0; i < NB_COL; i++){
+       20:  211:    for (int j = 0; j < NB_LINE; j++){
+       16:  212:      if (get_content(jeu, j, i) != get_content(copy, j, i)){
+    #####:  213:        fprintf(stderr, "echec in copy les cases sont differents");
+    #####:  214:        rep = false;
+        -:  215:      }
+        -:  216:    }
+        -:  217:  }
+        1:  218:  delete_game(jeu);
+        1:  219:  delete_game(copy);
+        1:  220:  return rep;
+        -:  221:}
+        -:  222:/*test is_game_possible*/
+        1:  223:bool test_is_game_possible(){
+        1:  224:  game jeu = new_game_ext(NB_COL,NB_LINE);
+        1:  225:  add_mirror_ext(jeu, ANTIMIRROR, 0, 3);
+        1:  226:  add_mirror_ext(jeu, MIRROR, 3, 3);
+        1:  227:  add_mirror_ext(jeu,ANTIMIRROR, 0, 2);
+        1:  228:  add_mirror_ext(jeu, ANTIMIRROR, 2, 1);
+        1:  229:  add_mirror_ext(jeu, MIRROR, 3, 1);
+        1:  230:  add_mirror_ext(jeu, ANTIMIRROR, 0, 0);
+        1:  231:  add_mirror_ext(jeu, ANTIMIRROR, 3, 0);
+        -:  232:
+        1:  233:  add_monster(jeu,ZOMBIE,0,1);
+        1:  234:  add_monster(jeu,ZOMBIE,1,0);
+        1:  235:  add_monster(jeu,GHOST,2,0);
+        1:  236:  add_monster(jeu,GHOST,1,1);
+        1:  237:  add_monster(jeu,ZOMBIE,1,2);
+        1:  238:  add_monster(jeu,ZOMBIE,2,2);
+        1:  239:  add_monster(jeu,ZOMBIE,3,2);
+        1:  240:  add_monster(jeu,VAMPIRE,1,3);
+        1:  241:  add_monster(jeu,VAMPIRE,2,3);
+        -:  242:
+        -:  243:
+        1:  244:  set_required_nb_monsters(jeu, ZOMBIE,5);
+        1:  245:  set_required_nb_monsters(jeu, VAMPIRE,2);
+        1:  246:  set_required_nb_monsters(jeu, GHOST,2);
+        1:  247:  set_required_nb_monsters(jeu,SPIRIT,0);
+        -:  248:
+        1:  249:  set_required_nb_seen(jeu, N, 0, 0);
+        1:  250:  set_required_nb_seen(jeu, N, 1, 3);
+        1:  251:  set_required_nb_seen(jeu, N, 2, 3);
+        1:  252:  set_required_nb_seen(jeu, N, 3, 0);
+        -:  253:
+        1:  254:  set_required_nb_seen(jeu, S, 0, 0);
+        1:  255:  set_required_nb_seen(jeu, S, 1, 3);
+        1:  256:  set_required_nb_seen(jeu, S, 2, 2);
+        1:  257:  set_required_nb_seen(jeu, S, 3, 3);
+        -:  258:
+        1:  259:  set_required_nb_seen(jeu, W, 3, 3);
+        1:  260:  set_required_nb_seen(jeu, W, 2, 3);
+        1:  261:  set_required_nb_seen(jeu, W, 1, 2);
+        1:  262:  set_required_nb_seen(jeu, W, 0, 0);
+        -:  263:
+        1:  264:  set_required_nb_seen(jeu, E, 3, 2);
+        1:  265:  set_required_nb_seen(jeu, E, 2, 3);
+        1:  266:  set_required_nb_seen(jeu, E, 1, 0);
+        1:  267:  set_required_nb_seen(jeu, E, 0, 0);
+        -:  268:
+        -:  269:
+        1:  270:  if(is_game_possible(jeu) == false){
+    #####:  271:    fprintf(stderr,"jeu pas possible");
+    #####:  272:    rep = false;
+        -:  273:  }
+        1:  274:  return rep;
+        -:  275:}
+        -:  276:
+        -:  277:
+        -:  278:/*tester le sol_recursive*/
+        1:  279:bool test_sol_recursive(){
+        1:  280:  game jeu = new_game_ext(NB_COL,NB_LINE);
+        1:  281:  add_mirror_ext(jeu, ANTIMIRROR, 0, 3);
+        1:  282:  add_mirror_ext(jeu, MIRROR, 3, 3);
+        1:  283:  add_mirror_ext(jeu,ANTIMIRROR, 0, 2);
+        1:  284:  add_mirror_ext(jeu, ANTIMIRROR, 2, 1);
+        1:  285:  add_mirror_ext(jeu, MIRROR, 3, 1);
+        1:  286:  add_mirror_ext(jeu, ANTIMIRROR, 0, 0);
+        1:  287:  add_mirror_ext(jeu, ANTIMIRROR, 3, 0);
+        -:  288:
+        1:  289:  set_required_nb_monsters(jeu, ZOMBIE,5);
+        1:  290:  set_required_nb_monsters(jeu, VAMPIRE,2);
+        1:  291:  set_required_nb_monsters(jeu, GHOST,2);
+        1:  292:  set_required_nb_monsters(jeu,SPIRIT,0);
+        -:  293:
+        1:  294:  set_required_nb_seen(jeu, N, 0, 0);
+        1:  295:  set_required_nb_seen(jeu, N, 1, 3);
+        1:  296:  set_required_nb_seen(jeu, N, 2, 3);
+        1:  297:  set_required_nb_seen(jeu, N, 3, 0);
+        -:  298:
+        1:  299:  set_required_nb_seen(jeu, S, 0, 0);
+        1:  300:  set_required_nb_seen(jeu, S, 1, 3);
+        1:  301:  set_required_nb_seen(jeu, S, 2, 2);
+        1:  302:  set_required_nb_seen(jeu, S, 3, 3);
+        -:  303:
+        1:  304:  set_required_nb_seen(jeu, W, 3, 3);
+        1:  305:  set_required_nb_seen(jeu, W, 2, 3);
+        1:  306:  set_required_nb_seen(jeu, W, 1, 2);
+        1:  307:  set_required_nb_seen(jeu, W, 0, 0);
+        -:  308:
+        1:  309:  set_required_nb_seen(jeu, E, 3, 2);
+        1:  310:  set_required_nb_seen(jeu, E, 2, 3);
+        1:  311:  set_required_nb_seen(jeu, E, 1, 0);
+        1:  312:  set_required_nb_seen(jeu, E, 0, 0);
+        -:  313:
+        1:  314:  if(sol_recursive(jeu, 0, false) == false){
+    #####:  315:    fprintf(stderr,"solution no found");
+    #####:  316:    rep = false;
+        -:  317:  }
+        1:  318:  return rep;
+        -:  319:}
+        -:  320:
+        1:  321:int main(void){
+        1:  322:  bool result = true;
+        1:  323:  result = test_new_game_ext() && result;
+        1:  324:  result =  test_is_game_over () && result;
+        1:  325:  result = test_add_mirror_ext() && result;
+        1:  326:  result = test_copy_game() && result;
+        1:  327:  result = test_add_mirror_ext() && result;
+        1:  328:  result =  test_restart_game () && result;
+        1:  329:  result = test_game_width() && result;
+        1:  330:  result = test_game_height() && result;
+        1:  331:  result = test_add_monster() && result;
+        1:  332:  result = test_sol_recursive() && result;
+        1:  333:  result = test_is_game_possible() && result;
+        1:  334:  if(result){
+        1:  335:      printf("Tests successfull\n");
+        1:  336:      return EXIT_SUCCESS;
+        -:  337:  }
+        -:  338:  else{
+    #####:  339:      printf("Tests failed\n");
+    #####:  340:      return EXIT_FAILURE;
+        -:  341:  }
+        -:  342:}

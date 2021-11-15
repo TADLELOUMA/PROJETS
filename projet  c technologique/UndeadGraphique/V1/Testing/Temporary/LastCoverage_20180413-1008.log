@@ -1,0 +1,159 @@
+Performing coverage: 1.52362e+09
+Removing old coverage log: /net/cremi/thdiallo/projet  c technologique/V1/Testing/20180413-1008/CoverageLog-0.xml
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/game.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/game.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/game.dir/solver.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/solver.c'
+Lines executed:27.48% of 131
+Creating 'solver.c.gcda##solver.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/solver.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir/game_io.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/game_io.c'
+Lines executed:0.00% of 163
+Creating 'game_io.c.gcda##game_io.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/game_io.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir/game.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/game.c'
+Lines executed:51.28% of 390
+Creating 'game.c.gcda##game.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/game.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir/testAM.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/testAM.c'
+Lines executed:82.86% of 245
+Creating 'testAM.c.gcda##testAM.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/testAM.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testAM.dir/solver.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/solver.c'
+Lines executed:69.47% of 131
+Creating 'solver.c.gcda##solver.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/solver.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir/game_io.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/game_io.c'
+Lines executed:0.00% of 163
+Creating 'game_io.c.gcda##game_io.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/game_io.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir/game.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/game.c'
+Lines executed:21.28% of 390
+Creating 'game.c.gcda##game.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/game.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir/testSAM.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/testSAM.c'
+Lines executed:80.00% of 70
+Creating 'testSAM.c.gcda##testSAM.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/testSAM.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSAM.dir/solver.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/solver.c'
+Lines executed:0.00% of 131
+Creating 'solver.c.gcda##solver.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/solver.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir/game_io.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/game_io.c'
+Lines executed:0.00% of 163
+Creating 'game_io.c.gcda##game_io.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/game_io.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir/game.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/game.c'
+Lines executed:22.56% of 390
+Creating 'game.c.gcda##game.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/game.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir/testSEY.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/testSEY.c'
+Lines executed:82.22% of 90
+Creating 'testSEY.c.gcda##testSEY.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/testSEY.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/testSEY.dir/solver.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/solver.c'
+Lines executed:0.00% of 131
+Creating 'solver.c.gcda##solver.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/solver.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir/game_io.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/game_io.c'
+Lines executed:0.00% of 163
+Creating 'game_io.c.gcda##game_io.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/game_io.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir/game.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/game.c'
+Lines executed:17.95% of 390
+Creating 'game.c.gcda##game.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/game.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir/test_DIAK.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/test_DIAK.c'
+Lines executed:86.49% of 74
+Creating 'test_DIAK.c.gcda##test_DIAK.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/test_DIAK.c
+* Run coverage for: /net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir
+  Command: "/usr/bin/gcov" -l -o "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir" "/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir/solver.c.gcda"
+  Output: File '/net/cremi/thdiallo/projet  c technologique/V1/solver.c'
+Lines executed:0.00% of 131
+Creating 'solver.c.gcda##solver.c.gcov'
+
+
+  Errors: 
+  produced in source dir: /net/cremi/thdiallo/projet  c technologique/V1/solver.c
+	Covered LOC:         697
+	Not covered LOC:     466
+	Total LOC:           1163
+	Percentage Coverage: 59.93%

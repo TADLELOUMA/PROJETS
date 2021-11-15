@@ -1,0 +1,68 @@
+*{
+padding: 0;
+margin: 0;
+font-family: "poppins", "montserrat";
+box-sizing: border-box;
+}
+.contact{
+    background: #1B1464;
+    padding: 100px 0;
+    text-align: center;
+    
+}
+.inner-width{
+    max-width: 600px;
+    margin: auto;
+    padding: 50px 30px;
+}
+.contact h1{
+    font-size: 20px;
+    color: white;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-weight: 400;
+ }
+p{
+    font-size: 20px;
+    color: aliceblue;
+    
+}
+.nom.poids.date{
+    background: none;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid;
+    color: #888;
+    padding: 10px 6px;
+    font-size: 14px;
+    margin-bottom: 40px;
+}
+.contact button{
+    background: none;
+    color: white;
+    border: 1px solid #70a1ff;
+    padding: 12px 40px;
+    border-radius: 8px;
+    text-transform: uppercase;
+    font-size: 14px;
+    transition: 0.4s linear;
+    cursor: pointer;
+    line-height: 20px;
+}
+@media screen and (max-width:600px){
+    .nom, .poids{
+        width: 100%;
+    }
+}
+
+.cate{
+    float: left;
+    width: 170px;
+
+}
+.nom{
+    float: 
+}
+.clear{
+    clear: both;

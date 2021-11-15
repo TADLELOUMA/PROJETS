@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "random": "c",
+        "string_view": "cpp",
+        "tuple": "cpp"
+    }
+}

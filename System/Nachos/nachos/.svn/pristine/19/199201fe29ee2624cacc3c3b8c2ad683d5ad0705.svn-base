@@ -1,0 +1,20 @@
+#ifdef CHANGED
+
+
+#include "syscall.h"
+
+char str [] = "Connais-tu mon beau village,
+        Qui se mire au fond du ruisseau? \n
+        Encadré dans le feuillage,\n
+        On dirait un nid d'oiseau\n
+        Ma maison parmi l'ombrage,\n
+        Me sourit comme un berceau,\n
+        Connais-tu mon beau village,\n
+        Qui se mire au clair du ruisseau? \n";
+
+int main()
+{
+    PutString(str);
+}
+
+#endif //CHANGED

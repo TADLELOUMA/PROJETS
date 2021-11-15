@@ -1,0 +1,78 @@
+Start testing: Apr 13 12:48 CEST
+----------------------------------------------------------
+1/4 Testing: test1
+1/4 Test: test1
+Command: "/net/cremi/thdiallo/projet  c technologique/V1/testAM"
+Directory: /net/cremi/thdiallo/projet  c technologique/V1
+"test1" start time: Apr 13 12:48 CEST
+Output:
+----------------------------------------------------------
+  Z:5 V:2 G:2 S:0   
+
+      0 3 3 0       
+
+|  3  \ V V /   2  |
+|  3  \ Z Z Z   3  |
+|  2  Z G \ /   0  |
+|  0  \ Z G \   0  |
+
+       0 3 2 3       
+
+Tests successfull
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"test1" end time: Apr 13 12:48 CEST
+"test1" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/4 Testing: test2
+2/4 Test: test2
+Command: "/net/cremi/thdiallo/projet  c technologique/V1/testSAM"
+Directory: /net/cremi/thdiallo/projet  c technologique/V1
+"test2" start time: Apr 13 12:48 CEST
+Output:
+----------------------------------------------------------
+Tests successfull
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"test2" end time: Apr 13 12:48 CEST
+"test2" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/4 Testing: test3
+3/4 Test: test3
+Command: "/net/cremi/thdiallo/projet  c technologique/V1/testSEY"
+Directory: /net/cremi/thdiallo/projet  c technologique/V1
+"test3" start time: Apr 13 12:48 CEST
+Output:
+----------------------------------------------------------
+Tests successfull
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"test3" end time: Apr 13 12:48 CEST
+"test3" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/4 Testing: test4
+4/4 Test: test4
+Command: "/net/cremi/thdiallo/projet  c technologique/V1/test_DIAK"
+Directory: /net/cremi/thdiallo/projet  c technologique/V1
+"test4" start time: Apr 13 12:48 CEST
+Output:
+----------------------------------------------------------
+Tests successfull
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"test4" end time: Apr 13 12:48 CEST
+"test4" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Apr 13 12:48 CEST

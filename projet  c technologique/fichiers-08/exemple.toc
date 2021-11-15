@@ -1,0 +1,16 @@
+\select@language {french}
+\contentsline {section}{\numberline {1}Premi\IeC {\`e}re section}{1}
+\contentsline {subsection}{\numberline {1.1}Sous-section 1}{1}
+\contentsline {section}{\numberline {2}Realisation d'un document standart}{1}
+\contentsline {subsection}{\numberline {2.1}Listes}{1}
+\contentsline {section}{\numberline {3}References crois\IeC {\'e}es}{1}
+\contentsline {subsection}{\numberline {3.1}\par \@tempskipa -3.5ex plus-1ex minus-.2ex\relax \let \penalty \@secpenalty \relax \vskip \@tempskipa \relax \let \reserved@d =*\def \par }{2}
+\contentsline {subsection}{\numberline {3.2}Bibliographie}{2}
+\contentsline {subsubsection}{\numberline {3.2.1}R\IeC {\'e}f\IeC {\'e}rences et citation}{2}
+\contentsline {subsubsection}{\numberline {3.2.2}Bibtex}{2}
+\contentsline {section}{\numberline {4}Programmation de Latex}{2}
+\contentsline {subsection}{\numberline {4.1}D\IeC {\'e}finition de commande}{2}
+\contentsline {subsection}{\numberline {4.2}D\IeC {\'e}finition de compteur}{2}
+\contentsline {subsection}{\numberline {4.3}D\IeC {\'e}finition d'environnement}{2}
+\contentsline {section}{\numberline {5}Texte math\IeC {\'e}matique}{3}
+\contentsline {section}{\numberline {6}Inclusion d'images}{3}

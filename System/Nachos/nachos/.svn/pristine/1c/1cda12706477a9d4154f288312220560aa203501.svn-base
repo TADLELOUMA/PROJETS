@@ -1,0 +1,21 @@
+#include "syscall.h"
+
+/*void print()
+{   
+    
+    char c = GetChar();
+    PutChar(c);
+}*/
+int c;
+int main()
+{
+    
+    c = GetChar();
+    //GetChar();
+    PutChar('<');
+    PutChar(c);
+    PutChar('>');
+    //print();
+    Halt();
+
+}

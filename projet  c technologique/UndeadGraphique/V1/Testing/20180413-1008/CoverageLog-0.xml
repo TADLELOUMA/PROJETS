@@ -1,0 +1,2069 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Linux-cc"
+	BuildStamp="20180413-1008-Experimental"
+	Name="madmax"
+	Generator="ctest-3.7.2"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Linux"
+	Hostname="madmax"
+	OSRelease="4.9.0-5-amd64"
+	OSVersion="#1 SMP Debian 4.9.65-3+deb9u2 (2018-01-04)"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="158"
+	ProcessorCacheSize="8192"
+	NumberOfLogicalCPU="8"
+	NumberOfPhysicalCPU="1"
+	TotalVirtualMemory="0"
+	TotalPhysicalMemory="15903"
+	LogicalProcessorsPerPhysical="8"
+	ProcessorClockFrequency="1417.68"
+	>
+	<CoverageLog>
+		<StartDateTime>Apr 13 12:39 CEST</StartDateTime>
+		<StartTime>1523615950</StartTime>
+		<File Name="game.c" FullPath="./game.c">
+			<Report>
+				<Line Number="0" Count="-1">#include &lt;stdlib.h&gt;</Line>
+				<Line Number="1" Count="-1">#include &lt;stdio.h&gt;</Line>
+				<Line Number="2" Count="-1">#include &lt;stdbool.h&gt;</Line>
+				<Line Number="3" Count="-1">#include &lt;string.h&gt;</Line>
+				<Line Number="4" Count="-1">#include "game.h"</Line>
+				<Line Number="5" Count="-1"></Line>
+				<Line Number="6" Count="-1">#define HEIGHT 4</Line>
+				<Line Number="7" Count="-1">#define WIDTH 4</Line>
+				<Line Number="8" Count="-1"></Line>
+				<Line Number="9" Count="-1">struct game_s{</Line>
+				<Line Number="10" Count="-1">  int required_nb_ghosts;</Line>
+				<Line Number="11" Count="-1">  int required_nb_vampires;</Line>
+				<Line Number="12" Count="-1">  int required_nb_zombies;</Line>
+				<Line Number="13" Count="-1">  int required_nb_spirits;</Line>
+				<Line Number="14" Count="-1">  int height;</Line>
+				<Line Number="15" Count="-1">  int width;</Line>
+				<Line Number="16" Count="-1">  int ** required_nb_seen;</Line>
+				<Line Number="17" Count="-1">  content * board;</Line>
+				<Line Number="18" Count="-1">};</Line>
+				<Line Number="19" Count="-1"></Line>
+				<Line Number="20" Count="-1"></Line>
+				<Line Number="21" Count="-1">/**</Line>
+				<Line Number="22" Count="-1">* @brief creates an empty game with all squares set to empty, all labels and the number of required monsters set to 0.</Line>
+				<Line Number="23" Count="-1">* @return the created game</Line>
+				<Line Number="24" Count="-1">**/</Line>
+				<Line Number="25" Count="143">game new_game(){</Line>
+				<Line Number="26" Count="143">  game g = (game) calloc(1,sizeof(struct game_s));</Line>
+				<Line Number="27" Count="143">  if(g==NULL){</Line>
+				<Line Number="28" Count="0">    fprintf(stderr,"not enough memory\n");</Line>
+				<Line Number="29" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="30" Count="-1">  }</Line>
+				<Line Number="31" Count="143">  g-&gt;board = (content*)calloc(HEIGHT*WIDTH, sizeof(content));</Line>
+				<Line Number="32" Count="143">  if (g-&gt;board==NULL){</Line>
+				<Line Number="33" Count="0">    fprintf(stderr,"not enough memory\n");</Line>
+				<Line Number="34" Count="0">    free(g);</Line>
+				<Line Number="35" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="36" Count="-1">  }</Line>
+				<Line Number="37" Count="143">  g-&gt;required_nb_seen=(int**) calloc(NB_DIR,sizeof(int*));</Line>
+				<Line Number="38" Count="143">  if(g-&gt;required_nb_seen==NULL){</Line>
+				<Line Number="39" Count="0">    fprintf(stderr,"not enough memory\n");</Line>
+				<Line Number="40" Count="0">    free(g-&gt;board);</Line>
+				<Line Number="41" Count="0">    free(g);</Line>
+				<Line Number="42" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="43" Count="-1">  }</Line>
+				<Line Number="44" Count="715">  for(int i = 0; i &lt; NB_DIR; i++){</Line>
+				<Line Number="45" Count="572">    if(i&lt;2){</Line>
+				<Line Number="46" Count="286">      g-&gt;required_nb_seen[i] = (int*)calloc(WIDTH,sizeof(int));</Line>
+				<Line Number="47" Count="-1">    }</Line>
+				<Line Number="48" Count="-1">    else{</Line>
+				<Line Number="49" Count="286">      g-&gt;required_nb_seen[i] = (int*)calloc(HEIGHT,sizeof(int));</Line>
+				<Line Number="50" Count="-1">    }</Line>
+				<Line Number="51" Count="572">    if(g-&gt;required_nb_seen[i]==NULL){</Line>
+				<Line Number="52" Count="0">      fprintf(stderr,"not enough memory\n");</Line>
+				<Line Number="53" Count="0">      if(i&gt;=1){</Line>
+				<Line Number="54" Count="0">        for(int j=i;j&gt;=0;j--){</Line>
+				<Line Number="55" Count="0">          free(g-&gt;required_nb_seen[j]);</Line>
+				<Line Number="56" Count="-1">        }</Line>
+				<Line Number="57" Count="-1">      }</Line>
+				<Line Number="58" Count="0">      free(g-&gt;required_nb_seen);</Line>
+				<Line Number="59" Count="0">      free(g-&gt;board);</Line>
+				<Line Number="60" Count="0">      free(g);</Line>
+				<Line Number="61" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="62" Count="-1">    }</Line>
+				<Line Number="63" Count="-1">  }</Line>
+				<Line Number="64" Count="143">  g-&gt;width = WIDTH;</Line>
+				<Line Number="65" Count="143">  g-&gt;height = HEIGHT;</Line>
+				<Line Number="66" Count="143">  return g;</Line>
+				<Line Number="67" Count="-1">}</Line>
+				<Line Number="68" Count="-1"></Line>
+				<Line Number="69" Count="-1">/**</Line>
+				<Line Number="70" Count="-1">* @brief creates an empty game with all labels set to 0.</Line>
+				<Line Number="71" Count="-1">* @param width number of columns of the board</Line>
+				<Line Number="72" Count="-1">* @param height number of lines of the board</Line>
+				<Line Number="73" Count="-1">* @return the created game</Line>
+				<Line Number="74" Count="-1">**/</Line>
+				<Line Number="75" Count="-1"></Line>
+				<Line Number="76" Count="176">game new_game_ext(int width, int height){</Line>
+				<Line Number="77" Count="176">  game g = (game) calloc(1,sizeof(struct game_s));</Line>
+				<Line Number="78" Count="176">  if(g==NULL){</Line>
+				<Line Number="79" Count="0">    fprintf(stderr,"not enough memory\n");</Line>
+				<Line Number="80" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="81" Count="-1">  }</Line>
+				<Line Number="82" Count="176">  g-&gt;board = (content*)calloc(height*width, sizeof(content));</Line>
+				<Line Number="83" Count="176">  if (g-&gt;board==NULL){</Line>
+				<Line Number="84" Count="0">    fprintf(stderr,"not enough memory\n");</Line>
+				<Line Number="85" Count="0">    free(g);</Line>
+				<Line Number="86" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="87" Count="-1">  }</Line>
+				<Line Number="88" Count="176">  g-&gt;required_nb_seen=(int**) calloc(NB_DIR,sizeof(int*));</Line>
+				<Line Number="89" Count="176">  if(g-&gt;required_nb_seen==NULL){</Line>
+				<Line Number="90" Count="0">    fprintf(stderr,"not enough memory\n");</Line>
+				<Line Number="91" Count="0">    free(g-&gt;board);</Line>
+				<Line Number="92" Count="0">    free(g);</Line>
+				<Line Number="93" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="94" Count="-1">  }</Line>
+				<Line Number="95" Count="880">  for(int i = 0; i &lt; NB_DIR; i++){</Line>
+				<Line Number="96" Count="704">    if(i&lt;2){</Line>
+				<Line Number="97" Count="352">      g-&gt;required_nb_seen[i] = (int*)calloc(width,sizeof(int));</Line>
+				<Line Number="98" Count="-1">    }</Line>
+				<Line Number="99" Count="-1">    else{</Line>
+				<Line Number="100" Count="352">      g-&gt;required_nb_seen[i] = (int*)calloc(height,sizeof(int));</Line>
+				<Line Number="101" Count="-1">    }</Line>
+				<Line Number="102" Count="704">    if(g-&gt;required_nb_seen[i]==NULL){</Line>
+				<Line Number="103" Count="0">      fprintf(stderr,"not enough memory\n");</Line>
+				<Line Number="104" Count="0">      if(i&gt;=1){</Line>
+				<Line Number="105" Count="0">        for(int j=i-1;j&gt;=0;j--){</Line>
+				<Line Number="106" Count="0">          free(g-&gt;required_nb_seen[j]);</Line>
+				<Line Number="107" Count="-1">        }</Line>
+				<Line Number="108" Count="-1">      }</Line>
+				<Line Number="109" Count="0">      free(g-&gt;required_nb_seen);</Line>
+				<Line Number="110" Count="0">      free(g-&gt;board);</Line>
+				<Line Number="111" Count="0">      free(g);</Line>
+				<Line Number="112" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="113" Count="-1">    }</Line>
+				<Line Number="114" Count="-1">  }</Line>
+				<Line Number="115" Count="176">  g-&gt;width = width;</Line>
+				<Line Number="116" Count="176">  g-&gt;height = height;</Line>
+				<Line Number="117" Count="176">  return g;</Line>
+				<Line Number="118" Count="-1">}</Line>
+				<Line Number="119" Count="-1"></Line>
+				<Line Number="120" Count="-1"></Line>
+				<Line Number="121" Count="-1">/**</Line>
+				<Line Number="122" Count="-1">* @brief creates a game from a board.</Line>
+				<Line Number="123" Count="-1">* It uses a given board possibly with its mirrors, and a list of labels.</Line>
+				<Line Number="124" Count="-1">* It checks that the proposed dimensions (that should match the list)</Line>
+				<Line Number="125" Count="-1">* match the size of the board.</Line>
+				<Line Number="126" Count="-1">*</Line>
+				<Line Number="127" Count="-1">* @param width number of columns of the board</Line>
+				<Line Number="128" Count="-1">* @param height number of lines of the board</Line>
+				<Line Number="129" Count="-1">* @param labels an array of four pointers towards array of labels (namely, labels[N], labels[S], labels[E], labels[W]).</Line>
+				<Line Number="130" Count="-1">* The labels are given according to increasing coordinate value (from S to N or from W to E)</Line>
+				<Line Number="131" Count="-1">* @param board an array of all the board squares, stored line-by-line (possibly with mirrors set already)</Line>
+				<Line Number="132" Count="-1">* @param required_nb_ghosts the number of ghosts required in the game.</Line>
+				<Line Number="133" Count="-1">* @param required_nb_vampires the number of vampires required in the game.</Line>
+				<Line Number="134" Count="-1">* @param required_nb_zombies the number of zombies required in the game.</Line>
+				<Line Number="135" Count="-1">* @param required_nb_spirits the number of spirits required in the game.</Line>
+				<Line Number="136" Count="-1">* @return the created game</Line>
+				<Line Number="137" Count="-1">**/</Line>
+				<Line Number="138" Count="-1"></Line>
+				<Line Number="139" Count="0">game setup_new_game_ext(int width, int height, int *labels[NB_DIR], content * board,</Line>
+				<Line Number="140" Count="-1">  int required_nb_ghosts,  int required_nb_vampires,</Line>
+				<Line Number="141" Count="-1">  int required_nb_zombies, int required_nb_spirits){</Line>
+				<Line Number="142" Count="-1"></Line>
+				<Line Number="143" Count="0">    game g = new_game_ext(width, height);</Line>
+				<Line Number="144" Count="0">    if(g == NULL || g-&gt;board == NULL || board == NULL || g-&gt;required_nb_seen == NULL){</Line>
+				<Line Number="145" Count="0">      fprintf(stderr, "Error not enough memory");</Line>
+				<Line Number="146" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="147" Count="-1">    }</Line>
+				<Line Number="148" Count="0">    for(unsigned int i=0;i&lt;width*height;i++)</Line>
+				<Line Number="149" Count="0">    g-&gt;board[i] = board[i];</Line>
+				<Line Number="150" Count="0">    g-&gt;required_nb_ghosts = required_nb_ghosts;</Line>
+				<Line Number="151" Count="0">    g-&gt;required_nb_vampires = required_nb_vampires;</Line>
+				<Line Number="152" Count="0">    g-&gt;required_nb_zombies = required_nb_zombies;</Line>
+				<Line Number="153" Count="0">    g-&gt;required_nb_spirits = required_nb_spirits;</Line>
+				<Line Number="154" Count="0">    g-&gt;height = height;</Line>
+				<Line Number="155" Count="0">    g-&gt;width = width;</Line>
+				<Line Number="156" Count="0">    for(unsigned int i=0;i&lt;NB_DIR;i++){</Line>
+				<Line Number="157" Count="0">      if (i&lt;2){</Line>
+				<Line Number="158" Count="0">        for(int j=0;j&lt;width;j++){</Line>
+				<Line Number="159" Count="0">          if(labels[i][j]&lt;0){</Line>
+				<Line Number="160" Count="0">            fprintf(stderr,"value put at labels[%d][%d] must be positive (actual value : %d)\n",i,j,labels[i][j]);</Line>
+				<Line Number="161" Count="0">            delete_game(g);</Line>
+				<Line Number="162" Count="0">            exit(EXIT_FAILURE);</Line>
+				<Line Number="163" Count="-1">          }</Line>
+				<Line Number="164" Count="0">          g-&gt;required_nb_seen[i][j] = labels[i][j];</Line>
+				<Line Number="165" Count="-1">        }</Line>
+				<Line Number="166" Count="-1">      }</Line>
+				<Line Number="167" Count="-1">      else{</Line>
+				<Line Number="168" Count="0">        for(int j=0;j&lt;height;j++){</Line>
+				<Line Number="169" Count="0">          if(labels[i][j]&lt;0){</Line>
+				<Line Number="170" Count="0">            fprintf(stderr,"value put at labels[%d][%d] must be positive (actual value : %d)\n",i,j,labels[i][j]);</Line>
+				<Line Number="171" Count="0">            delete_game(g);</Line>
+				<Line Number="172" Count="0">            exit(EXIT_FAILURE);</Line>
+				<Line Number="173" Count="-1">          }</Line>
+				<Line Number="174" Count="0">          g-&gt;required_nb_seen[i][j] = labels[i][j];</Line>
+				<Line Number="175" Count="-1">        }</Line>
+				<Line Number="176" Count="-1">      }</Line>
+				<Line Number="177" Count="-1">    }</Line>
+				<Line Number="178" Count="0">    return g;</Line>
+				<Line Number="179" Count="-1">  }</Line>
+				<Line Number="180" Count="-1"></Line>
+				<Line Number="181" Count="-1"></Line>
+				<Line Number="182" Count="-1"></Line>
+				<Line Number="183" Count="-1">  /**</Line>
+				<Line Number="184" Count="-1">  * @brief return the number of lines on the game</Line>
+				<Line Number="185" Count="-1">  *</Line>
+				<Line Number="186" Count="-1">  * @param game the game.</Line>
+				<Line Number="187" Count="-1">  * @return the height of the game</Line>
+				<Line Number="188" Count="-1">  **/</Line>
+				<Line Number="189" Count="-1"></Line>
+				<Line Number="190" Count="136867">  int game_height(cgame game){</Line>
+				<Line Number="191" Count="136867">    if (game == NULL){</Line>
+				<Line Number="192" Count="0">      fprintf(stderr, "Null pointer!\n");</Line>
+				<Line Number="193" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="194" Count="-1">    }</Line>
+				<Line Number="195" Count="136867">    return game-&gt;height;</Line>
+				<Line Number="196" Count="-1">  }</Line>
+				<Line Number="197" Count="-1"></Line>
+				<Line Number="198" Count="-1"></Line>
+				<Line Number="199" Count="-1"></Line>
+				<Line Number="200" Count="-1">  /**</Line>
+				<Line Number="201" Count="-1">  * @brief return the number of columns on the game</Line>
+				<Line Number="202" Count="-1">  *</Line>
+				<Line Number="203" Count="-1">  * @param game the game.</Line>
+				<Line Number="204" Count="-1">  * @return the width of the game</Line>
+				<Line Number="205" Count="-1">  */</Line>
+				<Line Number="206" Count="-1"></Line>
+				<Line Number="207" Count="176113">  int game_width(cgame game){</Line>
+				<Line Number="208" Count="176113">    if (game == NULL){</Line>
+				<Line Number="209" Count="0">      fprintf(stderr, "Null pointer!\n");</Line>
+				<Line Number="210" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="211" Count="-1">    }</Line>
+				<Line Number="212" Count="176113">    return game-&gt;width;</Line>
+				<Line Number="213" Count="-1">  }</Line>
+				<Line Number="214" Count="-1"></Line>
+				<Line Number="215" Count="-1">  /**</Line>
+				<Line Number="216" Count="-1">  * @brief creates a game from a board description.</Line>
+				<Line Number="217" Count="-1">  * It uses a given board possibly with its mirrors, and a list of labels.</Line>
+				<Line Number="218" Count="-1">  * @param labels an array of four pointers towards array of labels (namely, labels[N], labels[S], labels[E], labels[W]).</Line>
+				<Line Number="219" Count="-1">  * The labels are given according to increasing coordinate value (from S to N or from W to E)</Line>
+				<Line Number="220" Count="-1">  * @param board an array of all the board squares, stored sequentially line by line starting from coordinate (0,0)</Line>
+				<Line Number="221" Count="-1">  * @param required_nb_ghosts the number of ghosts required in the game.</Line>
+				<Line Number="222" Count="-1">  * @param required_nb_vampires the number of vampires required in the game.</Line>
+				<Line Number="223" Count="-1">  * @param required_nb_zombies the number of zombies required in the game.</Line>
+				<Line Number="224" Count="-1">  * @return the created game</Line>
+				<Line Number="225" Count="-1">  **/</Line>
+				<Line Number="226" Count="-1"></Line>
+				<Line Number="227" Count="0">  game setup_new_game(int *labels[NB_DIR], content * board, int required_nb_ghosts,  int required_nb_vampires, int required_nb_zombies){</Line>
+				<Line Number="228" Count="0">    game g = new_game();</Line>
+				<Line Number="229" Count="0">    if(g == NULL || g-&gt;board == NULL || board == NULL || g-&gt;required_nb_seen == NULL){</Line>
+				<Line Number="230" Count="0">      fprintf(stderr, "Error not enough memory");</Line>
+				<Line Number="231" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="232" Count="-1">    }</Line>
+				<Line Number="233" Count="0">    for(unsigned int i=0;i&lt;WIDTH*HEIGHT;i++)</Line>
+				<Line Number="234" Count="0">    g-&gt;board[i] = board[i];</Line>
+				<Line Number="235" Count="0">    g-&gt;required_nb_ghosts = required_nb_ghosts;</Line>
+				<Line Number="236" Count="0">    g-&gt;required_nb_vampires = required_nb_vampires;</Line>
+				<Line Number="237" Count="0">    g-&gt;required_nb_zombies = required_nb_zombies;</Line>
+				<Line Number="238" Count="0">    g-&gt;height = HEIGHT;</Line>
+				<Line Number="239" Count="0">    g-&gt;width = WIDTH;</Line>
+				<Line Number="240" Count="0">    for(unsigned int i=0;i&lt;NB_DIR;i++){</Line>
+				<Line Number="241" Count="0">      if (i&lt;2){</Line>
+				<Line Number="242" Count="0">        for(int j=0;j&lt;WIDTH;j++){</Line>
+				<Line Number="243" Count="0">          if(labels[i][j]&lt;0){</Line>
+				<Line Number="244" Count="0">            fprintf(stderr,"value put at labels[%d][%d] must be positive (actual value : %d)\n",i,j,labels[i][j]);</Line>
+				<Line Number="245" Count="0">            delete_game(g);</Line>
+				<Line Number="246" Count="0">            exit(EXIT_FAILURE);</Line>
+				<Line Number="247" Count="-1">          }</Line>
+				<Line Number="248" Count="0">          g-&gt;required_nb_seen[i][j] = labels[i][j];</Line>
+				<Line Number="249" Count="-1">        }</Line>
+				<Line Number="250" Count="-1">      }</Line>
+				<Line Number="251" Count="-1">      else{</Line>
+				<Line Number="252" Count="0">        for(int j=0;j&lt;WIDTH;j++){</Line>
+				<Line Number="253" Count="0">          if(labels[i][j]&lt;0){</Line>
+				<Line Number="254" Count="0">            fprintf(stderr,"value put at labels[%d][%d] must be positive (actual value : %d)\n",i,j,labels[i][j]);</Line>
+				<Line Number="255" Count="0">            delete_game(g);</Line>
+				<Line Number="256" Count="0">            exit(EXIT_FAILURE);</Line>
+				<Line Number="257" Count="-1">          }</Line>
+				<Line Number="258" Count="0">          g-&gt;required_nb_seen[i][j] = labels[i][j];</Line>
+				<Line Number="259" Count="-1">        }</Line>
+				<Line Number="260" Count="-1">      }</Line>
+				<Line Number="261" Count="-1">    }</Line>
+				<Line Number="262" Count="0">    return g;</Line>
+				<Line Number="263" Count="-1">  }</Line>
+				<Line Number="264" Count="-1"></Line>
+				<Line Number="265" Count="-1">  /**</Line>
+				<Line Number="266" Count="-1">  * @brief adds a mirror on the game board</Line>
+				<Line Number="267" Count="-1">  * @param game the game board where to add the mirror</Line>
+				<Line Number="268" Count="-1">  * @param dir the direction on which to add the mirror: 0 for +45 degrees (/), 1 for -45 degrees (\\)</Line>
+				<Line Number="269" Count="-1">  * @param col which column to insert the mirror on (0&lt;=col&lt;4)</Line>
+				<Line Number="270" Count="-1">  * @param line which line to insert the mirror on (0&lt;=line&lt;4)</Line>
+				<Line Number="271" Count="-1">  **/</Line>
+				<Line Number="272" Count="-1"></Line>
+				<Line Number="273" Count="392">  void add_mirror(game game, int dir, int col, int line){</Line>
+				<Line Number="274" Count="392">    if (game==NULL){</Line>
+				<Line Number="275" Count="0">      fprintf(stderr, "Invalid game pointer sent to add_mirror!\n");</Line>
+				<Line Number="276" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="277" Count="-1">    }</Line>
+				<Line Number="278" Count="392">    if (col&gt;=game_width(game) ||col&lt;0){</Line>
+				<Line Number="279" Count="0">      fprintf(stderr, "Invalid integer col sent to add_mirror!\n");</Line>
+				<Line Number="280" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="281" Count="-1">    }</Line>
+				<Line Number="282" Count="392">    if (line&gt;=game_height(game) || line&lt;0){</Line>
+				<Line Number="283" Count="0">      fprintf(stderr, "Invalid integer line sent to add_mirror!\n");</Line>
+				<Line Number="284" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="285" Count="-1">    }</Line>
+				<Line Number="286" Count="392">    if (dir==0){</Line>
+				<Line Number="287" Count="112">      game-&gt;board[game_width(game)*line+col]=MIRROR;</Line>
+				<Line Number="288" Count="-1">    }</Line>
+				<Line Number="289" Count="392">    if (dir==1){</Line>
+				<Line Number="290" Count="280">      game-&gt;board[game_width(game)*line+col]=ANTIMIRROR;</Line>
+				<Line Number="291" Count="-1">    }</Line>
+				<Line Number="292" Count="392">  }</Line>
+				<Line Number="293" Count="-1"></Line>
+				<Line Number="294" Count="-1">  /**</Line>
+				<Line Number="295" Count="-1">  * @brief adds a mirror on the game board</Line>
+				<Line Number="296" Count="-1">  * @param game the game board where to add the mirror</Line>
+				<Line Number="297" Count="-1">  * @param mirror_type a content that corresponds to a mirror (MIRROR, ANTI_MIRROR, VMIRROR or HMIRROR)</Line>
+				<Line Number="298" Count="-1">  * @param col which column to insert the mirror on. (0&lt;=col&lt;width)</Line>
+				<Line Number="299" Count="-1">  * @param line which line to insert the mirror on (0&lt;=line&lt;height)</Line>
+				<Line Number="300" Count="-1">  **/</Line>
+				<Line Number="301" Count="-1"></Line>
+				<Line Number="302" Count="360">  void add_mirror_ext(game game, content mirror_type, int col, int line){</Line>
+				<Line Number="303" Count="360">    if (game==NULL){</Line>
+				<Line Number="304" Count="0">      fprintf(stderr, "Invalid game pointer sent to add_mirror_ext!\n");</Line>
+				<Line Number="305" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="306" Count="-1">    }</Line>
+				<Line Number="307" Count="360">    if (col&gt;=game_width(game) ||col&lt;0){</Line>
+				<Line Number="308" Count="0">      fprintf(stderr, "Invalid integer col sent to add_mirror_ext!\n");</Line>
+				<Line Number="309" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="310" Count="-1">    }</Line>
+				<Line Number="311" Count="360">    if (line&gt;=game_height(game) || line&lt;0){</Line>
+				<Line Number="312" Count="0">      fprintf(stderr, "Invalid integer line sent to add_mirror_ext!\n");</Line>
+				<Line Number="313" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="314" Count="-1">    }</Line>
+				<Line Number="315" Count="360">    game-&gt;board[game_width(game)*line+col] = mirror_type;</Line>
+				<Line Number="316" Count="360">  }</Line>
+				<Line Number="317" Count="-1"></Line>
+				<Line Number="318" Count="-1">  /**</Line>
+				<Line Number="319" Count="-1">  * @brief sets the label of a game</Line>
+				<Line Number="320" Count="-1">  * @param game the game to modify</Line>
+				<Line Number="321" Count="-1">  * @param side the side of the game where the label should be modified</Line>
+				<Line Number="322" Count="-1">  * @param pos the position that the label should be modified (from S to N or from W to E)</Line>
+				<Line Number="323" Count="-1">  * @param value the new value to give to the label</Line>
+				<Line Number="324" Count="-1">  **/</Line>
+				<Line Number="325" Count="-1"></Line>
+				<Line Number="326" Count="960">  void set_required_nb_seen(game game, direction side, int pos, int value){</Line>
+				<Line Number="327" Count="960">    if(game ==NULL){</Line>
+				<Line Number="328" Count="0">      fprintf(stderr, "Game does not exist\n");</Line>
+				<Line Number="329" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="330" Count="-1">    }</Line>
+				<Line Number="331" Count="960">    if(side == E || side == W){</Line>
+				<Line Number="332" Count="480">      if(pos&gt;game_height(game) || pos&lt;0){</Line>
+				<Line Number="333" Count="0">        fprintf(stderr,"Can't be called out of bound\n");</Line>
+				<Line Number="334" Count="0">        exit(EXIT_FAILURE);</Line>
+				<Line Number="335" Count="-1">      }</Line>
+				<Line Number="336" Count="-1">    }</Line>
+				<Line Number="337" Count="960">    if(side == N || side == S){</Line>
+				<Line Number="338" Count="480">      if(pos&gt;game_width(game) || pos&lt;0){</Line>
+				<Line Number="339" Count="0">        fprintf(stderr,"Can't be called out of bound\n");</Line>
+				<Line Number="340" Count="0">        exit(EXIT_FAILURE);</Line>
+				<Line Number="341" Count="-1">      }</Line>
+				<Line Number="342" Count="-1">    }</Line>
+				<Line Number="343" Count="960">    if(value &lt; 0){</Line>
+				<Line Number="344" Count="0">      fprintf(stderr,"value must be positive\n");</Line>
+				<Line Number="345" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="346" Count="-1">    }</Line>
+				<Line Number="347" Count="960">    game-&gt;required_nb_seen[side][pos]=value;</Line>
+				<Line Number="348" Count="960">  }</Line>
+				<Line Number="349" Count="-1"></Line>
+				<Line Number="350" Count="-1"></Line>
+				<Line Number="351" Count="-1"></Line>
+				<Line Number="352" Count="-1">  /**</Line>
+				<Line Number="353" Count="-1">  * @brief modifies the aimed number of a given monster on the board</Line>
+				<Line Number="354" Count="-1">  * @param game the game that you want to modify the information about</Line>
+				<Line Number="355" Count="-1">  * @param monster the type of monster (should be GHOST, VAMPIRE, ZOMBIE or SPIRIT)</Line>
+				<Line Number="356" Count="-1">  * @param value the value you want to set to the parameter.</Line>
+				<Line Number="357" Count="-1">  **/</Line>
+				<Line Number="358" Count="-1"></Line>
+				<Line Number="359" Count="212">  void set_required_nb_monsters(game game, content monster, int value){</Line>
+				<Line Number="360" Count="212">    if (game==NULL){</Line>
+				<Line Number="361" Count="0">      fprintf(stderr, "game does not exist\n");</Line>
+				<Line Number="362" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="363" Count="-1">    }</Line>
+				<Line Number="364" Count="212">    if (monster != ZOMBIE &amp;&amp; monster !=VAMPIRE &amp;&amp; monster!=GHOST &amp;&amp; monster!=SPIRIT){</Line>
+				<Line Number="365" Count="0">      fprintf(stderr,"can't be called over something that is not a monster (nothing will happen)");</Line>
+				<Line Number="366" Count="-1">    }</Line>
+				<Line Number="367" Count="212">    if(monster == ZOMBIE){</Line>
+				<Line Number="368" Count="60">      game-&gt;required_nb_zombies=value;</Line>
+				<Line Number="369" Count="-1">    }</Line>
+				<Line Number="370" Count="212">    if(monster == VAMPIRE){</Line>
+				<Line Number="371" Count="60">      game-&gt;required_nb_vampires=value;</Line>
+				<Line Number="372" Count="-1">    }</Line>
+				<Line Number="373" Count="212">    if(monster == GHOST){</Line>
+				<Line Number="374" Count="60">      game-&gt;required_nb_ghosts=value;</Line>
+				<Line Number="375" Count="-1">    }</Line>
+				<Line Number="376" Count="212">    if(monster == SPIRIT){</Line>
+				<Line Number="377" Count="32">      game-&gt;required_nb_spirits=value;</Line>
+				<Line Number="378" Count="-1">    }</Line>
+				<Line Number="379" Count="212">  }</Line>
+				<Line Number="380" Count="-1"></Line>
+				<Line Number="381" Count="-1">  /**</Line>
+				<Line Number="382" Count="-1">  * @brief Clone the game g_src</Line>
+				<Line Number="383" Count="-1">  * @param g_src the game to clone</Line>
+				<Line Number="384" Count="-1">  * @return the clone of g_src</Line>
+				<Line Number="385" Count="-1">  **/</Line>
+				<Line Number="386" Count="17">  game copy_game (cgame g_src){</Line>
+				<Line Number="387" Count="17">    if (g_src==NULL) {</Line>
+				<Line Number="388" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="389" Count="-1">    }</Line>
+				<Line Number="390" Count="17">    game g= new_game_ext(g_src-&gt;width,g_src-&gt;height);</Line>
+				<Line Number="391" Count="17">    g-&gt;required_nb_zombies= g_src-&gt;required_nb_zombies;</Line>
+				<Line Number="392" Count="17">    g-&gt;required_nb_ghosts= g_src-&gt;required_nb_ghosts;</Line>
+				<Line Number="393" Count="17">    g-&gt;required_nb_vampires=g_src-&gt;required_nb_vampires;</Line>
+				<Line Number="394" Count="17">    g-&gt;required_nb_spirits=g_src-&gt;required_nb_spirits;</Line>
+				<Line Number="395" Count="17">    g-&gt;height=game_height(g_src);</Line>
+				<Line Number="396" Count="17">    g-&gt;width=game_width(g_src);</Line>
+				<Line Number="397" Count="289">    for (int i=0; i&lt;g-&gt;width*g-&gt;height; i++){</Line>
+				<Line Number="398" Count="272">      g-&gt;board[i] = g_src-&gt;board[i];</Line>
+				<Line Number="399" Count="-1">    }</Line>
+				<Line Number="400" Count="85">    for (int i=0; i&lt;NB_DIR; i++){</Line>
+				<Line Number="401" Count="68">      if (i&lt;2){</Line>
+				<Line Number="402" Count="170">        for (int j=0;j&lt;game_height(g); j++)</Line>
+				<Line Number="403" Count="136">        g-&gt;required_nb_seen[i][j]=g_src-&gt;required_nb_seen[i][j];</Line>
+				<Line Number="404" Count="-1">      }</Line>
+				<Line Number="405" Count="-1">      else{</Line>
+				<Line Number="406" Count="170">        for (int j=0;j&lt;game_height(g); j++)</Line>
+				<Line Number="407" Count="136">        g-&gt;required_nb_seen[i][j]=g_src-&gt;required_nb_seen[i][j];</Line>
+				<Line Number="408" Count="-1">      }</Line>
+				<Line Number="409" Count="-1">    }</Line>
+				<Line Number="410" Count="17">    return g;</Line>
+				<Line Number="411" Count="-1">  }</Line>
+				<Line Number="412" Count="-1"></Line>
+				<Line Number="413" Count="-1"></Line>
+				<Line Number="414" Count="-1">  /**</Line>
+				<Line Number="415" Count="-1">  * @brief Destroy the game and free allocated memory</Line>
+				<Line Number="416" Count="-1">  * @param g the game to destroy</Line>
+				<Line Number="417" Count="-1">  **/</Line>
+				<Line Number="418" Count="-1"></Line>
+				<Line Number="419" Count="296">  void delete_game (game g){</Line>
+				<Line Number="420" Count="296">    if(g != NULL){</Line>
+				<Line Number="421" Count="296">      if (g-&gt;required_nb_seen != NULL) {</Line>
+				<Line Number="422" Count="1480">        for(int i = 0; i &lt; NB_DIR; i++){</Line>
+				<Line Number="423" Count="1184">          if (g-&gt;required_nb_seen[i] != NULL) free(g-&gt;required_nb_seen[i]);</Line>
+				<Line Number="424" Count="-1">        }</Line>
+				<Line Number="425" Count="296">        free(g-&gt;required_nb_seen);</Line>
+				<Line Number="426" Count="-1">      }</Line>
+				<Line Number="427" Count="296">      if (g-&gt;board != NULL) free(g-&gt;board);</Line>
+				<Line Number="428" Count="296">      free(g);</Line>
+				<Line Number="429" Count="-1">    }</Line>
+				<Line Number="430" Count="296">  }</Line>
+				<Line Number="431" Count="-1"></Line>
+				<Line Number="432" Count="-1">  /**</Line>
+				<Line Number="433" Count="-1">  * @brief return the label on the side of the board</Line>
+				<Line Number="434" Count="-1">  * @param game the game we consider</Line>
+				<Line Number="435" Count="-1">  * @param side the side of the board we want the label from</Line>
+				<Line Number="436" Count="-1">  * @param pos the position of the label you want (from S to N or from W to E)</Line>
+				<Line Number="437" Count="-1">  **/</Line>
+				<Line Number="438" Count="-1"></Line>
+				<Line Number="439" Count="5965">  int required_nb_seen(cgame game, direction side, int pos){</Line>
+				<Line Number="440" Count="5965">    if (game == NULL){</Line>
+				<Line Number="441" Count="0">      fprintf(stderr, "game does not exist\n");</Line>
+				<Line Number="442" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="443" Count="-1">    }</Line>
+				<Line Number="444" Count="5965">    if (side != N &amp;&amp; side != S &amp;&amp; side != E &amp;&amp; side != W){</Line>
+				<Line Number="445" Count="0">      fprintf(stderr, "invalid side (-1 will be returned)\n");</Line>
+				<Line Number="446" Count="0">      return -1;</Line>
+				<Line Number="447" Count="-1">    }</Line>
+				<Line Number="448" Count="5965">    if(side == E || side == W){</Line>
+				<Line Number="449" Count="2850">      if(pos&gt;game_height(game) || pos&lt;0){</Line>
+				<Line Number="450" Count="0">        fprintf(stderr,"Can't be called out of bound(-1 will be returned)\n");</Line>
+				<Line Number="451" Count="0">        return -1;</Line>
+				<Line Number="452" Count="-1">      }</Line>
+				<Line Number="453" Count="-1">    }</Line>
+				<Line Number="454" Count="5965">    if(side == N || side == S){</Line>
+				<Line Number="455" Count="3115">      if(pos&gt;game_width(game) || pos&lt;0){</Line>
+				<Line Number="456" Count="0">        fprintf(stderr,"Can't be called out of bound(-1 will be returned)\n");</Line>
+				<Line Number="457" Count="0">        return -1;</Line>
+				<Line Number="458" Count="-1">      }</Line>
+				<Line Number="459" Count="-1">    }</Line>
+				<Line Number="460" Count="5965">    return game-&gt;required_nb_seen[side][pos];</Line>
+				<Line Number="461" Count="-1">  }</Line>
+				<Line Number="462" Count="-1">  /**</Line>
+				<Line Number="463" Count="-1">  * @brief get the content of a square in the board</Line>
+				<Line Number="464" Count="-1">  * @param game the game we consider</Line>
+				<Line Number="465" Count="-1">  * @param col the column of the square</Line>
+				<Line Number="466" Count="-1">  * @param line the line of the square</Line>
+				<Line Number="467" Count="-1">  * @return the content of the square</Line>
+				<Line Number="468" Count="-1">  **/</Line>
+				<Line Number="469" Count="-1"></Line>
+				<Line Number="470" Count="35068">  content get_content(cgame game, int col, int line){ // Alexis</Line>
+				<Line Number="471" Count="35068">    if (col &gt;= game_width(game) || col &lt; 0){</Line>
+				<Line Number="472" Count="0">      fprintf (stderr, "Invalid col argument sent to get_content! (col is %d while width is %d)\n", col, game_width(game));</Line>
+				<Line Number="473" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="474" Count="-1">    }</Line>
+				<Line Number="475" Count="35068">    if (line &gt;= game_height(game) || line &lt; 0){</Line>
+				<Line Number="476" Count="0">      fprintf (stderr, "Invalid line argument sent to get_content! (line is %d while height is %d)\n", line, game_height(game));</Line>
+				<Line Number="477" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="478" Count="-1">    }</Line>
+				<Line Number="479" Count="35068">    if (game == NULL){</Line>
+				<Line Number="480" Count="0">      fprintf (stderr, "Invalid game argument sent to get_content!\n");</Line>
+				<Line Number="481" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="482" Count="-1">    }</Line>
+				<Line Number="483" Count="35068">    return game-&gt;board[line*game_width(game)+col];</Line>
+				<Line Number="484" Count="-1">  }</Line>
+				<Line Number="485" Count="-1"></Line>
+				<Line Number="486" Count="-1">  /**</Line>
+				<Line Number="487" Count="-1">  * @brief indicates the aimed number of a given monster on the board</Line>
+				<Line Number="488" Count="-1">  * @param game the game that you want to collect the information about</Line>
+				<Line Number="489" Count="-1">  * @param monster the type of monster (should be GHOST, VAMPIRE, ZOMBIE or SPIRIT)</Line>
+				<Line Number="490" Count="-1">  * @return the number of monsters of that type that should be placed on the game.</Line>
+				<Line Number="491" Count="-1">  **/</Line>
+				<Line Number="492" Count="-1"></Line>
+				<Line Number="493" Count="3717">  int required_nb_monsters(cgame game, content monster){</Line>
+				<Line Number="494" Count="3717">    if (game == NULL){</Line>
+				<Line Number="495" Count="0">      fprintf(stderr, "Invalid cgame pointer sent to required_nb_monsters!\n");</Line>
+				<Line Number="496" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="497" Count="-1">    }</Line>
+				<Line Number="498" Count="3717">    int monsters=0;</Line>
+				<Line Number="499" Count="3717">    switch(monster){</Line>
+				<Line Number="500" Count="-1">      case ZOMBIE :</Line>
+				<Line Number="501" Count="1068">      monsters=game-&gt;required_nb_zombies;</Line>
+				<Line Number="502" Count="1068">      break;</Line>
+				<Line Number="503" Count="-1"></Line>
+				<Line Number="504" Count="-1">      case GHOST :</Line>
+				<Line Number="505" Count="1057">      monsters=game-&gt;required_nb_ghosts;</Line>
+				<Line Number="506" Count="1057">      break;</Line>
+				<Line Number="507" Count="-1"></Line>
+				<Line Number="508" Count="-1">      case VAMPIRE :</Line>
+				<Line Number="509" Count="888">      monsters=game-&gt;required_nb_vampires;</Line>
+				<Line Number="510" Count="888">      break;</Line>
+				<Line Number="511" Count="-1"></Line>
+				<Line Number="512" Count="-1">      case SPIRIT :</Line>
+				<Line Number="513" Count="704">      monsters=game-&gt;required_nb_spirits;</Line>
+				<Line Number="514" Count="704">      break;</Line>
+				<Line Number="515" Count="-1"></Line>
+				<Line Number="516" Count="-1">      case EMPTY :</Line>
+				<Line Number="517" Count="0">      fprintf(stderr,"Can't be called over an \"EMPTY\" content");</Line>
+				<Line Number="518" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="519" Count="-1">      break;</Line>
+				<Line Number="520" Count="-1">      case MIRROR :</Line>
+				<Line Number="521" Count="0">      fprintf(stderr,"Can't be called over a \"MIRROR\" content");</Line>
+				<Line Number="522" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="523" Count="-1">      break;</Line>
+				<Line Number="524" Count="-1"></Line>
+				<Line Number="525" Count="-1">      case ANTIMIRROR :</Line>
+				<Line Number="526" Count="0">      fprintf(stderr,"Can't be called over an \"ANTIMIRROR\" content");</Line>
+				<Line Number="527" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="528" Count="-1">      break;</Line>
+				<Line Number="529" Count="-1"></Line>
+				<Line Number="530" Count="-1">      case HMIRROR :</Line>
+				<Line Number="531" Count="0">      fprintf(stderr,"Can't be called over an \"HMIRROR\" content");</Line>
+				<Line Number="532" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="533" Count="-1">      break;</Line>
+				<Line Number="534" Count="-1"></Line>
+				<Line Number="535" Count="-1">      case VMIRROR :</Line>
+				<Line Number="536" Count="0">      fprintf(stderr,"Can't be called over an \"VMIRROR\" content");</Line>
+				<Line Number="537" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="538" Count="-1">      break;</Line>
+				<Line Number="539" Count="-1"></Line>
+				<Line Number="540" Count="-1">    }</Line>
+				<Line Number="541" Count="3717">    return monsters;</Line>
+				<Line Number="542" Count="-1">  }</Line>
+				<Line Number="543" Count="-1"></Line>
+				<Line Number="544" Count="-1">  /**</Line>
+				<Line Number="545" Count="-1">  * @brief Test if the game is over (that is the grid is filled according to the requirements).</Line>
+				<Line Number="546" Count="-1">  * @return true if all the constraints are satisfied</Line>
+				<Line Number="547" Count="-1">  **/</Line>
+				<Line Number="548" Count="-1"></Line>
+				<Line Number="549" Count="35">  bool is_game_over (cgame g){</Line>
+				<Line Number="550" Count="35">    if(g==NULL){</Line>
+				<Line Number="551" Count="0">      fprintf(stderr, "Invalid argument");</Line>
+				<Line Number="552" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="553" Count="-1">    }</Line>
+				<Line Number="554" Count="-1"></Line>
+				<Line Number="555" Count="-1">    /* printf("\n\nSCAN /!\\\n\n");</Line>
+				<Line Number="556" Count="-1">    printf("required_nb_monsters ZOMBIE : %d | current_nb_monsters ZOMBIE : %d\n", required_nb_monsters(g, ZOMBIE), current_nb_monsters(g, ZOMBIE));</Line>
+				<Line Number="557" Count="-1">    printf("required_nb_monsters VAMPIRE : %d | current_nb_monsters VAMPIRE : %d\n", required_nb_monsters(g, VAMPIRE), current_nb_monsters(g, VAMPIRE));</Line>
+				<Line Number="558" Count="-1">    printf("required_nb_monsters GHOST : %d | current_nb_monsters GHOST : %d\n", required_nb_monsters(g, GHOST), current_nb_monsters(g, GHOST));</Line>
+				<Line Number="559" Count="-1">    printf("required_nb_monsters SPIRIT : %d | current_nb_monsters SPIRIT : %d\n", required_nb_monsters(g, SPIRIT), current_nb_monsters(g, SPIRIT));</Line>
+				<Line Number="560" Count="-1">    for(int i=0; i&lt;game_width(g); i++){</Line>
+				<Line Number="561" Count="-1">    printf("required_nb_seen N %d : %d | current_nb_seen N %d : %d\n", i, required_nb_seen(g, N, i), i, current_nb_seen(g, N, i));</Line>
+				<Line Number="562" Count="-1">    printf("required_nb_seen S %d : %d | current_nb_seen S %d : %d\n", i, required_nb_seen(g, S, i), i, current_nb_seen(g, S, i));</Line>
+				<Line Number="563" Count="-1">  }</Line>
+				<Line Number="564" Count="-1">  for(int i=0; i&lt;game_height(g); i++){</Line>
+				<Line Number="565" Count="-1">  printf("required_nb_seen E %d : %d | current_nb_seen E %d : %d\n", i, required_nb_seen(g, E, i), i, current_nb_seen(g, E, i));</Line>
+				<Line Number="566" Count="-1">  printf("required_nb_seen W %d : %d | current_nb_seen W %d : %d\n", i, required_nb_seen(g, W, i), i, current_nb_seen(g, W, i));</Line>
+				<Line Number="567" Count="-1">}</Line>
+				<Line Number="568" Count="-1">printf("\n\nFin_SCAN\n\n");</Line>
+				<Line Number="569" Count="-1">*/</Line>
+				<Line Number="570" Count="35">if(required_nb_monsters(g, ZOMBIE)!=current_nb_monsters(g, ZOMBIE) || required_nb_monsters(g, GHOST)!=current_nb_monsters(g, GHOST) || required_nb_monsters(g, VAMPIRE)!=current_nb_monsters(g, VAMPIRE) || required_nb_monsters(g, SPIRIT)!=current_nb_monsters(g, SPIRIT)){</Line>
+				<Line Number="571" Count="0">  return false;</Line>
+				<Line Number="572" Count="-1">}</Line>
+				<Line Number="573" Count="175">for(int i=0; i&lt;game_width(g); i++){</Line>
+				<Line Number="574" Count="140">  if (required_nb_seen(g, N, i)!=current_nb_seen(g, N, i) || required_nb_seen(g, S, i)!=current_nb_seen(g, S, i)){</Line>
+				<Line Number="575" Count="0">    return false;</Line>
+				<Line Number="576" Count="-1">  }</Line>
+				<Line Number="577" Count="-1">}</Line>
+				<Line Number="578" Count="175">for(int i=0; i&lt;game_height(g); i++){</Line>
+				<Line Number="579" Count="140">  if (required_nb_seen(g, E, i)!=current_nb_seen(g, E, i) || required_nb_seen(g, W, i)!=current_nb_seen(g, W, i)){</Line>
+				<Line Number="580" Count="0">    return false;</Line>
+				<Line Number="581" Count="-1">  }</Line>
+				<Line Number="582" Count="-1">}</Line>
+				<Line Number="583" Count="35">return true;</Line>
+				<Line Number="584" Count="-1">}</Line>
+				<Line Number="585" Count="-1"></Line>
+				<Line Number="586" Count="-1">/**</Line>
+				<Line Number="587" Count="-1">* @brief Restart a game by cleaning monsters from the board.</Line>
+				<Line Number="588" Count="-1">**/</Line>
+				<Line Number="589" Count="-1"></Line>
+				<Line Number="590" Count="31">void restart_game(game g){</Line>
+				<Line Number="591" Count="31">  if(g==NULL){</Line>
+				<Line Number="592" Count="0">    fprintf(stderr, "Invalid argument");</Line>
+				<Line Number="593" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="594" Count="-1">  }</Line>
+				<Line Number="595" Count="527">  for (int i=0; i&lt;game_width(g)*game_height(g); i++){</Line>
+				<Line Number="596" Count="496">    if (g-&gt;board[i]==GHOST || g-&gt;board[i]==VAMPIRE || g-&gt;board[i]==ZOMBIE || g-&gt;board[i]==SPIRIT){</Line>
+				<Line Number="597" Count="194">      g-&gt;board[i]=EMPTY;</Line>
+				<Line Number="598" Count="-1">    }</Line>
+				<Line Number="599" Count="-1">  }</Line>
+				<Line Number="600" Count="31">}</Line>
+				<Line Number="601" Count="-1"></Line>
+				<Line Number="602" Count="-1"></Line>
+				<Line Number="603" Count="-1">/**</Line>
+				<Line Number="604" Count="-1">* @brief adds a monster on the game board.</Line>
+				<Line Number="605" Count="-1">* Can also be used to remove any monster by adding EMPTY.</Line>
+				<Line Number="606" Count="-1">* This function does not have effect on mirrors so it can be used safely in the course of the game.</Line>
+				<Line Number="607" Count="-1">* @param game the game board where to add the monster</Line>
+				<Line Number="608" Count="-1">* @param monster the type of monster to add</Line>
+				<Line Number="609" Count="-1">* @param col the column where to insert the monster</Line>
+				<Line Number="610" Count="-1">* @param line and the line where to insert the monster</Line>
+				<Line Number="611" Count="-1">* @return false if the monster was not placed since the square was occupied by a mirror.</Line>
+				<Line Number="612" Count="-1">**/</Line>
+				<Line Number="613" Count="-1"></Line>
+				<Line Number="614" Count="2209">bool add_monster(game game, content monster, int col, int line){</Line>
+				<Line Number="615" Count="2209">  if (game == NULL){</Line>
+				<Line Number="616" Count="0">    fprintf(stderr,"Game does not exist\n");</Line>
+				<Line Number="617" Count="0">    return false;</Line>
+				<Line Number="618" Count="-1">  }</Line>
+				<Line Number="619" Count="2209">  if (col&gt;=game_width(game) || line &gt;=game_height(game) || col&lt;0 || line &lt;0){</Line>
+				<Line Number="620" Count="0">    return false;</Line>
+				<Line Number="621" Count="-1">  }</Line>
+				<Line Number="622" Count="2209">  if (get_content(game, col, line)==MIRROR || get_content(game,col,line)==ANTIMIRROR || get_content(game,col,line)==HMIRROR || get_content(game,col,line)==VMIRROR){</Line>
+				<Line Number="623" Count="0">    return false;</Line>
+				<Line Number="624" Count="-1">  }</Line>
+				<Line Number="625" Count="-1">  else{</Line>
+				<Line Number="626" Count="2209">    game-&gt;board[game_width(game)*line + col]=monster;</Line>
+				<Line Number="627" Count="2209">    return true;</Line>
+				<Line Number="628" Count="-1">  }</Line>
+				<Line Number="629" Count="-1">}</Line>
+				<Line Number="630" Count="-1"></Line>
+				<Line Number="631" Count="-1"></Line>
+				<Line Number="632" Count="-1">/**</Line>
+				<Line Number="633" Count="-1">* @brief says how many monsters can be seen on the current game board</Line>
+				<Line Number="634" Count="-1">* @param game the game board to look at</Line>
+				<Line Number="635" Count="-1">* @param side the side of the board we consider (N, S, W, or E)</Line>
+				<Line Number="636" Count="-1">* @param pos the coordinate on that side (from S to N or from W to E)</Line>
+				<Line Number="637" Count="-1">* @return the number of monsters that can be seen through all the mirrors from a given side at position x</Line>
+				<Line Number="638" Count="-1">**/</Line>
+				<Line Number="639" Count="-1"></Line>
+				<Line Number="640" Count="4923">int current_nb_seen(cgame game, direction side, int pos){ // Alexis</Line>
+				<Line Number="641" Count="4923">  if (game == NULL){</Line>
+				<Line Number="642" Count="0">    fprintf(stderr, "Invalid game argument sent to current_nb_seen!\n");</Line>
+				<Line Number="643" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="644" Count="-1">  }</Line>
+				<Line Number="645" Count="4923">  if (pos &lt; 0 || pos &gt; game_width(game)*game_height(game)-1){</Line>
+				<Line Number="646" Count="0">    fprintf(stderr, "Invalid pos argument sent to current_nb_seen!\n");</Line>
+				<Line Number="647" Count="0">    return -1;</Line>
+				<Line Number="648" Count="-1">  }</Line>
+				<Line Number="649" Count="-1"></Line>
+				<Line Number="650" Count="4923">  int direction_tab_x[4] = {0, 0, -1, 1};                      //Sud, Nord, Ouest, Est</Line>
+				<Line Number="651" Count="4923">  int direction_tab_y[4] = {-1, 1, 0, 0};</Line>
+				<Line Number="652" Count="-1">  int direction, x, y;</Line>
+				<Line Number="653" Count="-1"></Line>
+				<Line Number="654" Count="4923">  switch (side){</Line>
+				<Line Number="655" Count="-1">    case N:</Line>
+				<Line Number="656" Count="1371">    x = pos;</Line>
+				<Line Number="657" Count="1371">    y = game_height(game)-1;</Line>
+				<Line Number="658" Count="1371">    direction = 0;                                             //direction sud, x prendra x=x et y prendra y-=1</Line>
+				<Line Number="659" Count="1371">    break;</Line>
+				<Line Number="660" Count="-1">    case S:</Line>
+				<Line Number="661" Count="1230">    x = pos;</Line>
+				<Line Number="662" Count="1230">    y = 0;</Line>
+				<Line Number="663" Count="1230">    direction = 1;                                             //direction nord, x prendra x=x et y prendra y+=1</Line>
+				<Line Number="664" Count="1230">    break;</Line>
+				<Line Number="665" Count="-1">    case E:</Line>
+				<Line Number="666" Count="1176">    x = game_width(game)-1;</Line>
+				<Line Number="667" Count="1176">    y = pos;</Line>
+				<Line Number="668" Count="1176">    direction = 2;                                             //etc..</Line>
+				<Line Number="669" Count="1176">    break;</Line>
+				<Line Number="670" Count="-1">    case W:</Line>
+				<Line Number="671" Count="1146">    x = 0;</Line>
+				<Line Number="672" Count="1146">    y = pos;</Line>
+				<Line Number="673" Count="1146">    direction = 3;</Line>
+				<Line Number="674" Count="1146">    break;</Line>
+				<Line Number="675" Count="-1">    default:</Line>
+				<Line Number="676" Count="0">    fprintf(stderr, "Invalid side argument sent to current_nb_seen!\n");</Line>
+				<Line Number="677" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="678" Count="-1">    break;</Line>
+				<Line Number="679" Count="-1">  }                                                            //en bref on donne une direction et une position de départ en fonction des arguments side et pos</Line>
+				<Line Number="680" Count="-1"></Line>
+				<Line Number="681" Count="-1"></Line>
+				<Line Number="682" Count="4923">  bool mirror_crossed = false;</Line>
+				<Line Number="683" Count="4923">  int res = 0;</Line>
+				<Line Number="684" Count="-1">  content content;</Line>
+				<Line Number="685" Count="-1"></Line>
+				<Line Number="686" Count="29475">  while (x &lt; game_width(game) &amp;&amp; y &lt; game_height(game) &amp;&amp; x&gt;=0 &amp;&amp; y&gt;=0){                     //tant qu'on ne sort pas du board</Line>
+				<Line Number="687" Count="19629">  content = get_content(game, x, y);                         //on regarde le contenu de la case</Line>
+				<Line Number="688" Count="19629">  if (content == ZOMBIE){ res++; }</Line>
+				<Line Number="689" Count="16595">  else if (content == GHOST &amp;&amp; mirror_crossed){ res++; }</Line>
+				<Line Number="690" Count="15590">  else if (content == VAMPIRE &amp;&amp; !mirror_crossed){ res++; }  //on ajoute 1 au résultat en fonction du monstre et de si on a rencontré un mirrior</Line>
+				<Line Number="691" Count="14734">  else if (content == MIRROR) {</Line>
+				<Line Number="692" Count="2391">    switch (direction){</Line>
+				<Line Number="693" Count="-1">      case 0:</Line>
+				<Line Number="694" Count="572">      direction = 2;</Line>
+				<Line Number="695" Count="572">      break;</Line>
+				<Line Number="696" Count="-1">      case 1:</Line>
+				<Line Number="697" Count="572">      direction = 3;</Line>
+				<Line Number="698" Count="572">      break;</Line>
+				<Line Number="699" Count="-1">      case 2:</Line>
+				<Line Number="700" Count="554">      direction = 0;</Line>
+				<Line Number="701" Count="554">      break;</Line>
+				<Line Number="702" Count="-1">      case 3:</Line>
+				<Line Number="703" Count="693">      direction = 1;</Line>
+				<Line Number="704" Count="693">      break;</Line>
+				<Line Number="705" Count="-1">    }</Line>
+				<Line Number="706" Count="2391">    mirror_crossed = true;</Line>
+				<Line Number="707" Count="-1">  }                                                          //on met à jour la direction si on rencontre un mirrior</Line>
+				<Line Number="708" Count="12343">  else if (content == ANTIMIRROR) {</Line>
+				<Line Number="709" Count="5658">    switch (direction){</Line>
+				<Line Number="710" Count="-1">      case 0:</Line>
+				<Line Number="711" Count="1494">      direction = 3;</Line>
+				<Line Number="712" Count="1494">      break;</Line>
+				<Line Number="713" Count="-1">      case 1:</Line>
+				<Line Number="714" Count="1421">      direction = 2;</Line>
+				<Line Number="715" Count="1421">      break;</Line>
+				<Line Number="716" Count="-1">      case 2:</Line>
+				<Line Number="717" Count="1403">      direction = 1;</Line>
+				<Line Number="718" Count="1403">      break;</Line>
+				<Line Number="719" Count="-1">      case 3:</Line>
+				<Line Number="720" Count="1340">      direction = 0;</Line>
+				<Line Number="721" Count="1340">      break;</Line>
+				<Line Number="722" Count="-1">    }</Line>
+				<Line Number="723" Count="5658">    mirror_crossed = true;</Line>
+				<Line Number="724" Count="-1">  }</Line>
+				<Line Number="725" Count="6685">  else if (content == HMIRROR) {</Line>
+				<Line Number="726" Count="0">    switch (direction){</Line>
+				<Line Number="727" Count="-1">      case 0:</Line>
+				<Line Number="728" Count="0">      direction = 1;</Line>
+				<Line Number="729" Count="0">      mirror_crossed = true;</Line>
+				<Line Number="730" Count="0">      break;</Line>
+				<Line Number="731" Count="-1">      case 1:</Line>
+				<Line Number="732" Count="0">      direction = 0;</Line>
+				<Line Number="733" Count="0">      mirror_crossed = true;</Line>
+				<Line Number="734" Count="0">      break;</Line>
+				<Line Number="735" Count="-1">      case 2:</Line>
+				<Line Number="736" Count="0">      break;</Line>
+				<Line Number="737" Count="-1">      case 3:</Line>
+				<Line Number="738" Count="0">      break;</Line>
+				<Line Number="739" Count="-1">    }</Line>
+				<Line Number="740" Count="-1">  }</Line>
+				<Line Number="741" Count="6685">  else if (content == VMIRROR) {</Line>
+				<Line Number="742" Count="0">    switch (direction){</Line>
+				<Line Number="743" Count="-1">      case 0:</Line>
+				<Line Number="744" Count="0">      break;</Line>
+				<Line Number="745" Count="-1">      case 1:</Line>
+				<Line Number="746" Count="0">      break;</Line>
+				<Line Number="747" Count="-1">      case 2:</Line>
+				<Line Number="748" Count="0">      direction = 3;</Line>
+				<Line Number="749" Count="0">      mirror_crossed = true;</Line>
+				<Line Number="750" Count="0">      break;</Line>
+				<Line Number="751" Count="-1">      case 3:</Line>
+				<Line Number="752" Count="0">      direction = 2;</Line>
+				<Line Number="753" Count="0">      mirror_crossed = true;</Line>
+				<Line Number="754" Count="0">      break;</Line>
+				<Line Number="755" Count="-1">    }</Line>
+				<Line Number="756" Count="-1">  }                                                      //de même pour un anti-mirroir</Line>
+				<Line Number="757" Count="19629">  x += direction_tab_x[direction];</Line>
+				<Line Number="758" Count="19629">  y += direction_tab_y[direction];                           //on met à jour x et y en fonction de la direction</Line>
+				<Line Number="759" Count="-1">}</Line>
+				<Line Number="760" Count="4923">return res;</Line>
+				<Line Number="761" Count="-1">}</Line>
+				<Line Number="762" Count="-1"></Line>
+				<Line Number="763" Count="-1">/**</Line>
+				<Line Number="764" Count="-1">* @brief counts the current number of monsters of a given type</Line>
+				<Line Number="765" Count="-1">* @param game the game board</Line>
+				<Line Number="766" Count="-1">* @param monster the type of monster</Line>
+				<Line Number="767" Count="-1">* @return the total number of monsters of the given type on the board.</Line>
+				<Line Number="768" Count="-1">**/</Line>
+				<Line Number="769" Count="-1"></Line>
+				<Line Number="770" Count="3481">int current_nb_monsters(cgame game, content monster){</Line>
+				<Line Number="771" Count="3481">  if (game == NULL){</Line>
+				<Line Number="772" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="773" Count="-1">  }</Line>
+				<Line Number="774" Count="3481">  if(monster !=ZOMBIE &amp;&amp; monster!=GHOST &amp;&amp; monster !=VAMPIRE &amp;&amp; monster !=SPIRIT){</Line>
+				<Line Number="775" Count="0">    fprintf(stderr,"Function called over an invalid monster");</Line>
+				<Line Number="776" Count="0">    return -1;</Line>
+				<Line Number="777" Count="-1">  }</Line>
+				<Line Number="778" Count="3481">  int cpt=0;</Line>
+				<Line Number="779" Count="59177">  for (int i = 0; i&lt;game_width(game)*game_height(game); i++){</Line>
+				<Line Number="780" Count="55696">    if (game-&gt;board[i]==monster)</Line>
+				<Line Number="781" Count="6152">    cpt++;</Line>
+				<Line Number="782" Count="-1">  }</Line>
+				<Line Number="783" Count="3481">  return cpt;</Line>
+				<Line Number="784" Count="-1">}</Line>
+			</Report>
+		</File>
+		<File Name="game_io.c" FullPath="./game_io.c">
+			<Report>
+				<Line Number="0" Count="-1">#include "game.h"</Line>
+				<Line Number="1" Count="-1">#include "game_io.h"</Line>
+				<Line Number="2" Count="-1">#include&lt;stdlib.h&gt;</Line>
+				<Line Number="3" Count="-1">#include&lt;string.h&gt;</Line>
+				<Line Number="4" Count="-1">#include&lt;stdio.h&gt;</Line>
+				<Line Number="5" Count="-1">#include&lt;stdbool.h&gt;</Line>
+				<Line Number="6" Count="-1"></Line>
+				<Line Number="7" Count="-1"></Line>
+				<Line Number="8" Count="-1">#define MAX 4096//on suppose que le maximum de ligne à lire  ne depasse pas 406</Line>
+				<Line Number="9" Count="-1">/*pour faire la fonction load_game on va utiliser deux fonctions auxiliaire :la premiere qui la read_next_line</Line>
+				<Line Number="10" Count="-1">qui nous permet de lire une ligne en entier et stock les caracteres separé par  des espaces  dans un tableau de caractere et la seconde</Line>
+				<Line Number="11" Count="-1">c'est une fonction qui est convert_line qui en cas de besoin de  convertir la lgne stocker dans le resultat de</Line>
+				<Line Number="12" Count="-1">read_next_line  en  long on l'utilse .En gros ,read_next_line lit la ligne depuis le fichier et convert_line la convertit</Line>
+				<Line Number="13" Count="-1">si c'est necessaire */</Line>
+				<Line Number="14" Count="-1"></Line>
+				<Line Number="15" Count="0">char* read_next_line(FILE* p_f, long* p_size){</Line>
+				<Line Number="16" Count="0">  char* s = malloc(MAX*sizeof(char));</Line>
+				<Line Number="17" Count="0">  if(s==NULL){</Line>
+				<Line Number="18" Count="0">    fprintf(stderr,"error");</Line>
+				<Line Number="19" Count="0">    free(s);</Line>
+				<Line Number="20" Count="0">    return NULL;</Line>
+				<Line Number="21" Count="-1"> }</Line>
+				<Line Number="22" Count="0"> long old_pos = ftell(p_f);</Line>
+				<Line Number="23" Count="0"> long len = 0;</Line>
+				<Line Number="24" Count="0"> if(fgets(s,MAX, p_f ) != NULL){</Line>
+				<Line Number="25" Count="0">   len = ftell(p_f)-old_pos;</Line>
+				<Line Number="26" Count="0">   if(s[len-1]=='\n'){</Line>
+				<Line Number="27" Count="0">     s[len-1]= '\0';</Line>
+				<Line Number="28" Count="0">     len--;</Line>
+				<Line Number="29" Count="-1"> } else{</Line>
+				<Line Number="30" Count="0">   if(!feof(p_f)){      // to detect error from last line without '\n'</Line>
+				<Line Number="31" Count="0">    fprintf(stderr, "line too long ...");</Line>
+				<Line Number="32" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="33" Count="-1">  }</Line>
+				<Line Number="34" Count="-1">}</Line>
+				<Line Number="35" Count="0">(*p_size)=len;</Line>
+				<Line Number="36" Count="0">return s;</Line>
+				<Line Number="37" Count="-1">}</Line>
+				<Line Number="38" Count="0">free(s);</Line>
+				<Line Number="39" Count="0">return NULL; // in case of eof</Line>
+				<Line Number="40" Count="-1">}</Line>
+				<Line Number="41" Count="0">long* convert_line(char* line, long* p_size){</Line>
+				<Line Number="42" Count="0">  long* arr = malloc((*p_size)*sizeof(long));</Line>
+				<Line Number="43" Count="0">  if(arr ==NULL){</Line>
+				<Line Number="44" Count="0">    fprintf(stderr,"error");</Line>
+				<Line Number="45" Count="0">    free(arr);</Line>
+				<Line Number="46" Count="0">    return NULL;</Line>
+				<Line Number="47" Count="-1">  }</Line>
+				<Line Number="48" Count="0">  long arr_s= 0;</Line>
+				<Line Number="49" Count="0">  char* token = strtok(line," ");</Line>
+				<Line Number="50" Count="0">  while(token !=NULL){</Line>
+				<Line Number="51" Count="0">    char* end_value = token;</Line>
+				<Line Number="52" Count="0">    long value = strtol(token, &amp;end_value,10);</Line>
+				<Line Number="53" Count="0">    if ((*end_value)=='\0') {   // convert was successfull</Line>
+				<Line Number="54" Count="0">      arr[arr_s]=value;</Line>
+				<Line Number="55" Count="0">      arr_s++;</Line>
+				<Line Number="56" Count="-1">    }else{</Line>
+				<Line Number="57" Count="0">      free(arr);</Line>
+				<Line Number="58" Count="0">      return NULL;</Line>
+				<Line Number="59" Count="-1">    }</Line>
+				<Line Number="60" Count="0">    token = strtok(NULL," ");</Line>
+				<Line Number="61" Count="-1">  }</Line>
+				<Line Number="62" Count="0">  (*p_size)=arr_s;</Line>
+				<Line Number="63" Count="0">  return arr;</Line>
+				<Line Number="64" Count="-1">}</Line>
+				<Line Number="65" Count="-1"></Line>
+				<Line Number="66" Count="0">game load_game(char* filename){</Line>
+				<Line Number="67" Count="0">  FILE* fichier =fopen(filename,"r");</Line>
+				<Line Number="68" Count="0">  if(fichier == NULL){</Line>
+				<Line Number="69" Count="0">    fprintf(stderr,"invalide fichier sur load_game");</Line>
+				<Line Number="70" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="71" Count="-1">  }</Line>
+				<Line Number="72" Count="-1">//  char* end=NULL;</Line>
+				<Line Number="73" Count="0">  long* tab=NULL;</Line>
+				<Line Number="74" Count="-1"></Line>
+				<Line Number="75" Count="0">  int compt = 1;                   // pour connaitre le nombre de ligne à lire</Line>
+				<Line Number="76" Count="0">  long size = 0;</Line>
+				<Line Number="77" Count="0">  char* line =NULL;</Line>
+				<Line Number="78" Count="0">  line =read_next_line(fichier, &amp;size);</Line>
+				<Line Number="79" Count="0">  tab = convert_line(line, &amp;size);</Line>
+				<Line Number="80" Count="0">  if(!tab){</Line>
+				<Line Number="81" Count="0">    fprintf(stderr, "tableaux vide");</Line>
+				<Line Number="82" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="83" Count="-1">  }</Line>
+				<Line Number="84" Count="0">  if(size == 0 || size&gt;2){</Line>
+				<Line Number="85" Count="-1"></Line>
+				<Line Number="86" Count="0">    fprintf(stderr,"error de size en 83");</Line>
+				<Line Number="87" Count="0">    exit(EXIT_FAILURE);</Line>
+				<Line Number="88" Count="-1">  }</Line>
+				<Line Number="89" Count="-1"></Line>
+				<Line Number="90" Count="0">    game jeu = new_game_ext(tab[0],tab[1]);</Line>
+				<Line Number="91" Count="0">  line =read_next_line(fichier, &amp;size);</Line>
+				<Line Number="92" Count="0">  while(compt &lt; 6 &amp;&amp; line !=NULL){</Line>
+				<Line Number="93" Count="0">    if(!line){</Line>
+				<Line Number="94" Count="0">      fprintf(stderr, "echec");</Line>
+				<Line Number="95" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="96" Count="-1">    }</Line>
+				<Line Number="97" Count="0">    tab = convert_line(line, &amp;size);</Line>
+				<Line Number="98" Count="0">    if(tab == NULL){</Line>
+				<Line Number="99" Count="0">      fprintf(stderr,"tab invalide dans case2");</Line>
+				<Line Number="100" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="101" Count="-1">    }</Line>
+				<Line Number="102" Count="-1"></Line>
+				<Line Number="103" Count="0">    switch (compt) {</Line>
+				<Line Number="104" Count="-1"></Line>
+				<Line Number="105" Count="-1">    case 1: {</Line>
+				<Line Number="106" Count="0">      for(int i = 0; i &lt; size; i++){</Line>
+				<Line Number="107" Count="0">        if(i == 0){</Line>
+				<Line Number="108" Count="0">          set_required_nb_monsters(jeu, VAMPIRE, tab[i]);</Line>
+				<Line Number="109" Count="-1">        }</Line>
+				<Line Number="110" Count="0">        if( i ==1){</Line>
+				<Line Number="111" Count="0">          set_required_nb_monsters(jeu, GHOST, tab[i]);</Line>
+				<Line Number="112" Count="-1">        }</Line>
+				<Line Number="113" Count="0">        if(i == 2){</Line>
+				<Line Number="114" Count="0">            set_required_nb_monsters(jeu, ZOMBIE, tab[i]);</Line>
+				<Line Number="115" Count="-1">        }else{</Line>
+				<Line Number="116" Count="0">          set_required_nb_monsters(jeu, SPIRIT, tab[i]);</Line>
+				<Line Number="117" Count="-1">        }</Line>
+				<Line Number="118" Count="-1">      }</Line>
+				<Line Number="119" Count="-1">    }</Line>
+				<Line Number="120" Count="0">    break;</Line>
+				<Line Number="121" Count="-1">    case 2: {                                                // troisième ligne du fichier</Line>
+				<Line Number="122" Count="-1"></Line>
+				<Line Number="123" Count="0">      for(int i = 0; i &lt; size; i++){</Line>
+				<Line Number="124" Count="0">        set_required_nb_seen(jeu, N ,i , tab[i]);</Line>
+				<Line Number="125" Count="-1">      }</Line>
+				<Line Number="126" Count="-1">    }</Line>
+				<Line Number="127" Count="0">    break;</Line>
+				<Line Number="128" Count="-1">    case 3: {                                              // quatrième ligne du fichier</Line>
+				<Line Number="129" Count="0">      for(int i = 0; i &lt; size; i++){</Line>
+				<Line Number="130" Count="0">        set_required_nb_seen(jeu, S ,i , tab[i]);</Line>
+				<Line Number="131" Count="-1">      }</Line>
+				<Line Number="132" Count="-1">    }</Line>
+				<Line Number="133" Count="0">    break;</Line>
+				<Line Number="134" Count="-1">    case 4: {                                            // cinquième ligne du fichier</Line>
+				<Line Number="135" Count="0">      for(int i = 0; i &lt; size; i++){</Line>
+				<Line Number="136" Count="0">        set_required_nb_seen(jeu, E ,i , tab[i]);</Line>
+				<Line Number="137" Count="-1">      }</Line>
+				<Line Number="138" Count="-1">    }</Line>
+				<Line Number="139" Count="0">    break;</Line>
+				<Line Number="140" Count="-1">    case 5: {                                           // sixieme ligne du fichier</Line>
+				<Line Number="141" Count="0">      for(int i = 0; i &lt; size; i++){</Line>
+				<Line Number="142" Count="0">        set_required_nb_seen(jeu, W ,i , tab[i]);</Line>
+				<Line Number="143" Count="-1">      }</Line>
+				<Line Number="144" Count="-1">    }</Line>
+				<Line Number="145" Count="0">    break;</Line>
+				<Line Number="146" Count="-1">    }</Line>
+				<Line Number="147" Count="0">    line = read_next_line(fichier, &amp;size);</Line>
+				<Line Number="148" Count="0">    compt = compt + 1;</Line>
+				<Line Number="149" Count="-1">  }</Line>
+				<Line Number="150" Count="0">  int compt2 = game_height(jeu)-1;</Line>
+				<Line Number="151" Count="-1"></Line>
+				<Line Number="152" Count="0">  while(compt2 &gt;= 0  &amp;&amp; line != NULL){</Line>
+				<Line Number="153" Count="0">    if(!line){</Line>
+				<Line Number="154" Count="0">      fprintf(stderr, "echec");</Line>
+				<Line Number="155" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="156" Count="-1">    }</Line>
+				<Line Number="157" Count="0">    for(int i = 0; i &lt; strlen(line); i=i+2){</Line>
+				<Line Number="158" Count="0">      if(!line[i]){</Line>
+				<Line Number="159" Count="0">        fprintf(stderr,"invalide char");</Line>
+				<Line Number="160" Count="0">        exit(EXIT_FAILURE);</Line>
+				<Line Number="161" Count="-1">      }</Line>
+				<Line Number="162" Count="0">      switch (line[i]) {</Line>
+				<Line Number="163" Count="-1">        case '\\':{</Line>
+				<Line Number="164" Count="0">          add_mirror_ext(jeu, ANTIMIRROR, i/2, compt2);</Line>
+				<Line Number="165" Count="-1">        }</Line>
+				<Line Number="166" Count="0">        break;</Line>
+				<Line Number="167" Count="-1">        case '/' :{</Line>
+				<Line Number="168" Count="0">          add_mirror_ext(jeu, MIRROR, i/2, compt2);</Line>
+				<Line Number="169" Count="-1">        }</Line>
+				<Line Number="170" Count="0">        break;</Line>
+				<Line Number="171" Count="-1">        case '.' :{</Line>
+				<Line Number="172" Count="0">          add_mirror_ext(jeu, EMPTY, i/2, compt2);</Line>
+				<Line Number="173" Count="-1">        }</Line>
+				<Line Number="174" Count="0">        break;</Line>
+				<Line Number="175" Count="-1">        case '|' : {</Line>
+				<Line Number="176" Count="0">          add_mirror_ext(jeu, VMIRROR, i/2, compt2);</Line>
+				<Line Number="177" Count="-1">        }</Line>
+				<Line Number="178" Count="0">        break;</Line>
+				<Line Number="179" Count="-1">        case '-': {</Line>
+				<Line Number="180" Count="0">          add_mirror_ext(jeu, HMIRROR, i/2, compt2);</Line>
+				<Line Number="181" Count="-1">        }</Line>
+				<Line Number="182" Count="0">        break;</Line>
+				<Line Number="183" Count="-1">        default  :</Line>
+				<Line Number="184" Count="0">        exit(EXIT_FAILURE);</Line>
+				<Line Number="185" Count="-1">      }</Line>
+				<Line Number="186" Count="-1"></Line>
+				<Line Number="187" Count="-1">    }</Line>
+				<Line Number="188" Count="0">    line = read_next_line(fichier,&amp;size);</Line>
+				<Line Number="189" Count="-1"></Line>
+				<Line Number="190" Count="0">    compt2--;</Line>
+				<Line Number="191" Count="-1">  }</Line>
+				<Line Number="192" Count="-1"></Line>
+				<Line Number="193" Count="0">fclose(fichier);</Line>
+				<Line Number="194" Count="0">return jeu;</Line>
+				<Line Number="195" Count="-1"></Line>
+				<Line Number="196" Count="-1">}</Line>
+				<Line Number="197" Count="-1"></Line>
+				<Line Number="198" Count="0">void save_game(cgame g, char* filename){</Line>
+				<Line Number="199" Count="0">    if(g==NULL || filename==NULL){</Line>
+				<Line Number="200" Count="0">        fprintf(stderr,"les pointeurs sont invalides");//on teste les pointeurs passés en parametre</Line>
+				<Line Number="201" Count="0">        exit(EXIT_FAILURE);</Line>
+				<Line Number="202" Count="-1">    }</Line>
+				<Line Number="203" Count="0">    FILE* fichier=fopen(filename,"w");//ouverture du fichier filename(où on doit les donnés de notre jeux) en mode ecriture</Line>
+				<Line Number="204" Count="0">    if(fichier==NULL){</Line>
+				<Line Number="205" Count="0">      fprintf(stderr,"echec de l'ouverture du fichier");//test si l'ouverure a échoué si oui on sort sinon on continue</Line>
+				<Line Number="206" Count="0">      exit(EXIT_FAILURE);</Line>
+				<Line Number="207" Count="-1">    }</Line>
+				<Line Number="208" Count="-1">    /* A partir de là que le fichier est ouvert on commence à ecrire les solutions dans le fichier mais à condition</Line>
+				<Line Number="209" Count="-1">    aussi que le jeu soit fini c'est à dire game_is_over*/</Line>
+				<Line Number="210" Count="-1">    // le "fprintf(fichier,"\n")" signifie juste quedans le ficher il faut retour à la ligne</Line>
+				<Line Number="211" Count="-1"></Line>
+				<Line Number="212" Count="-1"></Line>
+				<Line Number="213" Count="0">        fprintf(fichier,"%d %d", game_width(g), game_height(g));//la premieree ligne du fichier correspond à la largeur et la hauteur de notre grille</Line>
+				<Line Number="214" Count="0">        fprintf(fichier,"\n");</Line>
+				<Line Number="215" Count="-1">        //la 2eme au nombre de chaque type de monstre</Line>
+				<Line Number="216" Count="0">        fprintf(fichier,"%d %d %d %d ",required_nb_monsters(g, VAMPIRE),required_nb_monsters(g, GHOST),required_nb_monsters(g, ZOMBIE),required_nb_monsters(g,SPIRIT));</Line>
+				<Line Number="217" Count="0">        fprintf(fichier,"\n");</Line>
+				<Line Number="218" Count="-1">        // le nombre  de monstre visible coté nord à chaque position de la largeur</Line>
+				<Line Number="219" Count="0">        for(int i=0;i&lt;game_width(g);i++){</Line>
+				<Line Number="220" Count="0">          fprintf(fichier,"%d ",required_nb_seen(g, N, i));</Line>
+				<Line Number="221" Count="-1">        }</Line>
+				<Line Number="222" Count="0">        fprintf(fichier,"\n");</Line>
+				<Line Number="223" Count="-1">        // le nombre  de monstre visible coté sud à chaque position de la largeur</Line>
+				<Line Number="224" Count="0">        for(int i=0;i&lt;game_width(g);i++){</Line>
+				<Line Number="225" Count="0">          fprintf(fichier,"%d ",required_nb_seen(g, S, i));</Line>
+				<Line Number="226" Count="-1">        }</Line>
+				<Line Number="227" Count="0">        fprintf(fichier,"\n");</Line>
+				<Line Number="228" Count="-1">        // le nombre  de monstre visible coté EST à chaque position de la hauteur</Line>
+				<Line Number="229" Count="0">        for(int i=0;i&lt;game_height(g);i++){</Line>
+				<Line Number="230" Count="0">          fprintf(fichier,"%d ",required_nb_seen(g, E, i));</Line>
+				<Line Number="231" Count="-1">        }</Line>
+				<Line Number="232" Count="0">        fprintf(fichier,"\n");</Line>
+				<Line Number="233" Count="-1">        // le nombre  de monstre visible coté OUEST à chaque position de la hauteur</Line>
+				<Line Number="234" Count="0">        for(int i=0;i&lt;game_height(g);i++){</Line>
+				<Line Number="235" Count="0">          fprintf(fichier,"%d ",required_nb_seen(g, W, i));</Line>
+				<Line Number="236" Count="-1">        }</Line>
+				<Line Number="237" Count="0">        fprintf(fichier,"\n");</Line>
+				<Line Number="238" Count="-1">        //on parcours notre grille on recupere le contenu de chaque case et on l'ecrit directement dans le fichier</Line>
+				<Line Number="239" Count="0">        for(int j=game_height(g)-1;j&gt;=0;j--){</Line>
+				<Line Number="240" Count="0">          for(int i=0;i&lt;game_width(g);i++){</Line>
+				<Line Number="241" Count="0">            content contenue=get_content(g,i,j);</Line>
+				<Line Number="242" Count="0">            switch (contenue) {</Line>
+				<Line Number="243" Count="-1">              case VAMPIRE:</Line>
+				<Line Number="244" Count="0">              fprintf(fichier,"V ");</Line>
+				<Line Number="245" Count="0">              break;</Line>
+				<Line Number="246" Count="-1">              case ZOMBIE:</Line>
+				<Line Number="247" Count="0">              fprintf(fichier,"Z ");</Line>
+				<Line Number="248" Count="0">              break;</Line>
+				<Line Number="249" Count="-1">              case GHOST:</Line>
+				<Line Number="250" Count="0">              fprintf(fichier,"G ");</Line>
+				<Line Number="251" Count="0">              break;</Line>
+				<Line Number="252" Count="-1">              case SPIRIT:</Line>
+				<Line Number="253" Count="0">              fprintf(fichier,"S ");</Line>
+				<Line Number="254" Count="0">              break;</Line>
+				<Line Number="255" Count="-1">              case MIRROR:</Line>
+				<Line Number="256" Count="0">              fprintf(fichier,"/ ");</Line>
+				<Line Number="257" Count="0">              break;</Line>
+				<Line Number="258" Count="-1">              case ANTIMIRROR:</Line>
+				<Line Number="259" Count="0">              fprintf(fichier,"\\ ");</Line>
+				<Line Number="260" Count="0">              break;</Line>
+				<Line Number="261" Count="-1">              case VMIRROR:</Line>
+				<Line Number="262" Count="0">              fprintf(fichier,"| ");</Line>
+				<Line Number="263" Count="0">              break;</Line>
+				<Line Number="264" Count="-1">              case HMIRROR:</Line>
+				<Line Number="265" Count="0">              fprintf(fichier,"- ");</Line>
+				<Line Number="266" Count="0">              break;</Line>
+				<Line Number="267" Count="-1">              case EMPTY:</Line>
+				<Line Number="268" Count="0">              fprintf(fichier," ");</Line>
+				<Line Number="269" Count="-1">            }</Line>
+				<Line Number="270" Count="-1">          }</Line>
+				<Line Number="271" Count="0">          fprintf(fichier,"\n");</Line>
+				<Line Number="272" Count="-1"></Line>
+				<Line Number="273" Count="-1">    }</Line>
+				<Line Number="274" Count="0">    fclose(fichier);//ferme le fichier</Line>
+				<Line Number="275" Count="-1"></Line>
+				<Line Number="276" Count="0">}</Line>
+			</Report>
+		</File>
+		<File Name="solver.c" FullPath="./solver.c">
+			<Report>
+				<Line Number="0" Count="-1">#include"game.h"</Line>
+				<Line Number="1" Count="-1">#include&lt;stdlib.h&gt;</Line>
+				<Line Number="2" Count="-1">#include&lt;stdio.h&gt;</Line>
+				<Line Number="3" Count="-1">#include"game_io.h"</Line>
+				<Line Number="4" Count="-1">#include&lt;string.h&gt;</Line>
+				<Line Number="5" Count="-1"></Line>
+				<Line Number="6" Count="1">int affichergrille (game jeu){</Line>
+				<Line Number="7" Count="1">  printf("  Z:%d V:%d G:%d S:%d   \n",required_nb_monsters(jeu, ZOMBIE),required_nb_monsters(jeu, VAMPIRE),required_nb_monsters(jeu, GHOST),required_nb_monsters(jeu, SPIRIT));</Line>
+				<Line Number="8" Count="1">  printf("\n");</Line>
+				<Line Number="9" Count="-1">  //afficher le nombre de monstre visibles de chaque coté(N,S,E,O)</Line>
+				<Line Number="10" Count="-1"></Line>
+				<Line Number="11" Count="-1">  //cote NORD</Line>
+				<Line Number="12" Count="1">  printf("      ");</Line>
+				<Line Number="13" Count="5">  for(int i=0;i&lt;game_width(jeu);i++){</Line>
+				<Line Number="14" Count="4">    printf("%d ",required_nb_seen(jeu, N, i));</Line>
+				<Line Number="15" Count="-1">  }</Line>
+				<Line Number="16" Count="1">  printf("      \n");</Line>
+				<Line Number="17" Count="1">  printf("\n");</Line>
+				<Line Number="18" Count="-1"></Line>
+				<Line Number="19" Count="-1">  //affichage du contenu de chaque case de notre grille ET les cotes EST OUEST</Line>
+				<Line Number="20" Count="1">  int h=game_height(jeu)-1;</Line>
+				<Line Number="21" Count="1">  int w =game_width(jeu);</Line>
+				<Line Number="22" Count="5">    for(int y=h;y&gt;=0;y--){</Line>
+				<Line Number="23" Count="-1">  //for(int v=3; v&gt;=0; v--){</Line>
+				<Line Number="24" Count="4">      printf("|  %d  ",required_nb_seen(jeu, W, h));</Line>
+				<Line Number="25" Count="20">    for(int x=0;x&lt;w;x++){</Line>
+				<Line Number="26" Count="-1">     //for(int k=0;k&lt;4;k++){</Line>
+				<Line Number="27" Count="16">     content contenu=get_content(jeu,x,y);</Line>
+				<Line Number="28" Count="16">      switch (contenu) {</Line>
+				<Line Number="29" Count="-1">        case  MIRROR:</Line>
+				<Line Number="30" Count="2">         printf("/ ");</Line>
+				<Line Number="31" Count="2">         break;</Line>
+				<Line Number="32" Count="-1">        case  ANTIMIRROR:</Line>
+				<Line Number="33" Count="5">          printf("\\ ");</Line>
+				<Line Number="34" Count="5">          break;</Line>
+				<Line Number="35" Count="-1">        case  VMIRROR:</Line>
+				<Line Number="36" Count="0">           printf("| ");</Line>
+				<Line Number="37" Count="0">           break;</Line>
+				<Line Number="38" Count="-1">        case  HMIRROR:</Line>
+				<Line Number="39" Count="0">            printf("- ");</Line>
+				<Line Number="40" Count="0">            break;</Line>
+				<Line Number="41" Count="-1">        case  VAMPIRE:</Line>
+				<Line Number="42" Count="2">             printf("V ");</Line>
+				<Line Number="43" Count="2">             break;</Line>
+				<Line Number="44" Count="-1">        case  GHOST:</Line>
+				<Line Number="45" Count="2">              printf("G ");</Line>
+				<Line Number="46" Count="2">              break;</Line>
+				<Line Number="47" Count="-1">        case  ZOMBIE:</Line>
+				<Line Number="48" Count="5">               printf("Z ");</Line>
+				<Line Number="49" Count="5">               break;</Line>
+				<Line Number="50" Count="-1">        case  SPIRIT:</Line>
+				<Line Number="51" Count="0">                printf("S ");</Line>
+				<Line Number="52" Count="0">                break;</Line>
+				<Line Number="53" Count="-1">        case EMPTY:</Line>
+				<Line Number="54" Count="0">        printf("  ");</Line>
+				<Line Number="55" Count="0">        break;</Line>
+				<Line Number="56" Count="-1">      }</Line>
+				<Line Number="57" Count="-1"></Line>
+				<Line Number="58" Count="-1">      }</Line>
+				<Line Number="59" Count="4">      printf("  %d  |\n",required_nb_seen(jeu, E, h));</Line>
+				<Line Number="60" Count="4">      h--;</Line>
+				<Line Number="61" Count="-1">  }</Line>
+				<Line Number="62" Count="-1"></Line>
+				<Line Number="63" Count="1">  printf("\n");</Line>
+				<Line Number="64" Count="1">  printf("       ");</Line>
+				<Line Number="65" Count="5">  for(int i=0;i&lt;game_width(jeu);i++){</Line>
+				<Line Number="66" Count="4">    printf("%d ",required_nb_seen(jeu, S, i));</Line>
+				<Line Number="67" Count="-1">  }</Line>
+				<Line Number="68" Count="1">  printf("      \n");</Line>
+				<Line Number="69" Count="1">  printf("\n");</Line>
+				<Line Number="70" Count="-1"></Line>
+				<Line Number="71" Count="1">  return EXIT_SUCCESS;</Line>
+				<Line Number="72" Count="-1">  }</Line>
+				<Line Number="73" Count="-1"></Line>
+				<Line Number="74" Count="0">  void afficherMonstre(content monstre){</Line>
+				<Line Number="75" Count="0">    switch (monstre) {</Line>
+				<Line Number="76" Count="-1">      case  MIRROR:</Line>
+				<Line Number="77" Count="0">       printf("/ ");</Line>
+				<Line Number="78" Count="0">       break;</Line>
+				<Line Number="79" Count="-1">      case  ANTIMIRROR:</Line>
+				<Line Number="80" Count="0">        printf("\\ ");</Line>
+				<Line Number="81" Count="0">        break;</Line>
+				<Line Number="82" Count="-1">      case  VMIRROR:</Line>
+				<Line Number="83" Count="0">         printf("| ");</Line>
+				<Line Number="84" Count="0">         break;</Line>
+				<Line Number="85" Count="-1">      case  HMIRROR:</Line>
+				<Line Number="86" Count="0">          printf("- ");</Line>
+				<Line Number="87" Count="0">          break;</Line>
+				<Line Number="88" Count="-1">      case  VAMPIRE:</Line>
+				<Line Number="89" Count="0">           printf("V ");</Line>
+				<Line Number="90" Count="0">           break;</Line>
+				<Line Number="91" Count="-1">      case  GHOST:</Line>
+				<Line Number="92" Count="0">            printf("G ");</Line>
+				<Line Number="93" Count="0">            break;</Line>
+				<Line Number="94" Count="-1">      case  ZOMBIE:</Line>
+				<Line Number="95" Count="0">             printf("Z ");</Line>
+				<Line Number="96" Count="0">             break;</Line>
+				<Line Number="97" Count="-1">      case  SPIRIT:</Line>
+				<Line Number="98" Count="0">              printf("S ");</Line>
+				<Line Number="99" Count="0">              break;</Line>
+				<Line Number="100" Count="-1">       default:</Line>
+				<Line Number="101" Count="0">      printf(" . ");</Line>
+				<Line Number="102" Count="0">      break;</Line>
+				<Line Number="103" Count="-1"></Line>
+				<Line Number="104" Count="-1">    }</Line>
+				<Line Number="105" Count="0">  }</Line>
+				<Line Number="106" Count="-1"></Line>
+				<Line Number="107" Count="967">  bool is_game_possible(game g){</Line>
+				<Line Number="108" Count="967">    if ( current_nb_monsters(g,ZOMBIE) &gt; required_nb_monsters(g,ZOMBIE)){			//verifie que le nombre de zombie requis est egal au nombre de zombie dans la grille</Line>
+				<Line Number="109" Count="11">      return false;									//sinon la fonction renvoie false</Line>
+				<Line Number="110" Count="-1">    }</Line>
+				<Line Number="111" Count="956">    if ( current_nb_monsters(g,GHOST) &gt; required_nb_monsters(g,GHOST)){			//verifie que le nombre de ghost requis est egal au nombre de ghost dans la grille</Line>
+				<Line Number="112" Count="169">      return false;									//sinon la fonction renvoie false</Line>
+				<Line Number="113" Count="-1">    }</Line>
+				<Line Number="114" Count="787">    if ( current_nb_monsters(g,VAMPIRE) &gt; required_nb_monsters(g,VAMPIRE)){		//verifie que le nombre de vampire requis est egal au nombre de vampire dans la grille</Line>
+				<Line Number="115" Count="170">      return false;									//sinon la fonction renvoie false</Line>
+				<Line Number="116" Count="-1">    }</Line>
+				<Line Number="117" Count="617">    if ( current_nb_monsters(g,SPIRIT) &gt; required_nb_monsters(g,SPIRIT)){			//verifie que le nombre de vampire requis est egal au nombre de vampire dans la grille</Line>
+				<Line Number="118" Count="237">      return false;									//sinon la fonction renvoie false</Line>
+				<Line Number="119" Count="-1">    }</Line>
+				<Line Number="120" Count="1494">    for(int u = 0; u &lt; game_width(g); u++){				//boucle sur le nombre de lignes</Line>
+				<Line Number="121" Count="-1">      //verifie que le nombre de monstre que l'on doit voir à chaque position et bien egal au nombre de monstre que l'on voit</Line>
+				<Line Number="122" Count="1217">          if (required_nb_seen(g , N , u) &lt; current_nb_seen(g , N , u)){</Line>
+				<Line Number="123" Count="103">              return false;</Line>
+				<Line Number="124" Count="-1">          }</Line>
+				<Line Number="125" Count="-1">    }</Line>
+				<Line Number="126" Count="1349">    for(int u = 0; u &lt; game_width(g); u++){				//boucle sur le nombre de lignes</Line>
+				<Line Number="127" Count="-1">      //verifie que le nombre de monstre que l'on doit voir à chaque position et bien egal au nombre de monstre que l'on voit</Line>
+				<Line Number="128" Count="1090">          if (required_nb_seen(g , S , u) &lt; current_nb_seen(g , S , u)){</Line>
+				<Line Number="129" Count="18">              return false;</Line>
+				<Line Number="130" Count="-1">          }</Line>
+				<Line Number="131" Count="-1">    }</Line>
+				<Line Number="132" Count="1295">    for(int u = 0; u &lt; game_height(g); u++){				//boucle sur le nombre de lignes</Line>
+				<Line Number="133" Count="-1">      //verifie que le nombre de monstre que l'on doit voir à chaque position et bien egal au nombre de monstre que l'on voit</Line>
+				<Line Number="134" Count="1036">          if (required_nb_seen(g , E , u) &lt; current_nb_seen(g , E , u)){</Line>
+				<Line Number="135" Count="0">              return false;</Line>
+				<Line Number="136" Count="-1">          }</Line>
+				<Line Number="137" Count="-1">    }</Line>
+				<Line Number="138" Count="1250">    for(int u = 0; u &lt; game_height(g); u++){				//boucle sur le nombre de lignes</Line>
+				<Line Number="139" Count="-1">      //verifie que le nombre de monstre que l'on doit voir à chaque position et bien egal au nombre de monstre que l'on voit</Line>
+				<Line Number="140" Count="1006">          if (required_nb_seen(g , W , u) &lt; current_nb_seen(g , W , u)){</Line>
+				<Line Number="141" Count="15">              return false;</Line>
+				<Line Number="142" Count="-1">          }</Line>
+				<Line Number="143" Count="-1">    }</Line>
+				<Line Number="144" Count="-1"></Line>
+				<Line Number="145" Count="244">    return true;	// si il n'est rentrée dans aucune des conditions c'est que le jeu est finie donc renvoie true</Line>
+				<Line Number="146" Count="-1">  }</Line>
+				<Line Number="147" Count="-1"></Line>
+				<Line Number="148" Count="-1"></Line>
+				<Line Number="149" Count="1508">bool sol_recursive(game jeu, int position, bool retour){</Line>
+				<Line Number="150" Count="-1"></Line>
+				<Line Number="151" Count="1508">  if (jeu == NULL){</Line>
+				<Line Number="152" Count="0">   exit(EXIT_FAILURE);</Line>
+				<Line Number="153" Count="-1">  }</Line>
+				<Line Number="154" Count="1508">  if (position &lt; 0){</Line>
+				<Line Number="155" Count="12">    return false;</Line>
+				<Line Number="156" Count="-1">  }</Line>
+				<Line Number="157" Count="1496">  if (position == game_width(jeu)*game_height(jeu)){</Line>
+				<Line Number="158" Count="1">    if(is_game_over(jeu) == true){</Line>
+				<Line Number="159" Count="1">      affichergrille(jeu);</Line>
+				<Line Number="160" Count="1">      return true;</Line>
+				<Line Number="161" Count="-1">    }</Line>
+				<Line Number="162" Count="0">    return false;</Line>
+				<Line Number="163" Count="-1">  }</Line>
+				<Line Number="164" Count="1495">  int x = position%game_width(jeu);</Line>
+				<Line Number="165" Count="1495">  int y = position/game_height(jeu);</Line>
+				<Line Number="166" Count="-1">  // printf("la position courante est : %d\n",position);</Line>
+				<Line Number="167" Count="-1">  // printf("la largeur est : %d\n",x);</Line>
+				<Line Number="168" Count="-1">  // printf("la hauteur est : %d\n",y);</Line>
+				<Line Number="169" Count="-1">  // printf("le contenu de la position courante est :");</Line>
+				<Line Number="170" Count="-1">  // afficherMonstre(get_content(jeu,x,y));</Line>
+				<Line Number="171" Count="-1">  // printf("\n");</Line>
+				<Line Number="172" Count="1495">  content c=get_content(jeu,x,y);</Line>
+				<Line Number="173" Count="1495">  if( c== MIRROR || c == HMIRROR || c == VMIRROR || c == ANTIMIRROR ){</Line>
+				<Line Number="174" Count="-1">    //affichergrille(jeu);</Line>
+				<Line Number="175" Count="301">    if(retour==true){</Line>
+				<Line Number="176" Count="147">      return sol_recursive(jeu,position - 1,true);</Line>
+				<Line Number="177" Count="-1">    }else{</Line>
+				<Line Number="178" Count="154">      return sol_recursive(jeu, position + 1,false);</Line>
+				<Line Number="179" Count="-1">    }</Line>
+				<Line Number="180" Count="-1"></Line>
+				<Line Number="181" Count="-1">  }</Line>
+				<Line Number="182" Count="1194">  if (get_content(jeu,x,y)== EMPTY){</Line>
+				<Line Number="183" Count="242">    add_monster(jeu,VAMPIRE,x,y);</Line>
+				<Line Number="184" Count="-1">    //affichergrille(jeu);</Line>
+				<Line Number="185" Count="242">    if(is_game_possible(jeu)){</Line>
+				<Line Number="186" Count="-1">      //affichergrille(jeu);</Line>
+				<Line Number="187" Count="58">      return sol_recursive(jeu,position + 1,false);</Line>
+				<Line Number="188" Count="-1">    }</Line>
+				<Line Number="189" Count="-1">    else{</Line>
+				<Line Number="190" Count="-1">      //affichergrille(jeu);</Line>
+				<Line Number="191" Count="184">      return sol_recursive(jeu,position,false);</Line>
+				<Line Number="192" Count="-1"></Line>
+				<Line Number="193" Count="-1">    }</Line>
+				<Line Number="194" Count="-1">  }</Line>
+				<Line Number="195" Count="952">  else if (get_content(jeu,x,y)== VAMPIRE){</Line>
+				<Line Number="196" Count="240">    add_monster(jeu,GHOST,x,y);</Line>
+				<Line Number="197" Count="240">    if (is_game_possible(jeu)){</Line>
+				<Line Number="198" Count="-1">      //affichergrille(jeu);</Line>
+				<Line Number="199" Count="49">      return sol_recursive(jeu,position + 1,false);</Line>
+				<Line Number="200" Count="-1">    }else{</Line>
+				<Line Number="201" Count="-1">      //affichergrille(jeu);</Line>
+				<Line Number="202" Count="191">      return sol_recursive(jeu,position,false);</Line>
+				<Line Number="203" Count="-1">    }</Line>
+				<Line Number="204" Count="-1">  }</Line>
+				<Line Number="205" Count="712">  else if (get_content(jeu,x,y)== GHOST){</Line>
+				<Line Number="206" Count="-1">    //printf("fantom");</Line>
+				<Line Number="207" Count="238">    add_monster(jeu,ZOMBIE,x,y);</Line>
+				<Line Number="208" Count="238">    if (is_game_possible(jeu)){</Line>
+				<Line Number="209" Count="-1">      //affichergrille(jeu);</Line>
+				<Line Number="210" Count="127">      return sol_recursive(jeu,position + 1,false);</Line>
+				<Line Number="211" Count="-1">    }else{</Line>
+				<Line Number="212" Count="-1">      //affichergrille(jeu);</Line>
+				<Line Number="213" Count="111">      return sol_recursive(jeu,position,false);</Line>
+				<Line Number="214" Count="-1">    }</Line>
+				<Line Number="215" Count="-1">  }</Line>
+				<Line Number="216" Count="474">  else if (get_content(jeu,x,y)== ZOMBIE){</Line>
+				<Line Number="217" Count="237">    add_monster(jeu,SPIRIT,x,y);</Line>
+				<Line Number="218" Count="237">    if (is_game_possible(jeu)){</Line>
+				<Line Number="219" Count="-1">      //affichergrille(jeu);</Line>
+				<Line Number="220" Count="0">      return sol_recursive(jeu,position + 1,false);</Line>
+				<Line Number="221" Count="-1">    }else{</Line>
+				<Line Number="222" Count="-1">      //affichergrille(jeu);</Line>
+				<Line Number="223" Count="237">      return sol_recursive(jeu,position,false);</Line>
+				<Line Number="224" Count="-1">    }</Line>
+				<Line Number="225" Count="-1">  }</Line>
+				<Line Number="226" Count="-1">  else{</Line>
+				<Line Number="227" Count="237">    add_monster(jeu,EMPTY,x,y);</Line>
+				<Line Number="228" Count="237">    return sol_recursive(jeu,position - 1,true);</Line>
+				<Line Number="229" Count="-1">  }</Line>
+				<Line Number="230" Count="-1">}</Line>
+				<Line Number="231" Count="-1">bool s=false;</Line>
+				<Line Number="232" Count="0">void FIND_ALL(game jeu){</Line>
+				<Line Number="233" Count="0">  int size = game_width(jeu) * game_height(jeu) -1;</Line>
+				<Line Number="234" Count="-1">  //bool t=false;</Line>
+				<Line Number="235" Count="0">  s=sol_recursive(jeu,0,false);</Line>
+				<Line Number="236" Count="0">  while(s){</Line>
+				<Line Number="237" Count="0">    s=sol_recursive(jeu,size,true);</Line>
+				<Line Number="238" Count="-1">    //printf("%d",size);</Line>
+				<Line Number="239" Count="0">    affichergrille(jeu);</Line>
+				<Line Number="240" Count="-1">  }</Line>
+				<Line Number="241" Count="0">}</Line>
+				<Line Number="242" Count="-1"></Line>
+				<Line Number="243" Count="-1"></Line>
+				<Line Number="244" Count="-1"></Line>
+				<Line Number="245" Count="-1"></Line>
+				<Line Number="246" Count="-1"></Line>
+				<Line Number="247" Count="-1">//la fonvtion main</Line>
+				<Line Number="248" Count="-1"></Line>
+				<Line Number="249" Count="-1">// int main(int argc,char *argv[]){</Line>
+				<Line Number="250" Count="-1">//   if(argc !=4){</Line>
+				<Line Number="251" Count="-1">//     fprintf(stderr,"manque d'arguments");</Line>
+				<Line Number="252" Count="-1">//     exit(EXIT_FAILURE);</Line>
+				<Line Number="253" Count="-1">//   }</Line>
+				<Line Number="254" Count="-1">//   if(strcmp(argv[1],"FIND_ONE") != 0 &amp;&amp; strcmp(argv[1],"NB_SOL") != 0 &amp;&amp; strcmp(argv[1],"FIND_ALL") != 0){</Line>
+				<Line Number="255" Count="-1">//     exit(EXIT_FAILURE);</Line>
+				<Line Number="256" Count="-1">//   }</Line>
+				<Line Number="257" Count="-1">//   game jeu = load_game(argv[2]);</Line>
+				<Line Number="258" Count="-1">//   if(strcmp(argv[1],"FIND_ONE")==0){</Line>
+				<Line Number="259" Count="-1">//     sol_recursive(jeu,0,false);</Line>
+				<Line Number="260" Count="-1">//     save_game(jeu,argv[3]);</Line>
+				<Line Number="261" Count="-1">//     affichergrille(jeu);</Line>
+				<Line Number="262" Count="-1">//   }</Line>
+				<Line Number="263" Count="-1">//   if(strcmp(argv[1],"FIND_ALL")==0){</Line>
+				<Line Number="264" Count="-1">//     FIND_ALL(jeu);</Line>
+				<Line Number="265" Count="-1">//</Line>
+				<Line Number="266" Count="-1">//   }</Line>
+				<Line Number="267" Count="-1">//   return EXIT_SUCCESS;</Line>
+				<Line Number="268" Count="-1">// }</Line>
+			</Report>
+		</File>
+		<File Name="testAM.c" FullPath="./testAM.c">
+			<Report>
+				<Line Number="0" Count="-1">#include &lt;stdlib.h&gt;</Line>
+				<Line Number="1" Count="-1">#include &lt;stdbool.h&gt;</Line>
+				<Line Number="2" Count="-1">#include &lt;assert.h&gt;</Line>
+				<Line Number="3" Count="-1">#include &lt;stdio.h&gt;</Line>
+				<Line Number="4" Count="-1">#include "game_io.h"</Line>
+				<Line Number="5" Count="-1">#include "game.h"</Line>
+				<Line Number="6" Count="-1"></Line>
+				<Line Number="7" Count="-1">#define NB_DIR 4</Line>
+				<Line Number="8" Count="-1">#define NB_COL 4</Line>
+				<Line Number="9" Count="-1">#define NB_LINE 4</Line>
+				<Line Number="10" Count="-1"></Line>
+				<Line Number="11" Count="-1"></Line>
+				<Line Number="12" Count="-1">bool rep=true;</Line>
+				<Line Number="13" Count="1">bool test_new_game_ext(){</Line>
+				<Line Number="14" Count="1">  bool rep=true;</Line>
+				<Line Number="15" Count="1">  game jeu = new_game_ext(NB_COL,NB_LINE);</Line>
+				<Line Number="16" Count="1">  assert(jeu);</Line>
+				<Line Number="17" Count="1">  if(game_width(jeu) != NB_COL || game_height(jeu) != NB_LINE){</Line>
+				<Line Number="18" Count="0">    fprintf(stderr, "erreur au niveau de height et width de la fonction new_game_ext \n");</Line>
+				<Line Number="19" Count="-1">  }</Line>
+				<Line Number="20" Count="5"> 	for (int i=0; i &lt; NB_COL; i++){</Line>
+				<Line Number="21" Count="20"> 		for(int j=0;j &lt; NB_LINE;j++){</Line>
+				<Line Number="22" Count="16"> 			if(get_content(jeu, i, j)!=EMPTY){</Line>
+				<Line Number="23" Count="0"> 				rep = false;</Line>
+				<Line Number="24" Count="0"> 				fprintf(stderr,("Error new_game_ext les cases ne sont pas vides\n"));</Line>
+				<Line Number="25" Count="0">        delete_game (jeu);</Line>
+				<Line Number="26" Count="0">        return false;</Line>
+				<Line Number="27" Count="-1">      }</Line>
+				<Line Number="28" Count="-1">    }</Line>
+				<Line Number="29" Count="-1">  }</Line>
+				<Line Number="30" Count="-1"></Line>
+				<Line Number="31" Count="5">  for(int i = 0; i &lt; NB_DIR; i++){</Line>
+				<Line Number="32" Count="4">    if(required_nb_seen(jeu, N,i) != 0 || required_nb_seen(jeu, S,i) != 0  || required_nb_seen(jeu, E,i) != 0 || required_nb_seen(jeu, W,i) != 0){</Line>
+				<Line Number="33" Count="0">      fprintf(stderr, "error au niveau de required_nb_seen \n");</Line>
+				<Line Number="34" Count="0">      rep = false;</Line>
+				<Line Number="35" Count="-1">    }</Line>
+				<Line Number="36" Count="-1">  }</Line>
+				<Line Number="37" Count="1">  if(required_nb_monsters(jeu, ZOMBIE) != 0 || required_nb_monsters (jeu, VAMPIRE) != 0 || required_nb_monsters (jeu, GHOST)  != 0 || required_nb_monsters(jeu ,SPIRIT) != 0){</Line>
+				<Line Number="38" Count="0">    fprintf(stderr, "error au niveau de required_nb_monsters \n");</Line>
+				<Line Number="39" Count="0">    rep = false;</Line>
+				<Line Number="40" Count="-1">  }</Line>
+				<Line Number="41" Count="1">  delete_game(jeu);</Line>
+				<Line Number="42" Count="1">  return rep;</Line>
+				<Line Number="43" Count="-1"></Line>
+				<Line Number="44" Count="-1">}</Line>
+				<Line Number="45" Count="-1"></Line>
+				<Line Number="46" Count="1">bool test_add_monster(){</Line>
+				<Line Number="47" Count="1">   game jeu= new_game_ext(NB_COL,NB_LINE);</Line>
+				<Line Number="48" Count="1">   assert(jeu);</Line>
+				<Line Number="49" Count="1">   add_monster(jeu,VAMPIRE,0,1);</Line>
+				<Line Number="50" Count="1">   add_monster(jeu,ZOMBIE,1,0);</Line>
+				<Line Number="51" Count="1">   add_monster(jeu,GHOST,2,0);</Line>
+				<Line Number="52" Count="1">   add_monster(jeu,SPIRIT,1,1);</Line>
+				<Line Number="53" Count="-1"></Line>
+				<Line Number="54" Count="1">   if(get_content(jeu,0,1) != VAMPIRE || get_content(jeu, 1,0) != ZOMBIE || get_content(jeu, 2,0) != GHOST || get_content(jeu,1,1) != SPIRIT){</Line>
+				<Line Number="55" Count="0">     fprintf(stderr, "error in function add_monster 2 \n");</Line>
+				<Line Number="56" Count="0">     delete_game(jeu);</Line>
+				<Line Number="57" Count="0">     return false;</Line>
+				<Line Number="58" Count="-1">   }</Line>
+				<Line Number="59" Count="1">   if(add_monster(jeu,VAMPIRE, 0, 1) != true || add_monster(jeu,VAMPIRE, 1, 0) != true || add_monster(jeu,VAMPIRE,2, 0) != true || add_monster(jeu,VAMPIRE, 1, 1) != true){</Line>
+				<Line Number="60" Count="0">     fprintf(stderr, "error in function add_monster 1 \n");</Line>
+				<Line Number="61" Count="0">     delete_game(jeu);</Line>
+				<Line Number="62" Count="0">     return false;</Line>
+				<Line Number="63" Count="-1"></Line>
+				<Line Number="64" Count="-1">   }</Line>
+				<Line Number="65" Count="1">  delete_game(jeu);</Line>
+				<Line Number="66" Count="1">  return true;</Line>
+				<Line Number="67" Count="-1">}</Line>
+				<Line Number="68" Count="-1"></Line>
+				<Line Number="69" Count="2">bool test_add_mirror_ext(){</Line>
+				<Line Number="70" Count="2">  game jeu = new_game_ext(NB_COL,NB_LINE);</Line>
+				<Line Number="71" Count="2">  assert(jeu);</Line>
+				<Line Number="72" Count="2">  add_mirror_ext(jeu, ANTIMIRROR,0,3);</Line>
+				<Line Number="73" Count="2">  add_mirror_ext(jeu, MIRROR,3,3);</Line>
+				<Line Number="74" Count="2">  add_mirror_ext(jeu, VMIRROR,0,2);</Line>
+				<Line Number="75" Count="2">  add_mirror_ext(jeu, HMIRROR,0,0);</Line>
+				<Line Number="76" Count="-1"></Line>
+				<Line Number="77" Count="2">  if(get_content(jeu,0,3) != ANTIMIRROR ||get_content(jeu,3,3) != MIRROR || get_content(jeu,0,2) != VMIRROR  || get_content(jeu,0,0) != HMIRROR  ){</Line>
+				<Line Number="78" Count="0">    fprintf(stderr, "erro in add_mirror_ext \n");</Line>
+				<Line Number="79" Count="0">    delete_game(jeu);</Line>
+				<Line Number="80" Count="0">    rep = false;</Line>
+				<Line Number="81" Count="-1">  }</Line>
+				<Line Number="82" Count="2">  delete_game(jeu);</Line>
+				<Line Number="83" Count="2">  return rep;</Line>
+				<Line Number="84" Count="-1"></Line>
+				<Line Number="85" Count="-1">}</Line>
+				<Line Number="86" Count="-1"></Line>
+				<Line Number="87" Count="-1"></Line>
+				<Line Number="88" Count="1">bool test_is_game_over (){</Line>
+				<Line Number="89" Count="1">    bool rep = true;</Line>
+				<Line Number="90" Count="1">      game jeu =new_game ();</Line>
+				<Line Number="91" Count="1">      assert(jeu);</Line>
+				<Line Number="92" Count="1">      if(is_game_over(jeu) == false){</Line>
+				<Line Number="93" Count="0">        fprintf(stderr,"error in is_game_over 1 \n");</Line>
+				<Line Number="94" Count="0">        rep = false;</Line>
+				<Line Number="95" Count="-1">      }</Line>
+				<Line Number="96" Count="-1"></Line>
+				<Line Number="97" Count="1">      add_mirror_ext(jeu, ANTIMIRROR, 0, 3);</Line>
+				<Line Number="98" Count="1">      add_mirror_ext(jeu, MIRROR, 3, 3);</Line>
+				<Line Number="99" Count="1">      add_mirror_ext(jeu,ANTIMIRROR, 0, 2);</Line>
+				<Line Number="100" Count="1">      add_mirror_ext(jeu, ANTIMIRROR, 2, 1);</Line>
+				<Line Number="101" Count="1">      add_mirror_ext(jeu, MIRROR, 3, 1);</Line>
+				<Line Number="102" Count="1">      add_mirror_ext(jeu, ANTIMIRROR, 0, 0);</Line>
+				<Line Number="103" Count="1">      add_mirror_ext(jeu, ANTIMIRROR, 3, 0);</Line>
+				<Line Number="104" Count="-1"></Line>
+				<Line Number="105" Count="1">      add_monster(jeu,ZOMBIE,0,1);</Line>
+				<Line Number="106" Count="1">      add_monster(jeu,ZOMBIE,1,0);</Line>
+				<Line Number="107" Count="1">      add_monster(jeu,GHOST,2,0);</Line>
+				<Line Number="108" Count="1">      add_monster(jeu,GHOST,1,1);</Line>
+				<Line Number="109" Count="1">      add_monster(jeu,ZOMBIE,1,2);</Line>
+				<Line Number="110" Count="1">      add_monster(jeu,ZOMBIE,2,2);</Line>
+				<Line Number="111" Count="1">      add_monster(jeu,ZOMBIE,3,2);</Line>
+				<Line Number="112" Count="1">      add_monster(jeu,VAMPIRE,1,3);</Line>
+				<Line Number="113" Count="1">      add_monster(jeu,VAMPIRE,2,3);</Line>
+				<Line Number="114" Count="-1"></Line>
+				<Line Number="115" Count="-1"></Line>
+				<Line Number="116" Count="1">      set_required_nb_monsters(jeu, ZOMBIE,5);</Line>
+				<Line Number="117" Count="1">      set_required_nb_monsters(jeu, VAMPIRE,2);</Line>
+				<Line Number="118" Count="1">      set_required_nb_monsters(jeu, GHOST,2);</Line>
+				<Line Number="119" Count="1">      set_required_nb_monsters(jeu,SPIRIT,0);</Line>
+				<Line Number="120" Count="-1"></Line>
+				<Line Number="121" Count="1">      set_required_nb_seen(jeu, N, 0, 0);</Line>
+				<Line Number="122" Count="1">      set_required_nb_seen(jeu, N, 1, 3);</Line>
+				<Line Number="123" Count="1">      set_required_nb_seen(jeu, N, 2, 3);</Line>
+				<Line Number="124" Count="1">      set_required_nb_seen(jeu, N, 3, 0);</Line>
+				<Line Number="125" Count="-1"></Line>
+				<Line Number="126" Count="1">      set_required_nb_seen(jeu, S, 0, 0);</Line>
+				<Line Number="127" Count="1">      set_required_nb_seen(jeu, S, 1, 3);</Line>
+				<Line Number="128" Count="1">      set_required_nb_seen(jeu, S, 2, 2);</Line>
+				<Line Number="129" Count="1">      set_required_nb_seen(jeu, S, 3, 3);</Line>
+				<Line Number="130" Count="-1"></Line>
+				<Line Number="131" Count="1">      set_required_nb_seen(jeu, W, 3, 3);</Line>
+				<Line Number="132" Count="1">      set_required_nb_seen(jeu, W, 2, 3);</Line>
+				<Line Number="133" Count="1">      set_required_nb_seen(jeu, W, 1, 2);</Line>
+				<Line Number="134" Count="1">      set_required_nb_seen(jeu, W, 0, 0);</Line>
+				<Line Number="135" Count="-1"></Line>
+				<Line Number="136" Count="1">      set_required_nb_seen(jeu, E, 3, 2);</Line>
+				<Line Number="137" Count="1">      set_required_nb_seen(jeu, E, 2, 3);</Line>
+				<Line Number="138" Count="1">      set_required_nb_seen(jeu, E, 1, 0);</Line>
+				<Line Number="139" Count="1">      set_required_nb_seen(jeu, E, 0, 0);</Line>
+				<Line Number="140" Count="-1"></Line>
+				<Line Number="141" Count="-1"></Line>
+				<Line Number="142" Count="1">      if(is_game_over(jeu) == false){</Line>
+				<Line Number="143" Count="0">        fprintf(stderr, "erreur sur la fonction is_game_over \n");</Line>
+				<Line Number="144" Count="0">        rep = false;</Line>
+				<Line Number="145" Count="-1">      }</Line>
+				<Line Number="146" Count="1">     delete_game(jeu);</Line>
+				<Line Number="147" Count="1">     return rep;</Line>
+				<Line Number="148" Count="-1">}</Line>
+				<Line Number="149" Count="-1"></Line>
+				<Line Number="150" Count="1">bool test_restart_game(){</Line>
+				<Line Number="151" Count="1">  game jeu = new_game_ext(NB_COL,NB_LINE);</Line>
+				<Line Number="152" Count="1">  assert(jeu);</Line>
+				<Line Number="153" Count="1">  add_monster(jeu,VAMPIRE,0,1);</Line>
+				<Line Number="154" Count="1">  add_monster(jeu,ZOMBIE,1,0);</Line>
+				<Line Number="155" Count="1">  add_monster(jeu,GHOST,2,0);</Line>
+				<Line Number="156" Count="1">  add_monster(jeu,SPIRIT,1,1);</Line>
+				<Line Number="157" Count="-1"></Line>
+				<Line Number="158" Count="1">  restart_game(jeu);</Line>
+				<Line Number="159" Count="-1"></Line>
+				<Line Number="160" Count="1">  if(get_content(jeu,0,1) != EMPTY || get_content(jeu, 1,0) != EMPTY || get_content(jeu, 2,0) != EMPTY || get_content(jeu,1,1) != EMPTY){</Line>
+				<Line Number="161" Count="0">    fprintf(stderr, "error in function add_monster");</Line>
+				<Line Number="162" Count="0">    rep = false;</Line>
+				<Line Number="163" Count="-1">  }</Line>
+				<Line Number="164" Count="1">  delete_game(jeu);</Line>
+				<Line Number="165" Count="1">  return rep;</Line>
+				<Line Number="166" Count="-1"></Line>
+				<Line Number="167" Count="-1">}</Line>
+				<Line Number="168" Count="1">bool test_game_width(){</Line>
+				<Line Number="169" Count="1">  game jeu = new_game_ext(NB_COL,NB_LINE);</Line>
+				<Line Number="170" Count="1">  assert(jeu);</Line>
+				<Line Number="171" Count="1">  if(game_width(jeu) != NB_COL){</Line>
+				<Line Number="172" Count="0">    fprintf(stderr, "error in function game_width");</Line>
+				<Line Number="173" Count="0">    rep = false;</Line>
+				<Line Number="174" Count="-1">  }</Line>
+				<Line Number="175" Count="1">  delete_game(jeu);</Line>
+				<Line Number="176" Count="1">  return rep;</Line>
+				<Line Number="177" Count="-1">}</Line>
+				<Line Number="178" Count="1">bool test_game_height(){</Line>
+				<Line Number="179" Count="1">  game jeu = new_game_ext(NB_COL,NB_LINE);</Line>
+				<Line Number="180" Count="1">  assert(jeu);</Line>
+				<Line Number="181" Count="1">  if(game_height(jeu) != NB_LINE){</Line>
+				<Line Number="182" Count="0">    fprintf(stderr, "error in function game_height");</Line>
+				<Line Number="183" Count="0">    rep = false;</Line>
+				<Line Number="184" Count="-1">  }</Line>
+				<Line Number="185" Count="1">  delete_game(jeu);</Line>
+				<Line Number="186" Count="1">  return rep;</Line>
+				<Line Number="187" Count="-1">}</Line>
+				<Line Number="188" Count="-1"></Line>
+				<Line Number="189" Count="-1"></Line>
+				<Line Number="190" Count="1">bool test_copy_game(){</Line>
+				<Line Number="191" Count="1">  game jeu = new_game_ext(NB_COL,NB_LINE);</Line>
+				<Line Number="192" Count="1">    assert(jeu);</Line>
+				<Line Number="193" Count="1">    game copy = copy_game(jeu);</Line>
+				<Line Number="194" Count="1">    assert(jeu);</Line>
+				<Line Number="195" Count="1">    if(required_nb_monsters(jeu,ZOMBIE) != required_nb_monsters(copy,ZOMBIE) || required_nb_monsters(jeu,VAMPIRE) != required_nb_monsters(copy,VAMPIRE) || required_nb_monsters(jeu,GHOST) != required_nb_monsters(copy,GHOST) || required_nb_monsters(jeu,SPIRIT) != required_nb_monsters(copy,SPIRIT)){</Line>
+				<Line Number="196" Count="0">      fprintf(stderr, "error in function copy_game");</Line>
+				<Line Number="197" Count="0">      rep = false;</Line>
+				<Line Number="198" Count="-1">    }</Line>
+				<Line Number="199" Count="1">    if(game_width(jeu) != game_width(copy) || game_height(jeu) != game_height(copy)){</Line>
+				<Line Number="200" Count="0">      fprintf(stderr, "error in function game_height");</Line>
+				<Line Number="201" Count="0">      rep = false;</Line>
+				<Line Number="202" Count="-1">    }</Line>
+				<Line Number="203" Count="5">    for (int i = 0; i &lt; NB_DIR; i++){</Line>
+				<Line Number="204" Count="4">    if ((required_nb_seen(jeu, S, i) != required_nb_seen(copy, S, i)) || (required_nb_seen(jeu, N, i) != required_nb_seen(copy, N, i)) || (required_nb_seen(jeu, W, i) != required_nb_seen(copy, W, i)) || (required_nb_seen(jeu, E, i) != required_nb_seen(copy, E, i))){</Line>
+				<Line Number="205" Count="0">      fprintf(stderr, "echec on copy les labels sont differents");</Line>
+				<Line Number="206" Count="0">      rep = false;</Line>
+				<Line Number="207" Count="-1">    }</Line>
+				<Line Number="208" Count="-1">  }</Line>
+				<Line Number="209" Count="5">  for (int i = 0; i &lt; NB_COL; i++){</Line>
+				<Line Number="210" Count="20">    for (int j = 0; j &lt; NB_LINE; j++){</Line>
+				<Line Number="211" Count="16">      if (get_content(jeu, j, i) != get_content(copy, j, i)){</Line>
+				<Line Number="212" Count="0">        fprintf(stderr, "echec in copy les cases sont differents");</Line>
+				<Line Number="213" Count="0">        rep = false;</Line>
+				<Line Number="214" Count="-1">      }</Line>
+				<Line Number="215" Count="-1">    }</Line>
+				<Line Number="216" Count="-1">  }</Line>
+				<Line Number="217" Count="1">  delete_game(jeu);</Line>
+				<Line Number="218" Count="1">  delete_game(copy);</Line>
+				<Line Number="219" Count="1">  return rep;</Line>
+				<Line Number="220" Count="-1">}</Line>
+				<Line Number="221" Count="-1">/*test is_game_possible*/</Line>
+				<Line Number="222" Count="1">bool test_is_game_possible(){</Line>
+				<Line Number="223" Count="1">  game jeu = new_game_ext(NB_COL,NB_LINE);</Line>
+				<Line Number="224" Count="1">  add_mirror_ext(jeu, ANTIMIRROR, 0, 3);</Line>
+				<Line Number="225" Count="1">  add_mirror_ext(jeu, MIRROR, 3, 3);</Line>
+				<Line Number="226" Count="1">  add_mirror_ext(jeu,ANTIMIRROR, 0, 2);</Line>
+				<Line Number="227" Count="1">  add_mirror_ext(jeu, ANTIMIRROR, 2, 1);</Line>
+				<Line Number="228" Count="1">  add_mirror_ext(jeu, MIRROR, 3, 1);</Line>
+				<Line Number="229" Count="1">  add_mirror_ext(jeu, ANTIMIRROR, 0, 0);</Line>
+				<Line Number="230" Count="1">  add_mirror_ext(jeu, ANTIMIRROR, 3, 0);</Line>
+				<Line Number="231" Count="-1"></Line>
+				<Line Number="232" Count="1">  add_monster(jeu,ZOMBIE,0,1);</Line>
+				<Line Number="233" Count="1">  add_monster(jeu,ZOMBIE,1,0);</Line>
+				<Line Number="234" Count="1">  add_monster(jeu,GHOST,2,0);</Line>
+				<Line Number="235" Count="1">  add_monster(jeu,GHOST,1,1);</Line>
+				<Line Number="236" Count="1">  add_monster(jeu,ZOMBIE,1,2);</Line>
+				<Line Number="237" Count="1">  add_monster(jeu,ZOMBIE,2,2);</Line>
+				<Line Number="238" Count="1">  add_monster(jeu,ZOMBIE,3,2);</Line>
+				<Line Number="239" Count="1">  add_monster(jeu,VAMPIRE,1,3);</Line>
+				<Line Number="240" Count="1">  add_monster(jeu,VAMPIRE,2,3);</Line>
+				<Line Number="241" Count="-1"></Line>
+				<Line Number="242" Count="-1"></Line>
+				<Line Number="243" Count="1">  set_required_nb_monsters(jeu, ZOMBIE,5);</Line>
+				<Line Number="244" Count="1">  set_required_nb_monsters(jeu, VAMPIRE,2);</Line>
+				<Line Number="245" Count="1">  set_required_nb_monsters(jeu, GHOST,2);</Line>
+				<Line Number="246" Count="1">  set_required_nb_monsters(jeu,SPIRIT,0);</Line>
+				<Line Number="247" Count="-1"></Line>
+				<Line Number="248" Count="1">  set_required_nb_seen(jeu, N, 0, 0);</Line>
+				<Line Number="249" Count="1">  set_required_nb_seen(jeu, N, 1, 3);</Line>
+				<Line Number="250" Count="1">  set_required_nb_seen(jeu, N, 2, 3);</Line>
+				<Line Number="251" Count="1">  set_required_nb_seen(jeu, N, 3, 0);</Line>
+				<Line Number="252" Count="-1"></Line>
+				<Line Number="253" Count="1">  set_required_nb_seen(jeu, S, 0, 0);</Line>
+				<Line Number="254" Count="1">  set_required_nb_seen(jeu, S, 1, 3);</Line>
+				<Line Number="255" Count="1">  set_required_nb_seen(jeu, S, 2, 2);</Line>
+				<Line Number="256" Count="1">  set_required_nb_seen(jeu, S, 3, 3);</Line>
+				<Line Number="257" Count="-1"></Line>
+				<Line Number="258" Count="1">  set_required_nb_seen(jeu, W, 3, 3);</Line>
+				<Line Number="259" Count="1">  set_required_nb_seen(jeu, W, 2, 3);</Line>
+				<Line Number="260" Count="1">  set_required_nb_seen(jeu, W, 1, 2);</Line>
+				<Line Number="261" Count="1">  set_required_nb_seen(jeu, W, 0, 0);</Line>
+				<Line Number="262" Count="-1"></Line>
+				<Line Number="263" Count="1">  set_required_nb_seen(jeu, E, 3, 2);</Line>
+				<Line Number="264" Count="1">  set_required_nb_seen(jeu, E, 2, 3);</Line>
+				<Line Number="265" Count="1">  set_required_nb_seen(jeu, E, 1, 0);</Line>
+				<Line Number="266" Count="1">  set_required_nb_seen(jeu, E, 0, 0);</Line>
+				<Line Number="267" Count="-1"></Line>
+				<Line Number="268" Count="-1"></Line>
+				<Line Number="269" Count="1">  if(is_game_possible(jeu) == false){</Line>
+				<Line Number="270" Count="0">    fprintf(stderr,"jeu pas possible");</Line>
+				<Line Number="271" Count="0">    rep = false;</Line>
+				<Line Number="272" Count="-1">  }</Line>
+				<Line Number="273" Count="1">  return rep;</Line>
+				<Line Number="274" Count="-1">}</Line>
+				<Line Number="275" Count="-1"></Line>
+				<Line Number="276" Count="-1"></Line>
+				<Line Number="277" Count="-1">/*tester le sol_recursive*/</Line>
+				<Line Number="278" Count="1">bool test_sol_recursive(){</Line>
+				<Line Number="279" Count="1">  game jeu = new_game_ext(NB_COL,NB_LINE);</Line>
+				<Line Number="280" Count="1">  add_mirror_ext(jeu, ANTIMIRROR, 0, 3);</Line>
+				<Line Number="281" Count="1">  add_mirror_ext(jeu, MIRROR, 3, 3);</Line>
+				<Line Number="282" Count="1">  add_mirror_ext(jeu,ANTIMIRROR, 0, 2);</Line>
+				<Line Number="283" Count="1">  add_mirror_ext(jeu, ANTIMIRROR, 2, 1);</Line>
+				<Line Number="284" Count="1">  add_mirror_ext(jeu, MIRROR, 3, 1);</Line>
+				<Line Number="285" Count="1">  add_mirror_ext(jeu, ANTIMIRROR, 0, 0);</Line>
+				<Line Number="286" Count="1">  add_mirror_ext(jeu, ANTIMIRROR, 3, 0);</Line>
+				<Line Number="287" Count="-1"></Line>
+				<Line Number="288" Count="1">  set_required_nb_monsters(jeu, ZOMBIE,5);</Line>
+				<Line Number="289" Count="1">  set_required_nb_monsters(jeu, VAMPIRE,2);</Line>
+				<Line Number="290" Count="1">  set_required_nb_monsters(jeu, GHOST,2);</Line>
+				<Line Number="291" Count="1">  set_required_nb_monsters(jeu,SPIRIT,0);</Line>
+				<Line Number="292" Count="-1"></Line>
+				<Line Number="293" Count="1">  set_required_nb_seen(jeu, N, 0, 0);</Line>
+				<Line Number="294" Count="1">  set_required_nb_seen(jeu, N, 1, 3);</Line>
+				<Line Number="295" Count="1">  set_required_nb_seen(jeu, N, 2, 3);</Line>
+				<Line Number="296" Count="1">  set_required_nb_seen(jeu, N, 3, 0);</Line>
+				<Line Number="297" Count="-1"></Line>
+				<Line Number="298" Count="1">  set_required_nb_seen(jeu, S, 0, 0);</Line>
+				<Line Number="299" Count="1">  set_required_nb_seen(jeu, S, 1, 3);</Line>
+				<Line Number="300" Count="1">  set_required_nb_seen(jeu, S, 2, 2);</Line>
+				<Line Number="301" Count="1">  set_required_nb_seen(jeu, S, 3, 3);</Line>
+				<Line Number="302" Count="-1"></Line>
+				<Line Number="303" Count="1">  set_required_nb_seen(jeu, W, 3, 3);</Line>
+				<Line Number="304" Count="1">  set_required_nb_seen(jeu, W, 2, 3);</Line>
+				<Line Number="305" Count="1">  set_required_nb_seen(jeu, W, 1, 2);</Line>
+				<Line Number="306" Count="1">  set_required_nb_seen(jeu, W, 0, 0);</Line>
+				<Line Number="307" Count="-1"></Line>
+				<Line Number="308" Count="1">  set_required_nb_seen(jeu, E, 3, 2);</Line>
+				<Line Number="309" Count="1">  set_required_nb_seen(jeu, E, 2, 3);</Line>
+				<Line Number="310" Count="1">  set_required_nb_seen(jeu, E, 1, 0);</Line>
+				<Line Number="311" Count="1">  set_required_nb_seen(jeu, E, 0, 0);</Line>
+				<Line Number="312" Count="-1"></Line>
+				<Line Number="313" Count="1">  if(sol_recursive(jeu, 0, false) == false){</Line>
+				<Line Number="314" Count="0">    fprintf(stderr,"solution no found");</Line>
+				<Line Number="315" Count="0">    rep = false;</Line>
+				<Line Number="316" Count="-1">  }</Line>
+				<Line Number="317" Count="1">  return rep;</Line>
+				<Line Number="318" Count="-1">}</Line>
+				<Line Number="319" Count="-1"></Line>
+				<Line Number="320" Count="1">int main(void){</Line>
+				<Line Number="321" Count="1">  bool result = true;</Line>
+				<Line Number="322" Count="1">  result = test_new_game_ext() &amp;&amp; result;</Line>
+				<Line Number="323" Count="1">  result =  test_is_game_over () &amp;&amp; result;</Line>
+				<Line Number="324" Count="1">  result = test_add_mirror_ext() &amp;&amp; result;</Line>
+				<Line Number="325" Count="1">  result = test_copy_game() &amp;&amp; result;</Line>
+				<Line Number="326" Count="1">  result = test_add_mirror_ext() &amp;&amp; result;</Line>
+				<Line Number="327" Count="1">  result =  test_restart_game () &amp;&amp; result;</Line>
+				<Line Number="328" Count="1">  result = test_game_width() &amp;&amp; result;</Line>
+				<Line Number="329" Count="1">  result = test_game_height() &amp;&amp; result;</Line>
+				<Line Number="330" Count="1">  result = test_add_monster() &amp;&amp; result;</Line>
+				<Line Number="331" Count="1">  result = test_sol_recursive() &amp;&amp; result;</Line>
+				<Line Number="332" Count="1">  result = test_is_game_possible() &amp;&amp; result;</Line>
+				<Line Number="333" Count="1">  if(result){</Line>
+				<Line Number="334" Count="1">      printf("Tests successfull\n");</Line>
+				<Line Number="335" Count="1">      return EXIT_SUCCESS;</Line>
+				<Line Number="336" Count="-1">  }</Line>
+				<Line Number="337" Count="-1">  else{</Line>
+				<Line Number="338" Count="0">      printf("Tests failed\n");</Line>
+				<Line Number="339" Count="0">      return EXIT_FAILURE;</Line>
+				<Line Number="340" Count="-1">  }</Line>
+				<Line Number="341" Count="-1">}</Line>
+			</Report>
+		</File>
+		<File Name="testSAM.c" FullPath="./testSAM.c">
+			<Report>
+				<Line Number="0" Count="-1">#include &lt;stdlib.h&gt;</Line>
+				<Line Number="1" Count="-1">#include &lt;stdbool.h&gt;</Line>
+				<Line Number="2" Count="-1">#include &lt;assert.h&gt;</Line>
+				<Line Number="3" Count="-1">#include &lt;stdio.h&gt;</Line>
+				<Line Number="4" Count="-1">#include "game.h"</Line>
+				<Line Number="5" Count="-1"></Line>
+				<Line Number="6" Count="-1"></Line>
+				<Line Number="7" Count="-1">bool rep=true;</Line>
+				<Line Number="8" Count="14">bool test_add_mirror(){</Line>
+				<Line Number="9" Count="14">     game jeu= new_game();</Line>
+				<Line Number="10" Count="14">     assert(jeu);</Line>
+				<Line Number="11" Count="14">     add_mirror(jeu, 1, 0, 3);</Line>
+				<Line Number="12" Count="14">     add_mirror(jeu, 0, 3, 3);</Line>
+				<Line Number="13" Count="14">     add_mirror(jeu, 1, 0, 2);</Line>
+				<Line Number="14" Count="14">     add_mirror(jeu, 1, 2, 1);</Line>
+				<Line Number="15" Count="14">     add_mirror(jeu, 0, 3, 1);</Line>
+				<Line Number="16" Count="14">     add_mirror(jeu, 1, 0, 0);</Line>
+				<Line Number="17" Count="14">     add_mirror(jeu, 1, 3, 0);</Line>
+				<Line Number="18" Count="-1"></Line>
+				<Line Number="19" Count="14">     if((get_content(jeu,0,3)!=ANTIMIRROR) || (get_content(jeu,3,3)!=MIRROR) || (get_content(jeu,0,2)!=ANTIMIRROR) ||(get_content(jeu,2,1)!=ANTIMIRROR) || (get_content(jeu,3,1)!=MIRROR) || (get_content(jeu,0,0)!=ANTIMIRROR) || (get_content(jeu,3,0)!=ANTIMIRROR))</Line>
+				<Line Number="20" Count="-1">           {</Line>
+				<Line Number="21" Count="0">           fprintf(stderr,("Basic test on add_mirror failed\n"));</Line>
+				<Line Number="22" Count="0">           rep= false;</Line>
+				<Line Number="23" Count="-1">           </Line>
+				<Line Number="24" Count="-1">           }</Line>
+				<Line Number="25" Count="14">     delete_game(jeu);</Line>
+				<Line Number="26" Count="14">     return rep;</Line>
+				<Line Number="27" Count="-1">}</Line>
+				<Line Number="28" Count="14">bool test_set_required_nb_monster(){</Line>
+				<Line Number="29" Count="14">	game jeu= new_game();</Line>
+				<Line Number="30" Count="14">        assert(jeu);</Line>
+				<Line Number="31" Count="14">	set_required_nb_monsters(jeu, ZOMBIE,5);</Line>
+				<Line Number="32" Count="14">	set_required_nb_monsters(jeu, VAMPIRE,2);</Line>
+				<Line Number="33" Count="14">	set_required_nb_monsters(jeu, GHOST,2);</Line>
+				<Line Number="34" Count="14">if(required_nb_monsters(jeu, ZOMBIE)!=5 || required_nb_monsters(jeu,VAMPIRE)!=2||required_nb_monsters(jeu, GHOST)!=2){</Line>
+				<Line Number="35" Count="0">	fprintf(stderr,("Basic test on add_mirror failed\n"));</Line>
+				<Line Number="36" Count="0">           rep= false;</Line>
+				<Line Number="37" Count="-1">           </Line>
+				<Line Number="38" Count="-1">           }</Line>
+				<Line Number="39" Count="14">     delete_game(jeu);</Line>
+				<Line Number="40" Count="14">     return rep;</Line>
+				<Line Number="41" Count="-1"></Line>
+				<Line Number="42" Count="-1">}</Line>
+				<Line Number="43" Count="14">bool test_set_required_nb_seen(){</Line>
+				<Line Number="44" Count="14">bool nb=true;</Line>
+				<Line Number="45" Count="14">        game jeu= new_game();</Line>
+				<Line Number="46" Count="14">        assert(jeu);</Line>
+				<Line Number="47" Count="14">	set_required_nb_seen(jeu, N, 0, 0);</Line>
+				<Line Number="48" Count="14">	set_required_nb_seen(jeu, N, 1, 3);</Line>
+				<Line Number="49" Count="14">	set_required_nb_seen(jeu, N, 2, 3);</Line>
+				<Line Number="50" Count="14">	set_required_nb_seen(jeu, N, 3, 0);</Line>
+				<Line Number="51" Count="14">	set_required_nb_seen(jeu, S, 0, 0);</Line>
+				<Line Number="52" Count="14">	set_required_nb_seen(jeu, S, 1, 3);</Line>
+				<Line Number="53" Count="14">	set_required_nb_seen(jeu, S, 2, 2);</Line>
+				<Line Number="54" Count="14">	set_required_nb_seen(jeu, S, 3, 3);</Line>
+				<Line Number="55" Count="14">	set_required_nb_seen(jeu, W, 3, 3);</Line>
+				<Line Number="56" Count="14">	set_required_nb_seen(jeu, W, 2, 3);</Line>
+				<Line Number="57" Count="14">	set_required_nb_seen(jeu, W, 1, 2);</Line>
+				<Line Number="58" Count="14">	set_required_nb_seen(jeu, W, 0, 0);</Line>
+				<Line Number="59" Count="14">	set_required_nb_seen(jeu, E, 3, 2);</Line>
+				<Line Number="60" Count="14">	set_required_nb_seen(jeu, E, 2, 3);</Line>
+				<Line Number="61" Count="14">	set_required_nb_seen(jeu, E, 1, 0);</Line>
+				<Line Number="62" Count="14">	set_required_nb_seen(jeu, E, 0, 0);</Line>
+				<Line Number="63" Count="-1"></Line>
+				<Line Number="64" Count="14">if((required_nb_seen(jeu, N, 0)!=0 )|| (required_nb_seen(jeu, N, 1)!=3) ||(required_nb_seen(jeu, N, 2)!=3 )|| (required_nb_seen(jeu, N, 3)!=0)){</Line>
+				<Line Number="65" Count="0">	fprintf(stderr,"le test de  base sur set_required_nb_seen  a echoué cote NORD\n");</Line>
+				<Line Number="66" Count="0">          	nb= false;</Line>
+				<Line Number="67" Count="-1">	}</Line>
+				<Line Number="68" Count="14">else if ((required_nb_seen(jeu, S, 0)!=0)||(required_nb_seen(jeu, S, 1)!=3) ||(required_nb_seen(jeu, S, 2)!=2 )||(required_nb_seen(jeu, S, 3)!=3)){</Line>
+				<Line Number="69" Count="0">	fprintf(stderr,"le test de  base sur set_required_nb_seen  a echoué cote SUD\n");</Line>
+				<Line Number="70" Count="0">          	nb= false;</Line>
+				<Line Number="71" Count="-1">	}</Line>
+				<Line Number="72" Count="14">else if ((required_nb_seen(jeu, W, 3)!=3) ||(required_nb_seen(jeu, W, 2)!=3 )||(required_nb_seen(jeu, W, 1)!=2) || (required_nb_seen(jeu, W, 0)!=0)){</Line>
+				<Line Number="73" Count="0">	fprintf(stderr,"le test de  base sur set_required_nb_seen  a echoué cote OUEST\n");</Line>
+				<Line Number="74" Count="0">          	nb= false;</Line>
+				<Line Number="75" Count="-1">	}</Line>
+				<Line Number="76" Count="14">else if ((required_nb_seen(jeu, E, 3)!=2) ||(required_nb_seen(jeu, E, 2)!=3) ||(required_nb_seen(jeu, E, 1)!=0) ||(required_nb_seen(jeu, E, 0)!=0)){</Line>
+				<Line Number="77" Count="0">		fprintf(stderr,"le test de  base sur set_required_nb_seen  a echoué cote EST\n");</Line>
+				<Line Number="78" Count="0">          	nb= false;</Line>
+				<Line Number="79" Count="-1">	}</Line>
+				<Line Number="80" Count="-1"></Line>
+				<Line Number="81" Count="14">	delete_game(jeu);</Line>
+				<Line Number="82" Count="14">     	return nb;</Line>
+				<Line Number="83" Count="-1">      </Line>
+				<Line Number="84" Count="-1"> }</Line>
+				<Line Number="85" Count="-1"></Line>
+				<Line Number="86" Count="14">int main(void){</Line>
+				<Line Number="87" Count="14">  bool result = true;</Line>
+				<Line Number="88" Count="14"> result = test_set_required_nb_monster() &amp;&amp; result;</Line>
+				<Line Number="89" Count="14">  result = test_add_mirror() &amp;&amp; result;</Line>
+				<Line Number="90" Count="14">result = test_set_required_nb_seen() &amp;&amp; result;</Line>
+				<Line Number="91" Count="14">  if(result){</Line>
+				<Line Number="92" Count="14">      printf("Tests successfull\n");</Line>
+				<Line Number="93" Count="14">      return EXIT_SUCCESS;</Line>
+				<Line Number="94" Count="-1">  }</Line>
+				<Line Number="95" Count="-1">  else{</Line>
+				<Line Number="96" Count="0">      printf("Tests failed\n");</Line>
+				<Line Number="97" Count="0">      return EXIT_FAILURE;</Line>
+				<Line Number="98" Count="-1">  }</Line>
+				<Line Number="99" Count="-1">}</Line>
+				<Line Number="100" Count="-1"></Line>
+				<Line Number="101" Count="-1"></Line>
+			</Report>
+		</File>
+		<File Name="testSEY.c" FullPath="./testSEY.c">
+			<Report>
+				<Line Number="0" Count="-1">#include &lt;stdlib.h&gt;</Line>
+				<Line Number="1" Count="-1">#include &lt;stdbool.h&gt;</Line>
+				<Line Number="2" Count="-1">#include &lt;assert.h&gt;</Line>
+				<Line Number="3" Count="-1">#include &lt;stdio.h&gt;</Line>
+				<Line Number="4" Count="-1">#include "game.h"</Line>
+				<Line Number="5" Count="-1">#include"game_io.h"</Line>
+				<Line Number="6" Count="-1"></Line>
+				<Line Number="7" Count="-1"></Line>
+				<Line Number="8" Count="-1"></Line>
+				<Line Number="9" Count="14">bool testnewgame(){</Line>
+				<Line Number="10" Count="14">	game g = new_game();</Line>
+				<Line Number="11" Count="14">   	assert(g);</Line>
+				<Line Number="12" Count="-1"></Line>
+				<Line Number="13" Count="14">	bool res = true;</Line>
+				<Line Number="14" Count="70">	for (int i=3; i&gt;=0; i--){</Line>
+				<Line Number="15" Count="280">		for(int j=0;j&lt;4;j++){</Line>
+				<Line Number="16" Count="224">			if(get_content(g, j, i)!=EMPTY){</Line>
+				<Line Number="17" Count="0">				res = false;</Line>
+				<Line Number="18" Count="0">				fprintf(stderr,("Error newgame didn't work\n"));</Line>
+				<Line Number="19" Count="0">                                delete_game (g);</Line>
+				<Line Number="20" Count="0">				return res;</Line>
+				<Line Number="21" Count="-1">				}</Line>
+				<Line Number="22" Count="-1">		}</Line>
+				<Line Number="23" Count="-1">	}</Line>
+				<Line Number="24" Count="14">       delete_game (g);</Line>
+				<Line Number="25" Count="14">	return res;</Line>
+				<Line Number="26" Count="-1">}</Line>
+				<Line Number="27" Count="-1"></Line>
+				<Line Number="28" Count="14">bool test_restart_game(){</Line>
+				<Line Number="29" Count="14">   	bool res = true;</Line>
+				<Line Number="30" Count="14">	game jeu = new_game();</Line>
+				<Line Number="31" Count="-1"></Line>
+				<Line Number="32" Count="14">   	assert(jeu);</Line>
+				<Line Number="33" Count="14">	add_monster(jeu,ZOMBIE,0,1);</Line>
+				<Line Number="34" Count="14">	add_monster(jeu,ZOMBIE,1,0);</Line>
+				<Line Number="35" Count="14"> 	add_monster(jeu,GHOST,2,0);</Line>
+				<Line Number="36" Count="14">	add_monster(jeu,GHOST,1,1);</Line>
+				<Line Number="37" Count="14">	add_monster(jeu,ZOMBIE,1,2);</Line>
+				<Line Number="38" Count="14">	add_monster(jeu,ZOMBIE,2,2);</Line>
+				<Line Number="39" Count="14">	add_monster(jeu,ZOMBIE,2,3);</Line>
+				<Line Number="40" Count="14">	add_monster(jeu,VAMPIRE,1,3);</Line>
+				<Line Number="41" Count="14">	add_monster(jeu,VAMPIRE,3,2);</Line>
+				<Line Number="42" Count="-1"></Line>
+				<Line Number="43" Count="14">        add_mirror(jeu, 1, 0, 3);</Line>
+				<Line Number="44" Count="14">        add_mirror(jeu, 0, 3, 3);</Line>
+				<Line Number="45" Count="14">        add_mirror(jeu, 1, 0, 2);</Line>
+				<Line Number="46" Count="14">        add_mirror(jeu, 1, 2, 1);</Line>
+				<Line Number="47" Count="14">        add_mirror(jeu, 0, 3, 1);</Line>
+				<Line Number="48" Count="14">        add_mirror(jeu, 1, 0, 0);</Line>
+				<Line Number="49" Count="14">        add_mirror(jeu, 1, 3, 0);</Line>
+				<Line Number="50" Count="-1"></Line>
+				<Line Number="51" Count="14">	restart_game(jeu);</Line>
+				<Line Number="52" Count="-1"></Line>
+				<Line Number="53" Count="14">	if(((get_content(jeu, 0, 1) == EMPTY)&amp;&amp; (get_content(jeu, 1, 0) == EMPTY) &amp;&amp; (get_content(jeu, 2, 0) == EMPTY) &amp;&amp; (get_content(jeu, 1, 1) == EMPTY)&amp;&amp;(get_content(jeu, 1,2 ) == EMPTY) &amp;&amp; (get_content(jeu, 2,2 ) == EMPTY) &amp;&amp;(get_content(jeu, 2,3 ) == EMPTY) &amp;&amp; (get_content(jeu, 1,3 ) == EMPTY) &amp;&amp; (get_content(jeu, 3,2 ) == EMPTY)) &amp;&amp; ((get_content(jeu,0,3)==ANTIMIRROR) &amp;&amp; (get_content(jeu,3,3)==MIRROR) &amp;&amp; (get_content(jeu,0,2)==ANTIMIRROR) &amp;&amp;(get_content(jeu,2,1)==ANTIMIRROR) &amp;&amp; (get_content(jeu,3,1)==MIRROR) &amp;&amp; (get_content(jeu,0,0)==ANTIMIRROR) &amp;&amp; (get_content(jeu,3,0)==ANTIMIRROR))){</Line>
+				<Line Number="54" Count="28">	  delete_game (jeu);</Line>
+				<Line Number="55" Count="28">           return res;</Line>
+				<Line Number="56" Count="14">	}</Line>
+				<Line Number="57" Count="14">        delete_game (jeu);</Line>
+				<Line Number="58" Count="0">	fprintf(stderr,("Error restart_game didn't work\n"));</Line>
+				<Line Number="59" Count="0">	return false;</Line>
+				<Line Number="60" Count="-1">}</Line>
+				<Line Number="61" Count="-1"></Line>
+				<Line Number="62" Count="14">bool test_current_nbmonster(){</Line>
+				<Line Number="63" Count="14">	bool res = true;</Line>
+				<Line Number="64" Count="14">	game jeu = new_game();</Line>
+				<Line Number="65" Count="14">	add_monster(jeu,ZOMBIE,0,1);</Line>
+				<Line Number="66" Count="14">	add_monster(jeu,ZOMBIE,1,0);</Line>
+				<Line Number="67" Count="14">	if (current_nb_monsters( jeu , ZOMBIE) != 2) {</Line>
+				<Line Number="68" Count="0">		res = false;</Line>
+				<Line Number="69" Count="0">		fprintf(stderr,("Error current_nb_monster didn't work\n"));</Line>
+				<Line Number="70" Count="0">		delete_game (jeu);</Line>
+				<Line Number="71" Count="0">		return res;</Line>
+				<Line Number="72" Count="-1">	}</Line>
+				<Line Number="73" Count="14">	delete_game (jeu);</Line>
+				<Line Number="74" Count="14">	return res;</Line>
+				<Line Number="75" Count="-1">}</Line>
+				<Line Number="76" Count="-1"></Line>
+				<Line Number="77" Count="14">bool test_current_nbseen(){</Line>
+				<Line Number="78" Count="14">	bool res = true;</Line>
+				<Line Number="79" Count="14">	game jeu = new_game();</Line>
+				<Line Number="80" Count="14">	add_mirror(jeu, 1, 0, 3);</Line>
+				<Line Number="81" Count="14">     	add_mirror(jeu, 0, 3, 3);</Line>
+				<Line Number="82" Count="14">     	add_mirror(jeu, 1, 0, 2);</Line>
+				<Line Number="83" Count="14">     	add_mirror(jeu, 1, 2, 1);</Line>
+				<Line Number="84" Count="14">     	add_mirror(jeu, 0, 3, 1);</Line>
+				<Line Number="85" Count="14">     	add_mirror(jeu, 1, 0, 0);</Line>
+				<Line Number="86" Count="14">     	add_mirror(jeu, 1, 3, 0);</Line>
+				<Line Number="87" Count="-1"></Line>
+				<Line Number="88" Count="14">	add_monster(jeu,ZOMBIE,0,1);</Line>
+				<Line Number="89" Count="14">	add_monster(jeu,ZOMBIE,1,0);</Line>
+				<Line Number="90" Count="14"> 	add_monster(jeu,GHOST,2,0);</Line>
+				<Line Number="91" Count="14">	add_monster(jeu,GHOST,1,1);</Line>
+				<Line Number="92" Count="14">	add_monster(jeu,ZOMBIE,1,2);</Line>
+				<Line Number="93" Count="14">	add_monster(jeu,ZOMBIE,2,2);</Line>
+				<Line Number="94" Count="14">	add_monster(jeu,ZOMBIE,2,3);</Line>
+				<Line Number="95" Count="14">	add_monster(jeu,VAMPIRE,1,3);</Line>
+				<Line Number="96" Count="14">	add_monster(jeu,VAMPIRE,3,2);</Line>
+				<Line Number="97" Count="-1"></Line>
+				<Line Number="98" Count="14">	if (current_nb_seen( jeu , N , 1) != 3) {</Line>
+				<Line Number="99" Count="0">		res = false;</Line>
+				<Line Number="100" Count="0">		fprintf(stderr,("Error current_nb_seen didn't work\n"));</Line>
+				<Line Number="101" Count="0">		delete_game (jeu);</Line>
+				<Line Number="102" Count="0">		return res;</Line>
+				<Line Number="103" Count="-1">	}</Line>
+				<Line Number="104" Count="14">	delete_game (jeu);</Line>
+				<Line Number="105" Count="14">	return res;</Line>
+				<Line Number="106" Count="-1">}</Line>
+				<Line Number="107" Count="-1"></Line>
+				<Line Number="108" Count="-1"></Line>
+				<Line Number="109" Count="14">int main(void){</Line>
+				<Line Number="110" Count="14">	bool result = true;</Line>
+				<Line Number="111" Count="14">  	result = testnewgame()&amp;&amp; result;</Line>
+				<Line Number="112" Count="14">        result = test_restart_game() &amp;&amp; result;</Line>
+				<Line Number="113" Count="14">	result = test_current_nbmonster() &amp;&amp; result;</Line>
+				<Line Number="114" Count="14">	result = test_current_nbseen() &amp;&amp; result;</Line>
+				<Line Number="115" Count="14">  	if(result){</Line>
+				<Line Number="116" Count="14">      		printf("Tests successfull\n");</Line>
+				<Line Number="117" Count="14">      		return EXIT_SUCCESS;</Line>
+				<Line Number="118" Count="-1">  	}</Line>
+				<Line Number="119" Count="-1">  	else{</Line>
+				<Line Number="120" Count="0">      		printf("Tests failed\n");</Line>
+				<Line Number="121" Count="0">      		return EXIT_FAILURE;</Line>
+				<Line Number="122" Count="-1">  	}</Line>
+				<Line Number="123" Count="-1">}</Line>
+			</Report>
+		</File>
+		<File Name="test_DIAK.c" FullPath="./test_DIAK.c">
+			<Report>
+				<Line Number="0" Count="-1"></Line>
+				<Line Number="1" Count="-1">#include &lt;stdlib.h&gt;</Line>
+				<Line Number="2" Count="-1">#include &lt;stdbool.h&gt;</Line>
+				<Line Number="3" Count="-1">#include &lt;assert.h&gt;</Line>
+				<Line Number="4" Count="-1">#include &lt;stdio.h&gt;</Line>
+				<Line Number="5" Count="-1">#include "game.h"</Line>
+				<Line Number="6" Count="-1"></Line>
+				<Line Number="7" Count="14">bool test_add_monster(){</Line>
+				<Line Number="8" Count="14">   game jeu= new_game();</Line>
+				<Line Number="9" Count="14">   bool rep=true;</Line>
+				<Line Number="10" Count="14">   assert(jeu);</Line>
+				<Line Number="11" Count="14">   add_monster(jeu,ZOMBIE,0,1);</Line>
+				<Line Number="12" Count="14">   add_monster(jeu,ZOMBIE,1,0);</Line>
+				<Line Number="13" Count="14">   add_monster(jeu,GHOST,2,0);</Line>
+				<Line Number="14" Count="14">   add_monster(jeu,GHOST,1,1);</Line>
+				<Line Number="15" Count="14">   add_monster(jeu,ZOMBIE,1,2);</Line>
+				<Line Number="16" Count="14">   add_monster(jeu,ZOMBIE,2,2);</Line>
+				<Line Number="17" Count="14">   add_monster(jeu,ZOMBIE,2,3);</Line>
+				<Line Number="18" Count="14">   add_monster(jeu,VAMPIRE,1,3);</Line>
+				<Line Number="19" Count="14">   add_monster(jeu,VAMPIRE,3,2);</Line>
+				<Line Number="20" Count="-1"></Line>
+				<Line Number="21" Count="14">if((get_content(jeu, 0, 1) != ZOMBIE)|| (get_content(jeu, 1, 0) != ZOMBIE)||(get_content(jeu, 2, 0) != GHOST)||(get_content(jeu, 1, 1) != GHOST)||(get_content(jeu, 1,2 ) != ZOMBIE) ||(get_content(jeu, 2,2 ) != ZOMBIE) ||(get_content(jeu, 2,3 ) != ZOMBIE) ||(get_content(jeu, 1,3 ) != VAMPIRE) ||(get_content(jeu, 3,2 ) != VAMPIRE)){</Line>
+				<Line Number="22" Count="0">      fprintf(stderr,("Basic test on get_content failed\n"));</Line>
+				<Line Number="23" Count="0">      delete_game(jeu);</Line>
+				<Line Number="24" Count="0">      rep=false;</Line>
+				<Line Number="25" Count="-1">  }</Line>
+				<Line Number="26" Count="14">  delete_game(jeu);</Line>
+				<Line Number="27" Count="14">  return rep;</Line>
+				<Line Number="28" Count="-1"></Line>
+				<Line Number="29" Count="-1">}</Line>
+				<Line Number="30" Count="-1"></Line>
+				<Line Number="31" Count="-1"></Line>
+				<Line Number="32" Count="14">bool test_is_game_over (){</Line>
+				<Line Number="33" Count="14">      game jeu =new_game ();</Line>
+				<Line Number="34" Count="14">       bool rep=true;</Line>
+				<Line Number="35" Count="14">   	assert(jeu);</Line>
+				<Line Number="36" Count="14">      add_mirror(jeu, 1, 0, 3);</Line>
+				<Line Number="37" Count="14">      add_mirror(jeu, 0, 3, 3);</Line>
+				<Line Number="38" Count="14">      add_mirror(jeu, 1, 0, 2);</Line>
+				<Line Number="39" Count="14">      add_mirror(jeu, 1, 2, 1);</Line>
+				<Line Number="40" Count="14">      add_mirror(jeu, 0, 3, 1);</Line>
+				<Line Number="41" Count="14">      add_mirror(jeu, 1, 0, 0);</Line>
+				<Line Number="42" Count="14">      add_mirror(jeu, 1, 3, 0);</Line>
+				<Line Number="43" Count="-1"></Line>
+				<Line Number="44" Count="14">      add_monster(jeu,ZOMBIE,0,1);</Line>
+				<Line Number="45" Count="14">      add_monster(jeu,ZOMBIE,1,0);</Line>
+				<Line Number="46" Count="14">      add_monster(jeu,GHOST,2,0);</Line>
+				<Line Number="47" Count="14">      add_monster(jeu,GHOST,1,1);</Line>
+				<Line Number="48" Count="14">      add_monster(jeu,ZOMBIE,1,2);</Line>
+				<Line Number="49" Count="14">      add_monster(jeu,ZOMBIE,2,2);</Line>
+				<Line Number="50" Count="14">      add_monster(jeu,ZOMBIE,2,3);</Line>
+				<Line Number="51" Count="14">      add_monster(jeu,VAMPIRE,1,3);</Line>
+				<Line Number="52" Count="14">      add_monster(jeu,VAMPIRE,3,2);</Line>
+				<Line Number="53" Count="-1"></Line>
+				<Line Number="54" Count="14">      set_required_nb_monsters(jeu, ZOMBIE,5);</Line>
+				<Line Number="55" Count="14">      set_required_nb_monsters(jeu, VAMPIRE,2);</Line>
+				<Line Number="56" Count="14">      set_required_nb_monsters(jeu, GHOST,2);</Line>
+				<Line Number="57" Count="-1"></Line>
+				<Line Number="58" Count="14">      set_required_nb_seen(jeu, N, 0, 0);</Line>
+				<Line Number="59" Count="14">      set_required_nb_seen(jeu, N, 1, 3);</Line>
+				<Line Number="60" Count="14">      set_required_nb_seen(jeu, N, 2, 3);</Line>
+				<Line Number="61" Count="14">      set_required_nb_seen(jeu, N, 3, 0);</Line>
+				<Line Number="62" Count="-1"></Line>
+				<Line Number="63" Count="14">      set_required_nb_seen(jeu, S, 0, 0);</Line>
+				<Line Number="64" Count="14">      set_required_nb_seen(jeu, S, 1, 3);</Line>
+				<Line Number="65" Count="14">      set_required_nb_seen(jeu, S, 2, 2);</Line>
+				<Line Number="66" Count="14">      set_required_nb_seen(jeu, S, 3, 3);</Line>
+				<Line Number="67" Count="-1"></Line>
+				<Line Number="68" Count="14">      set_required_nb_seen(jeu, W, 3, 3);</Line>
+				<Line Number="69" Count="14">      set_required_nb_seen(jeu, W, 2, 3);</Line>
+				<Line Number="70" Count="14">      set_required_nb_seen(jeu, W, 1, 2);</Line>
+				<Line Number="71" Count="14">      set_required_nb_seen(jeu, W, 0, 0);</Line>
+				<Line Number="72" Count="-1"></Line>
+				<Line Number="73" Count="14">      set_required_nb_seen(jeu, E, 3, 2);</Line>
+				<Line Number="74" Count="14">      set_required_nb_seen(jeu, E, 2, 3);</Line>
+				<Line Number="75" Count="14">      set_required_nb_seen(jeu, E, 1, 0);</Line>
+				<Line Number="76" Count="14">      set_required_nb_seen(jeu, E, 0, 0);</Line>
+				<Line Number="77" Count="14">      if(test_add_monster ()==false){</Line>
+				<Line Number="78" Count="0">          if((get_content(jeu,0,3)!=ANTIMIRROR) || (get_content(jeu,3,3)!=MIRROR) || (get_content(jeu,0,2)!=ANTIMIRROR) ||(get_content(jeu,2,1)!=ANTIMIRROR) || (get_content(jeu,3,1)!=MIRROR) || (get_content(jeu,0,0)!=ANTIMIRROR) || (get_content(jeu,3,0)!=ANTIMIRROR)){</Line>
+				<Line Number="79" Count="0">                 if(required_nb_monsters(jeu, ZOMBIE)!=5 || required_nb_monsters(jeu,VAMPIRE)!=2||required_nb_monsters(jeu, GHOST)!=2){</Line>
+				<Line Number="80" Count="0">                      delete_game(jeu);</Line>
+				<Line Number="81" Count="0">                     fprintf(stderr,("Basic test on is_game_over failed\n"));</Line>
+				<Line Number="82" Count="0">                     rep=false ;</Line>
+				<Line Number="83" Count="-1">                 }</Line>
+				<Line Number="84" Count="-1">            }</Line>
+				<Line Number="85" Count="-1"></Line>
+				<Line Number="86" Count="-1">     }</Line>
+				<Line Number="87" Count="-1"></Line>
+				<Line Number="88" Count="14">     delete_game(jeu);</Line>
+				<Line Number="89" Count="14">     return rep;</Line>
+				<Line Number="90" Count="-1"></Line>
+				<Line Number="91" Count="-1">}</Line>
+				<Line Number="92" Count="-1"></Line>
+				<Line Number="93" Count="-1">     </Line>
+				<Line Number="94" Count="-1"></Line>
+				<Line Number="95" Count="-1"></Line>
+				<Line Number="96" Count="-1"></Line>
+				<Line Number="97" Count="-1"></Line>
+				<Line Number="98" Count="14">int main(void){</Line>
+				<Line Number="99" Count="14">  bool result = true;</Line>
+				<Line Number="100" Count="14">  result =  test_is_game_over () &amp;&amp; result;</Line>
+				<Line Number="101" Count="14">  if(result){</Line>
+				<Line Number="102" Count="14">      printf("Tests successfull\n");</Line>
+				<Line Number="103" Count="14">      return EXIT_SUCCESS;</Line>
+				<Line Number="104" Count="-1">  }</Line>
+				<Line Number="105" Count="-1">  else{</Line>
+				<Line Number="106" Count="0">      printf("Tests failed\n");</Line>
+				<Line Number="107" Count="0">      return EXIT_FAILURE;</Line>
+				<Line Number="108" Count="-1">  }</Line>
+				<Line Number="109" Count="-1">}</Line>
+			</Report>
+		</File>
+		<EndDateTime>Apr 13 12:39 CEST</EndDateTime>
+		<EndTime>1523615950</EndTime>
+	</CoverageLog>
+</Site>

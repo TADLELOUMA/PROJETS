@@ -1,0 +1,15 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\begin{document}
+Ceci est mon \textbf{premier} document en \LaTeX,
+écrit le \today{} en TP d’environnement de programmation,
+avec le mode « article ».
+Après une ligne blanche, commence un nouveau paragraphe
+dont la première ligne est \emph{indentée}.
+\begin{verbatim}
+bonjour vous allez bien DIEU merci.
+\end{verbatim}
+\end{document}

@@ -1,0 +1,56 @@
+toutes les fonctions sauf bonus
+reste a reorganisé le code 
+--Cette ligne, et les suivantes ci-dessous, seront ignorées--
+
+A    code/.vscode
+A    code/.vscode/settings.json
+M    code/Makefile.common
+AM   code/bin/coff2noff
+AM   code/test/getchar
+A    code/test/getchar.c
+AM   code/test/getchar.coff
+AM   code/test/getstring
+A    code/test/getstring.c
+AM   code/test/getstring.coff
+AM   code/test/halt
+M    code/test/halt.c
+AM   code/test/halt.coff
+AM   code/test/matmult
+AM   code/test/matmult.coff
+AM   code/test/putchar
+M    code/test/putchar.c
+AM   code/test/putchar.coff
+AM   code/test/putstring
+A    code/test/putstring.c
+AM   code/test/putstring.coff
+AM   code/test/shell
+AM   code/test/shell.coff
+AM   code/test/sort
+AM   code/test/sort.coff
+M    code/test/start.S
+A    code/threads/.interrupt.d
+A    code/threads/.list.d
+A    code/threads/.main.d
+A    code/threads/.scheduler.d
+A    code/threads/.stats.d
+A    code/threads/.switch.d
+A    code/threads/.synch.d
+A    code/threads/.synchlist.d
+A    code/threads/.sysdep.d
+A    code/threads/.system.d
+A    code/threads/.thread.d
+A    code/threads/.threadtest.d
+A    code/threads/.timer.d
+A    code/threads/.utility.d
+M    code/threads/main.cc
+AM   code/threads/nachos
+M    code/threads/system.h
+M    code/userprog/.exception.d
+M    code/userprog/abort.svg
+M    code/userprog/consoledriver.cc
+M    code/userprog/exception.cc
+M    code/userprog/memory.svg
+M    code/userprog/nachos
+M    code/userprog/progtest.cc
+M    code/userprog/progtest.h
+M    code/userprog/syscall.h

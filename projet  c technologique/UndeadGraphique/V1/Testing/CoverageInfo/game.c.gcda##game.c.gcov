@@ -1,0 +1,790 @@
+        -:    0:Source:/net/cremi/thdiallo/projet  c technologique/V1/game.c
+        -:    0:Graph:/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir/game.c.gcno
+        -:    0:Data:/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir/game.c.gcda
+        -:    0:Runs:14
+        -:    0:Programs:2
+        -:    1:#include <stdlib.h>
+        -:    2:#include <stdio.h>
+        -:    3:#include <stdbool.h>
+        -:    4:#include <string.h>
+        -:    5:#include "game.h"
+        -:    6:
+        -:    7:#define HEIGHT 4
+        -:    8:#define WIDTH 4
+        -:    9:
+        -:   10:struct game_s{
+        -:   11:  int required_nb_ghosts;
+        -:   12:  int required_nb_vampires;
+        -:   13:  int required_nb_zombies;
+        -:   14:  int required_nb_spirits;
+        -:   15:  int height;
+        -:   16:  int width;
+        -:   17:  int ** required_nb_seen;
+        -:   18:  content * board;
+        -:   19:};
+        -:   20:
+        -:   21:
+        -:   22:/**
+        -:   23:* @brief creates an empty game with all squares set to empty, all labels and the number of required monsters set to 0.
+        -:   24:* @return the created game
+        -:   25:**/
+       28:   26:game new_game(){
+       28:   27:  game g = (game) calloc(1,sizeof(struct game_s));
+       28:   28:  if(g==NULL){
+    #####:   29:    fprintf(stderr,"not enough memory\n");
+    #####:   30:    exit(EXIT_FAILURE);
+        -:   31:  }
+       28:   32:  g->board = (content*)calloc(HEIGHT*WIDTH, sizeof(content));
+       28:   33:  if (g->board==NULL){
+    #####:   34:    fprintf(stderr,"not enough memory\n");
+    #####:   35:    free(g);
+    #####:   36:    exit(EXIT_FAILURE);
+        -:   37:  }
+       28:   38:  g->required_nb_seen=(int**) calloc(NB_DIR,sizeof(int*));
+       28:   39:  if(g->required_nb_seen==NULL){
+    #####:   40:    fprintf(stderr,"not enough memory\n");
+    #####:   41:    free(g->board);
+    #####:   42:    free(g);
+    #####:   43:    exit(EXIT_FAILURE);
+        -:   44:  }
+      140:   45:  for(int i = 0; i < NB_DIR; i++){
+      112:   46:    if(i<2){
+       56:   47:      g->required_nb_seen[i] = (int*)calloc(WIDTH,sizeof(int));
+        -:   48:    }
+        -:   49:    else{
+       56:   50:      g->required_nb_seen[i] = (int*)calloc(HEIGHT,sizeof(int));
+        -:   51:    }
+      112:   52:    if(g->required_nb_seen[i]==NULL){
+    #####:   53:      fprintf(stderr,"not enough memory\n");
+    #####:   54:      if(i>=1){
+    #####:   55:        for(int j=i;j>=0;j--){
+    #####:   56:          free(g->required_nb_seen[j]);
+        -:   57:        }
+        -:   58:      }
+    #####:   59:      free(g->required_nb_seen);
+    #####:   60:      free(g->board);
+    #####:   61:      free(g);
+    #####:   62:      exit(EXIT_FAILURE);
+        -:   63:    }
+        -:   64:  }
+       28:   65:  g->width = WIDTH;
+       28:   66:  g->height = HEIGHT;
+       28:   67:  return g;
+        -:   68:}
+        -:   69:
+        -:   70:/**
+        -:   71:* @brief creates an empty game with all labels set to 0.
+        -:   72:* @param width number of columns of the board
+        -:   73:* @param height number of lines of the board
+        -:   74:* @return the created game
+        -:   75:**/
+        -:   76:
+    #####:   77:game new_game_ext(int width, int height){
+    #####:   78:  game g = (game) calloc(1,sizeof(struct game_s));
+    #####:   79:  if(g==NULL){
+    #####:   80:    fprintf(stderr,"not enough memory\n");
+    #####:   81:    exit(EXIT_FAILURE);
+        -:   82:  }
+    #####:   83:  g->board = (content*)calloc(height*width, sizeof(content));
+    #####:   84:  if (g->board==NULL){
+    #####:   85:    fprintf(stderr,"not enough memory\n");
+    #####:   86:    free(g);
+    #####:   87:    exit(EXIT_FAILURE);
+        -:   88:  }
+    #####:   89:  g->required_nb_seen=(int**) calloc(NB_DIR,sizeof(int*));
+    #####:   90:  if(g->required_nb_seen==NULL){
+    #####:   91:    fprintf(stderr,"not enough memory\n");
+    #####:   92:    free(g->board);
+    #####:   93:    free(g);
+    #####:   94:    exit(EXIT_FAILURE);
+        -:   95:  }
+    #####:   96:  for(int i = 0; i < NB_DIR; i++){
+    #####:   97:    if(i<2){
+    #####:   98:      g->required_nb_seen[i] = (int*)calloc(width,sizeof(int));
+        -:   99:    }
+        -:  100:    else{
+    #####:  101:      g->required_nb_seen[i] = (int*)calloc(height,sizeof(int));
+        -:  102:    }
+    #####:  103:    if(g->required_nb_seen[i]==NULL){
+    #####:  104:      fprintf(stderr,"not enough memory\n");
+    #####:  105:      if(i>=1){
+    #####:  106:        for(int j=i-1;j>=0;j--){
+    #####:  107:          free(g->required_nb_seen[j]);
+        -:  108:        }
+        -:  109:      }
+    #####:  110:      free(g->required_nb_seen);
+    #####:  111:      free(g->board);
+    #####:  112:      free(g);
+    #####:  113:      exit(EXIT_FAILURE);
+        -:  114:    }
+        -:  115:  }
+    #####:  116:  g->width = width;
+    #####:  117:  g->height = height;
+    #####:  118:  return g;
+        -:  119:}
+        -:  120:
+        -:  121:
+        -:  122:/**
+        -:  123:* @brief creates a game from a board.
+        -:  124:* It uses a given board possibly with its mirrors, and a list of labels.
+        -:  125:* It checks that the proposed dimensions (that should match the list)
+        -:  126:* match the size of the board.
+        -:  127:*
+        -:  128:* @param width number of columns of the board
+        -:  129:* @param height number of lines of the board
+        -:  130:* @param labels an array of four pointers towards array of labels (namely, labels[N], labels[S], labels[E], labels[W]).
+        -:  131:* The labels are given according to increasing coordinate value (from S to N or from W to E)
+        -:  132:* @param board an array of all the board squares, stored line-by-line (possibly with mirrors set already)
+        -:  133:* @param required_nb_ghosts the number of ghosts required in the game.
+        -:  134:* @param required_nb_vampires the number of vampires required in the game.
+        -:  135:* @param required_nb_zombies the number of zombies required in the game.
+        -:  136:* @param required_nb_spirits the number of spirits required in the game.
+        -:  137:* @return the created game
+        -:  138:**/
+        -:  139:
+    #####:  140:game setup_new_game_ext(int width, int height, int *labels[NB_DIR], content * board,
+        -:  141:  int required_nb_ghosts,  int required_nb_vampires,
+        -:  142:  int required_nb_zombies, int required_nb_spirits){
+        -:  143:
+    #####:  144:    game g = new_game_ext(width, height);
+    #####:  145:    if(g == NULL || g->board == NULL || board == NULL || g->required_nb_seen == NULL){
+    #####:  146:      fprintf(stderr, "Error not enough memory");
+    #####:  147:      exit(EXIT_FAILURE);
+        -:  148:    }
+    #####:  149:    for(unsigned int i=0;i<width*height;i++)
+    #####:  150:    g->board[i] = board[i];
+    #####:  151:    g->required_nb_ghosts = required_nb_ghosts;
+    #####:  152:    g->required_nb_vampires = required_nb_vampires;
+    #####:  153:    g->required_nb_zombies = required_nb_zombies;
+    #####:  154:    g->required_nb_spirits = required_nb_spirits;
+    #####:  155:    g->height = height;
+    #####:  156:    g->width = width;
+    #####:  157:    for(unsigned int i=0;i<NB_DIR;i++){
+    #####:  158:      if (i<2){
+    #####:  159:        for(int j=0;j<width;j++){
+    #####:  160:          if(labels[i][j]<0){
+    #####:  161:            fprintf(stderr,"value put at labels[%d][%d] must be positive (actual value : %d)\n",i,j,labels[i][j]);
+    #####:  162:            delete_game(g);
+    #####:  163:            exit(EXIT_FAILURE);
+        -:  164:          }
+    #####:  165:          g->required_nb_seen[i][j] = labels[i][j];
+        -:  166:        }
+        -:  167:      }
+        -:  168:      else{
+    #####:  169:        for(int j=0;j<height;j++){
+    #####:  170:          if(labels[i][j]<0){
+    #####:  171:            fprintf(stderr,"value put at labels[%d][%d] must be positive (actual value : %d)\n",i,j,labels[i][j]);
+    #####:  172:            delete_game(g);
+    #####:  173:            exit(EXIT_FAILURE);
+        -:  174:          }
+    #####:  175:          g->required_nb_seen[i][j] = labels[i][j];
+        -:  176:        }
+        -:  177:      }
+        -:  178:    }
+    #####:  179:    return g;
+        -:  180:  }
+        -:  181:
+        -:  182:
+        -:  183:
+        -:  184:  /**
+        -:  185:  * @brief return the number of lines on the game
+        -:  186:  *
+        -:  187:  * @param game the game.
+        -:  188:  * @return the height of the game
+        -:  189:  **/
+        -:  190:
+     1596:  191:  int game_height(cgame game){
+     1596:  192:    if (game == NULL){
+    #####:  193:      fprintf(stderr, "Null pointer!\n");
+    #####:  194:      exit(EXIT_FAILURE);
+        -:  195:    }
+     1596:  196:    return game->height;
+        -:  197:  }
+        -:  198:
+        -:  199:
+        -:  200:
+        -:  201:  /**
+        -:  202:  * @brief return the number of columns on the game
+        -:  203:  *
+        -:  204:  * @param game the game.
+        -:  205:  * @return the width of the game
+        -:  206:  */
+        -:  207:
+     3080:  208:  int game_width(cgame game){
+     3080:  209:    if (game == NULL){
+    #####:  210:      fprintf(stderr, "Null pointer!\n");
+    #####:  211:      exit(EXIT_FAILURE);
+        -:  212:    }
+     3080:  213:    return game->width;
+        -:  214:  }
+        -:  215:
+        -:  216:  /**
+        -:  217:  * @brief creates a game from a board description.
+        -:  218:  * It uses a given board possibly with its mirrors, and a list of labels.
+        -:  219:  * @param labels an array of four pointers towards array of labels (namely, labels[N], labels[S], labels[E], labels[W]).
+        -:  220:  * The labels are given according to increasing coordinate value (from S to N or from W to E)
+        -:  221:  * @param board an array of all the board squares, stored sequentially line by line starting from coordinate (0,0)
+        -:  222:  * @param required_nb_ghosts the number of ghosts required in the game.
+        -:  223:  * @param required_nb_vampires the number of vampires required in the game.
+        -:  224:  * @param required_nb_zombies the number of zombies required in the game.
+        -:  225:  * @return the created game
+        -:  226:  **/
+        -:  227:
+    #####:  228:  game setup_new_game(int *labels[NB_DIR], content * board, int required_nb_ghosts,  int required_nb_vampires, int required_nb_zombies){
+    #####:  229:    game g = new_game();
+    #####:  230:    if(g == NULL || g->board == NULL || board == NULL || g->required_nb_seen == NULL){
+    #####:  231:      fprintf(stderr, "Error not enough memory");
+    #####:  232:      exit(EXIT_FAILURE);
+        -:  233:    }
+    #####:  234:    for(unsigned int i=0;i<WIDTH*HEIGHT;i++)
+    #####:  235:    g->board[i] = board[i];
+    #####:  236:    g->required_nb_ghosts = required_nb_ghosts;
+    #####:  237:    g->required_nb_vampires = required_nb_vampires;
+    #####:  238:    g->required_nb_zombies = required_nb_zombies;
+    #####:  239:    g->height = HEIGHT;
+    #####:  240:    g->width = WIDTH;
+    #####:  241:    for(unsigned int i=0;i<NB_DIR;i++){
+    #####:  242:      if (i<2){
+    #####:  243:        for(int j=0;j<WIDTH;j++){
+    #####:  244:          if(labels[i][j]<0){
+    #####:  245:            fprintf(stderr,"value put at labels[%d][%d] must be positive (actual value : %d)\n",i,j,labels[i][j]);
+    #####:  246:            delete_game(g);
+    #####:  247:            exit(EXIT_FAILURE);
+        -:  248:          }
+    #####:  249:          g->required_nb_seen[i][j] = labels[i][j];
+        -:  250:        }
+        -:  251:      }
+        -:  252:      else{
+    #####:  253:        for(int j=0;j<WIDTH;j++){
+    #####:  254:          if(labels[i][j]<0){
+    #####:  255:            fprintf(stderr,"value put at labels[%d][%d] must be positive (actual value : %d)\n",i,j,labels[i][j]);
+    #####:  256:            delete_game(g);
+    #####:  257:            exit(EXIT_FAILURE);
+        -:  258:          }
+    #####:  259:          g->required_nb_seen[i][j] = labels[i][j];
+        -:  260:        }
+        -:  261:      }
+        -:  262:    }
+    #####:  263:    return g;
+        -:  264:  }
+        -:  265:
+        -:  266:  /**
+        -:  267:  * @brief adds a mirror on the game board
+        -:  268:  * @param game the game board where to add the mirror
+        -:  269:  * @param dir the direction on which to add the mirror: 0 for +45 degrees (/), 1 for -45 degrees (\\)
+        -:  270:  * @param col which column to insert the mirror on (0<=col<4)
+        -:  271:  * @param line which line to insert the mirror on (0<=line<4)
+        -:  272:  **/
+        -:  273:
+       98:  274:  void add_mirror(game game, int dir, int col, int line){
+       98:  275:    if (game==NULL){
+    #####:  276:      fprintf(stderr, "Invalid game pointer sent to add_mirror!\n");
+    #####:  277:      exit(EXIT_FAILURE);
+        -:  278:    }
+       98:  279:    if (col>=game_width(game) ||col<0){
+    #####:  280:      fprintf(stderr, "Invalid integer col sent to add_mirror!\n");
+    #####:  281:      exit(EXIT_FAILURE);
+        -:  282:    }
+       98:  283:    if (line>=game_height(game) || line<0){
+    #####:  284:      fprintf(stderr, "Invalid integer line sent to add_mirror!\n");
+    #####:  285:      exit(EXIT_FAILURE);
+        -:  286:    }
+       98:  287:    if (dir==0){
+       28:  288:      game->board[game_width(game)*line+col]=MIRROR;
+        -:  289:    }
+       98:  290:    if (dir==1){
+       70:  291:      game->board[game_width(game)*line+col]=ANTIMIRROR;
+        -:  292:    }
+       98:  293:  }
+        -:  294:
+        -:  295:  /**
+        -:  296:  * @brief adds a mirror on the game board
+        -:  297:  * @param game the game board where to add the mirror
+        -:  298:  * @param mirror_type a content that corresponds to a mirror (MIRROR, ANTI_MIRROR, VMIRROR or HMIRROR)
+        -:  299:  * @param col which column to insert the mirror on. (0<=col<width)
+        -:  300:  * @param line which line to insert the mirror on (0<=line<height)
+        -:  301:  **/
+        -:  302:
+    #####:  303:  void add_mirror_ext(game game, content mirror_type, int col, int line){
+    #####:  304:    if (game==NULL){
+    #####:  305:      fprintf(stderr, "Invalid game pointer sent to add_mirror_ext!\n");
+    #####:  306:      exit(EXIT_FAILURE);
+        -:  307:    }
+    #####:  308:    if (col>=game_width(game) ||col<0){
+    #####:  309:      fprintf(stderr, "Invalid integer col sent to add_mirror_ext!\n");
+    #####:  310:      exit(EXIT_FAILURE);
+        -:  311:    }
+    #####:  312:    if (line>=game_height(game) || line<0){
+    #####:  313:      fprintf(stderr, "Invalid integer line sent to add_mirror_ext!\n");
+    #####:  314:      exit(EXIT_FAILURE);
+        -:  315:    }
+    #####:  316:    game->board[game_width(game)*line+col] = mirror_type;
+    #####:  317:  }
+        -:  318:
+        -:  319:  /**
+        -:  320:  * @brief sets the label of a game
+        -:  321:  * @param game the game to modify
+        -:  322:  * @param side the side of the game where the label should be modified
+        -:  323:  * @param pos the position that the label should be modified (from S to N or from W to E)
+        -:  324:  * @param value the new value to give to the label
+        -:  325:  **/
+        -:  326:
+      224:  327:  void set_required_nb_seen(game game, direction side, int pos, int value){
+      224:  328:    if(game ==NULL){
+    #####:  329:      fprintf(stderr, "Game does not exist\n");
+    #####:  330:      exit(EXIT_FAILURE);
+        -:  331:    }
+      224:  332:    if(side == E || side == W){
+      112:  333:      if(pos>game_height(game) || pos<0){
+    #####:  334:        fprintf(stderr,"Can't be called out of bound\n");
+    #####:  335:        exit(EXIT_FAILURE);
+        -:  336:      }
+        -:  337:    }
+      224:  338:    if(side == N || side == S){
+      112:  339:      if(pos>game_width(game) || pos<0){
+    #####:  340:        fprintf(stderr,"Can't be called out of bound\n");
+    #####:  341:        exit(EXIT_FAILURE);
+        -:  342:      }
+        -:  343:    }
+      224:  344:    if(value < 0){
+    #####:  345:      fprintf(stderr,"value must be positive\n");
+    #####:  346:      exit(EXIT_FAILURE);
+        -:  347:    }
+      224:  348:    game->required_nb_seen[side][pos]=value;
+      224:  349:  }
+        -:  350:
+        -:  351:
+        -:  352:
+        -:  353:  /**
+        -:  354:  * @brief modifies the aimed number of a given monster on the board
+        -:  355:  * @param game the game that you want to modify the information about
+        -:  356:  * @param monster the type of monster (should be GHOST, VAMPIRE, ZOMBIE or SPIRIT)
+        -:  357:  * @param value the value you want to set to the parameter.
+        -:  358:  **/
+        -:  359:
+       42:  360:  void set_required_nb_monsters(game game, content monster, int value){
+       42:  361:    if (game==NULL){
+    #####:  362:      fprintf(stderr, "game does not exist\n");
+    #####:  363:      exit(EXIT_FAILURE);
+        -:  364:    }
+       42:  365:    if (monster != ZOMBIE && monster !=VAMPIRE && monster!=GHOST && monster!=SPIRIT){
+    #####:  366:      fprintf(stderr,"can't be called over something that is not a monster (nothing will happen)");
+        -:  367:    }
+       42:  368:    if(monster == ZOMBIE){
+       14:  369:      game->required_nb_zombies=value;
+        -:  370:    }
+       42:  371:    if(monster == VAMPIRE){
+       14:  372:      game->required_nb_vampires=value;
+        -:  373:    }
+       42:  374:    if(monster == GHOST){
+       14:  375:      game->required_nb_ghosts=value;
+        -:  376:    }
+       42:  377:    if(monster == SPIRIT){
+    #####:  378:      game->required_nb_spirits=value;
+        -:  379:    }
+       42:  380:  }
+        -:  381:
+        -:  382:  /**
+        -:  383:  * @brief Clone the game g_src
+        -:  384:  * @param g_src the game to clone
+        -:  385:  * @return the clone of g_src
+        -:  386:  **/
+    #####:  387:  game copy_game (cgame g_src){
+    #####:  388:    if (g_src==NULL) {
+    #####:  389:      exit(EXIT_FAILURE);
+        -:  390:    }
+    #####:  391:    game g= new_game_ext(g_src->width,g_src->height);
+    #####:  392:    g->required_nb_zombies= g_src->required_nb_zombies;
+    #####:  393:    g->required_nb_ghosts= g_src->required_nb_ghosts;
+    #####:  394:    g->required_nb_vampires=g_src->required_nb_vampires;
+    #####:  395:    g->required_nb_spirits=g_src->required_nb_spirits;
+    #####:  396:    g->height=game_height(g_src);
+    #####:  397:    g->width=game_width(g_src);
+    #####:  398:    for (int i=0; i<g->width*g->height; i++){
+    #####:  399:      g->board[i] = g_src->board[i];
+        -:  400:    }
+    #####:  401:    for (int i=0; i<NB_DIR; i++){
+    #####:  402:      if (i<2){
+    #####:  403:        for (int j=0;j<game_height(g); j++)
+    #####:  404:        g->required_nb_seen[i][j]=g_src->required_nb_seen[i][j];
+        -:  405:      }
+        -:  406:      else{
+    #####:  407:        for (int j=0;j<game_height(g); j++)
+    #####:  408:        g->required_nb_seen[i][j]=g_src->required_nb_seen[i][j];
+        -:  409:      }
+        -:  410:    }
+    #####:  411:    return g;
+        -:  412:  }
+        -:  413:
+        -:  414:
+        -:  415:  /**
+        -:  416:  * @brief Destroy the game and free allocated memory
+        -:  417:  * @param g the game to destroy
+        -:  418:  **/
+        -:  419:
+       28:  420:  void delete_game (game g){
+       28:  421:    if(g != NULL){
+       28:  422:      if (g->required_nb_seen != NULL) {
+      140:  423:        for(int i = 0; i < NB_DIR; i++){
+      112:  424:          if (g->required_nb_seen[i] != NULL) free(g->required_nb_seen[i]);
+        -:  425:        }
+       28:  426:        free(g->required_nb_seen);
+        -:  427:      }
+       28:  428:      if (g->board != NULL) free(g->board);
+       28:  429:      free(g);
+        -:  430:    }
+       28:  431:  }
+        -:  432:
+        -:  433:  /**
+        -:  434:  * @brief return the label on the side of the board
+        -:  435:  * @param game the game we consider
+        -:  436:  * @param side the side of the board we want the label from
+        -:  437:  * @param pos the position of the label you want (from S to N or from W to E)
+        -:  438:  **/
+        -:  439:
+    #####:  440:  int required_nb_seen(cgame game, direction side, int pos){
+    #####:  441:    if (game == NULL){
+    #####:  442:      fprintf(stderr, "game does not exist\n");
+    #####:  443:      exit(EXIT_FAILURE);
+        -:  444:    }
+    #####:  445:    if (side != N && side != S && side != E && side != W){
+    #####:  446:      fprintf(stderr, "invalid side (-1 will be returned)\n");
+    #####:  447:      return -1;
+        -:  448:    }
+    #####:  449:    if(side == E || side == W){
+    #####:  450:      if(pos>game_height(game) || pos<0){
+    #####:  451:        fprintf(stderr,"Can't be called out of bound(-1 will be returned)\n");
+    #####:  452:        return -1;
+        -:  453:      }
+        -:  454:    }
+    #####:  455:    if(side == N || side == S){
+    #####:  456:      if(pos>game_width(game) || pos<0){
+    #####:  457:        fprintf(stderr,"Can't be called out of bound(-1 will be returned)\n");
+    #####:  458:        return -1;
+        -:  459:      }
+        -:  460:    }
+    #####:  461:    return game->required_nb_seen[side][pos];
+        -:  462:  }
+        -:  463:  /**
+        -:  464:  * @brief get the content of a square in the board
+        -:  465:  * @param game the game we consider
+        -:  466:  * @param col the column of the square
+        -:  467:  * @param line the line of the square
+        -:  468:  * @return the content of the square
+        -:  469:  **/
+        -:  470:
+     1134:  471:  content get_content(cgame game, int col, int line){ // Alexis
+     1134:  472:    if (col >= game_width(game) || col < 0){
+    #####:  473:      fprintf (stderr, "Invalid col argument sent to get_content! (col is %d while width is %d)\n", col, game_width(game));
+    #####:  474:      exit(EXIT_FAILURE);
+        -:  475:    }
+     1134:  476:    if (line >= game_height(game) || line < 0){
+    #####:  477:      fprintf (stderr, "Invalid line argument sent to get_content! (line is %d while height is %d)\n", line, game_height(game));
+    #####:  478:      exit(EXIT_FAILURE);
+        -:  479:    }
+     1134:  480:    if (game == NULL){
+    #####:  481:      fprintf (stderr, "Invalid game argument sent to get_content!\n");
+    #####:  482:      exit(EXIT_FAILURE);
+        -:  483:    }
+     1134:  484:    return game->board[line*game_width(game)+col];
+        -:  485:  }
+        -:  486:
+        -:  487:  /**
+        -:  488:  * @brief indicates the aimed number of a given monster on the board
+        -:  489:  * @param game the game that you want to collect the information about
+        -:  490:  * @param monster the type of monster (should be GHOST, VAMPIRE, ZOMBIE or SPIRIT)
+        -:  491:  * @return the number of monsters of that type that should be placed on the game.
+        -:  492:  **/
+        -:  493:
+    #####:  494:  int required_nb_monsters(cgame game, content monster){
+    #####:  495:    if (game == NULL){
+    #####:  496:      fprintf(stderr, "Invalid cgame pointer sent to required_nb_monsters!\n");
+    #####:  497:      exit(EXIT_FAILURE);
+        -:  498:    }
+    #####:  499:    int monsters=0;
+    #####:  500:    switch(monster){
+        -:  501:      case ZOMBIE :
+    #####:  502:      monsters=game->required_nb_zombies;
+    #####:  503:      break;
+        -:  504:
+        -:  505:      case GHOST :
+    #####:  506:      monsters=game->required_nb_ghosts;
+    #####:  507:      break;
+        -:  508:
+        -:  509:      case VAMPIRE :
+    #####:  510:      monsters=game->required_nb_vampires;
+    #####:  511:      break;
+        -:  512:
+        -:  513:      case SPIRIT :
+    #####:  514:      monsters=game->required_nb_spirits;
+    #####:  515:      break;
+        -:  516:
+        -:  517:      case EMPTY :
+    #####:  518:      fprintf(stderr,"Can't be called over an \"EMPTY\" content");
+    #####:  519:      exit(EXIT_FAILURE);
+        -:  520:      break;
+        -:  521:      case MIRROR :
+    #####:  522:      fprintf(stderr,"Can't be called over a \"MIRROR\" content");
+    #####:  523:      exit(EXIT_FAILURE);
+        -:  524:      break;
+        -:  525:
+        -:  526:      case ANTIMIRROR :
+    #####:  527:      fprintf(stderr,"Can't be called over an \"ANTIMIRROR\" content");
+    #####:  528:      exit(EXIT_FAILURE);
+        -:  529:      break;
+        -:  530:
+        -:  531:      case HMIRROR :
+    #####:  532:      fprintf(stderr,"Can't be called over an \"HMIRROR\" content");
+    #####:  533:      exit(EXIT_FAILURE);
+        -:  534:      break;
+        -:  535:
+        -:  536:      case VMIRROR :
+    #####:  537:      fprintf(stderr,"Can't be called over an \"VMIRROR\" content");
+    #####:  538:      exit(EXIT_FAILURE);
+        -:  539:      break;
+        -:  540:
+        -:  541:    }
+    #####:  542:    return monsters;
+        -:  543:  }
+        -:  544:
+        -:  545:  /**
+        -:  546:  * @brief Test if the game is over (that is the grid is filled according to the requirements).
+        -:  547:  * @return true if all the constraints are satisfied
+        -:  548:  **/
+        -:  549:
+    #####:  550:  bool is_game_over (cgame g){
+    #####:  551:    if(g==NULL){
+    #####:  552:      fprintf(stderr, "Invalid argument");
+    #####:  553:      exit(EXIT_FAILURE);
+        -:  554:    }
+        -:  555:
+        -:  556:    /* printf("\n\nSCAN /!\\\n\n");
+        -:  557:    printf("required_nb_monsters ZOMBIE : %d | current_nb_monsters ZOMBIE : %d\n", required_nb_monsters(g, ZOMBIE), current_nb_monsters(g, ZOMBIE));
+        -:  558:    printf("required_nb_monsters VAMPIRE : %d | current_nb_monsters VAMPIRE : %d\n", required_nb_monsters(g, VAMPIRE), current_nb_monsters(g, VAMPIRE));
+        -:  559:    printf("required_nb_monsters GHOST : %d | current_nb_monsters GHOST : %d\n", required_nb_monsters(g, GHOST), current_nb_monsters(g, GHOST));
+        -:  560:    printf("required_nb_monsters SPIRIT : %d | current_nb_monsters SPIRIT : %d\n", required_nb_monsters(g, SPIRIT), current_nb_monsters(g, SPIRIT));
+        -:  561:    for(int i=0; i<game_width(g); i++){
+        -:  562:    printf("required_nb_seen N %d : %d | current_nb_seen N %d : %d\n", i, required_nb_seen(g, N, i), i, current_nb_seen(g, N, i));
+        -:  563:    printf("required_nb_seen S %d : %d | current_nb_seen S %d : %d\n", i, required_nb_seen(g, S, i), i, current_nb_seen(g, S, i));
+        -:  564:  }
+        -:  565:  for(int i=0; i<game_height(g); i++){
+        -:  566:  printf("required_nb_seen E %d : %d | current_nb_seen E %d : %d\n", i, required_nb_seen(g, E, i), i, current_nb_seen(g, E, i));
+        -:  567:  printf("required_nb_seen W %d : %d | current_nb_seen W %d : %d\n", i, required_nb_seen(g, W, i), i, current_nb_seen(g, W, i));
+        -:  568:}
+        -:  569:printf("\n\nFin_SCAN\n\n");
+        -:  570:*/
+    #####:  571:if(required_nb_monsters(g, ZOMBIE)!=current_nb_monsters(g, ZOMBIE) || required_nb_monsters(g, GHOST)!=current_nb_monsters(g, GHOST) || required_nb_monsters(g, VAMPIRE)!=current_nb_monsters(g, VAMPIRE) || required_nb_monsters(g, SPIRIT)!=current_nb_monsters(g, SPIRIT)){
+    #####:  572:  return false;
+        -:  573:}
+    #####:  574:for(int i=0; i<game_width(g); i++){
+    #####:  575:  if (required_nb_seen(g, N, i)!=current_nb_seen(g, N, i) || required_nb_seen(g, S, i)!=current_nb_seen(g, S, i)){
+    #####:  576:    return false;
+        -:  577:  }
+        -:  578:}
+    #####:  579:for(int i=0; i<game_height(g); i++){
+    #####:  580:  if (required_nb_seen(g, E, i)!=current_nb_seen(g, E, i) || required_nb_seen(g, W, i)!=current_nb_seen(g, W, i)){
+    #####:  581:    return false;
+        -:  582:  }
+        -:  583:}
+    #####:  584:return true;
+        -:  585:}
+        -:  586:
+        -:  587:/**
+        -:  588:* @brief Restart a game by cleaning monsters from the board.
+        -:  589:**/
+        -:  590:
+    #####:  591:void restart_game(game g){
+    #####:  592:  if(g==NULL){
+    #####:  593:    fprintf(stderr, "Invalid argument");
+    #####:  594:    exit(EXIT_FAILURE);
+        -:  595:  }
+    #####:  596:  for (int i=0; i<game_width(g)*game_height(g); i++){
+    #####:  597:    if (g->board[i]==GHOST || g->board[i]==VAMPIRE || g->board[i]==ZOMBIE || g->board[i]==SPIRIT){
+    #####:  598:      g->board[i]=EMPTY;
+        -:  599:    }
+        -:  600:  }
+    #####:  601:}
+        -:  602:
+        -:  603:
+        -:  604:/**
+        -:  605:* @brief adds a monster on the game board.
+        -:  606:* Can also be used to remove any monster by adding EMPTY.
+        -:  607:* This function does not have effect on mirrors so it can be used safely in the course of the game.
+        -:  608:* @param game the game board where to add the monster
+        -:  609:* @param monster the type of monster to add
+        -:  610:* @param col the column where to insert the monster
+        -:  611:* @param line and the line where to insert the monster
+        -:  612:* @return false if the monster was not placed since the square was occupied by a mirror.
+        -:  613:**/
+        -:  614:
+      252:  615:bool add_monster(game game, content monster, int col, int line){
+      252:  616:  if (game == NULL){
+    #####:  617:    fprintf(stderr,"Game does not exist\n");
+    #####:  618:    return false;
+        -:  619:  }
+      252:  620:  if (col>=game_width(game) || line >=game_height(game) || col<0 || line <0){
+    #####:  621:    return false;
+        -:  622:  }
+      252:  623:  if (get_content(game, col, line)==MIRROR || get_content(game,col,line)==ANTIMIRROR || get_content(game,col,line)==HMIRROR || get_content(game,col,line)==VMIRROR){
+    #####:  624:    return false;
+        -:  625:  }
+        -:  626:  else{
+      252:  627:    game->board[game_width(game)*line + col]=monster;
+      252:  628:    return true;
+        -:  629:  }
+        -:  630:}
+        -:  631:
+        -:  632:
+        -:  633:/**
+        -:  634:* @brief says how many monsters can be seen on the current game board
+        -:  635:* @param game the game board to look at
+        -:  636:* @param side the side of the board we consider (N, S, W, or E)
+        -:  637:* @param pos the coordinate on that side (from S to N or from W to E)
+        -:  638:* @return the number of monsters that can be seen through all the mirrors from a given side at position x
+        -:  639:**/
+        -:  640:
+    #####:  641:int current_nb_seen(cgame game, direction side, int pos){ // Alexis
+    #####:  642:  if (game == NULL){
+    #####:  643:    fprintf(stderr, "Invalid game argument sent to current_nb_seen!\n");
+    #####:  644:    exit(EXIT_FAILURE);
+        -:  645:  }
+    #####:  646:  if (pos < 0 || pos > game_width(game)*game_height(game)-1){
+    #####:  647:    fprintf(stderr, "Invalid pos argument sent to current_nb_seen!\n");
+    #####:  648:    return -1;
+        -:  649:  }
+        -:  650:
+    #####:  651:  int direction_tab_x[4] = {0, 0, -1, 1};                      //Sud, Nord, Ouest, Est
+    #####:  652:  int direction_tab_y[4] = {-1, 1, 0, 0};
+        -:  653:  int direction, x, y;
+        -:  654:
+    #####:  655:  switch (side){
+        -:  656:    case N:
+    #####:  657:    x = pos;
+    #####:  658:    y = game_height(game)-1;
+    #####:  659:    direction = 0;                                             //direction sud, x prendra x=x et y prendra y-=1
+    #####:  660:    break;
+        -:  661:    case S:
+    #####:  662:    x = pos;
+    #####:  663:    y = 0;
+    #####:  664:    direction = 1;                                             //direction nord, x prendra x=x et y prendra y+=1
+    #####:  665:    break;
+        -:  666:    case E:
+    #####:  667:    x = game_width(game)-1;
+    #####:  668:    y = pos;
+    #####:  669:    direction = 2;                                             //etc..
+    #####:  670:    break;
+        -:  671:    case W:
+    #####:  672:    x = 0;
+    #####:  673:    y = pos;
+    #####:  674:    direction = 3;
+    #####:  675:    break;
+        -:  676:    default:
+    #####:  677:    fprintf(stderr, "Invalid side argument sent to current_nb_seen!\n");
+    #####:  678:    exit(EXIT_FAILURE);
+        -:  679:    break;
+        -:  680:  }                                                            //en bref on donne une direction et une position de départ en fonction des arguments side et pos
+        -:  681:
+        -:  682:
+    #####:  683:  bool mirror_crossed = false;
+    #####:  684:  int res = 0;
+        -:  685:  content content;
+        -:  686:
+    #####:  687:  while (x < game_width(game) && y < game_height(game) && x>=0 && y>=0){                     //tant qu'on ne sort pas du board
+    #####:  688:  content = get_content(game, x, y);                         //on regarde le contenu de la case
+    #####:  689:  if (content == ZOMBIE){ res++; }
+    #####:  690:  else if (content == GHOST && mirror_crossed){ res++; }
+    #####:  691:  else if (content == VAMPIRE && !mirror_crossed){ res++; }  //on ajoute 1 au résultat en fonction du monstre et de si on a rencontré un mirrior
+    #####:  692:  else if (content == MIRROR) {
+    #####:  693:    switch (direction){
+        -:  694:      case 0:
+    #####:  695:      direction = 2;
+    #####:  696:      break;
+        -:  697:      case 1:
+    #####:  698:      direction = 3;
+    #####:  699:      break;
+        -:  700:      case 2:
+    #####:  701:      direction = 0;
+    #####:  702:      break;
+        -:  703:      case 3:
+    #####:  704:      direction = 1;
+    #####:  705:      break;
+        -:  706:    }
+    #####:  707:    mirror_crossed = true;
+        -:  708:  }                                                          //on met à jour la direction si on rencontre un mirrior
+    #####:  709:  else if (content == ANTIMIRROR) {
+    #####:  710:    switch (direction){
+        -:  711:      case 0:
+    #####:  712:      direction = 3;
+    #####:  713:      break;
+        -:  714:      case 1:
+    #####:  715:      direction = 2;
+    #####:  716:      break;
+        -:  717:      case 2:
+    #####:  718:      direction = 1;
+    #####:  719:      break;
+        -:  720:      case 3:
+    #####:  721:      direction = 0;
+    #####:  722:      break;
+        -:  723:    }
+    #####:  724:    mirror_crossed = true;
+        -:  725:  }
+    #####:  726:  else if (content == HMIRROR) {
+    #####:  727:    switch (direction){
+        -:  728:      case 0:
+    #####:  729:      direction = 1;
+    #####:  730:      mirror_crossed = true;
+    #####:  731:      break;
+        -:  732:      case 1:
+    #####:  733:      direction = 0;
+    #####:  734:      mirror_crossed = true;
+    #####:  735:      break;
+        -:  736:      case 2:
+    #####:  737:      break;
+        -:  738:      case 3:
+    #####:  739:      break;
+        -:  740:    }
+        -:  741:  }
+    #####:  742:  else if (content == VMIRROR) {
+    #####:  743:    switch (direction){
+        -:  744:      case 0:
+    #####:  745:      break;
+        -:  746:      case 1:
+    #####:  747:      break;
+        -:  748:      case 2:
+    #####:  749:      direction = 3;
+    #####:  750:      mirror_crossed = true;
+    #####:  751:      break;
+        -:  752:      case 3:
+    #####:  753:      direction = 2;
+    #####:  754:      mirror_crossed = true;
+    #####:  755:      break;
+        -:  756:    }
+        -:  757:  }                                                      //de même pour un anti-mirroir
+    #####:  758:  x += direction_tab_x[direction];
+    #####:  759:  y += direction_tab_y[direction];                           //on met à jour x et y en fonction de la direction
+        -:  760:}
+    #####:  761:return res;
+        -:  762:}
+        -:  763:
+        -:  764:/**
+        -:  765:* @brief counts the current number of monsters of a given type
+        -:  766:* @param game the game board
+        -:  767:* @param monster the type of monster
+        -:  768:* @return the total number of monsters of the given type on the board.
+        -:  769:**/
+        -:  770:
+    #####:  771:int current_nb_monsters(cgame game, content monster){
+    #####:  772:  if (game == NULL){
+    #####:  773:    exit(EXIT_FAILURE);
+        -:  774:  }
+    #####:  775:  if(monster !=ZOMBIE && monster!=GHOST && monster !=VAMPIRE && monster !=SPIRIT){
+    #####:  776:    fprintf(stderr,"Function called over an invalid monster");
+    #####:  777:    return -1;
+        -:  778:  }
+    #####:  779:  int cpt=0;
+    #####:  780:  for (int i = 0; i<game_width(game)*game_height(game); i++){
+    #####:  781:    if (game->board[i]==monster)
+    #####:  782:    cpt++;
+        -:  783:  }
+    #####:  784:  return cpt;
+        -:  785:}

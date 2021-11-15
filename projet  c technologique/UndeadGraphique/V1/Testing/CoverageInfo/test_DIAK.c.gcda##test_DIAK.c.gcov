@@ -1,0 +1,115 @@
+        -:    0:Source:/net/cremi/thdiallo/projet  c technologique/V1/test_DIAK.c
+        -:    0:Graph:/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir/test_DIAK.c.gcno
+        -:    0:Data:/net/cremi/thdiallo/projet  c technologique/V1/CMakeFiles/test_DIAK.dir/test_DIAK.c.gcda
+        -:    0:Runs:14
+        -:    0:Programs:2
+        -:    1:
+        -:    2:#include <stdlib.h>
+        -:    3:#include <stdbool.h>
+        -:    4:#include <assert.h>
+        -:    5:#include <stdio.h>
+        -:    6:#include "game.h"
+        -:    7:
+       14:    8:bool test_add_monster(){
+       14:    9:   game jeu= new_game();
+       14:   10:   bool rep=true;
+       14:   11:   assert(jeu);
+       14:   12:   add_monster(jeu,ZOMBIE,0,1);
+       14:   13:   add_monster(jeu,ZOMBIE,1,0);
+       14:   14:   add_monster(jeu,GHOST,2,0);
+       14:   15:   add_monster(jeu,GHOST,1,1);
+       14:   16:   add_monster(jeu,ZOMBIE,1,2);
+       14:   17:   add_monster(jeu,ZOMBIE,2,2);
+       14:   18:   add_monster(jeu,ZOMBIE,2,3);
+       14:   19:   add_monster(jeu,VAMPIRE,1,3);
+       14:   20:   add_monster(jeu,VAMPIRE,3,2);
+        -:   21:
+       14:   22:if((get_content(jeu, 0, 1) != ZOMBIE)|| (get_content(jeu, 1, 0) != ZOMBIE)||(get_content(jeu, 2, 0) != GHOST)||(get_content(jeu, 1, 1) != GHOST)||(get_content(jeu, 1,2 ) != ZOMBIE) ||(get_content(jeu, 2,2 ) != ZOMBIE) ||(get_content(jeu, 2,3 ) != ZOMBIE) ||(get_content(jeu, 1,3 ) != VAMPIRE) ||(get_content(jeu, 3,2 ) != VAMPIRE)){
+    #####:   23:      fprintf(stderr,("Basic test on get_content failed\n"));
+    #####:   24:      delete_game(jeu);
+    #####:   25:      rep=false;
+        -:   26:  }
+       14:   27:  delete_game(jeu);
+       14:   28:  return rep;
+        -:   29:
+        -:   30:}
+        -:   31:
+        -:   32:
+       14:   33:bool test_is_game_over (){
+       14:   34:      game jeu =new_game ();
+       14:   35:       bool rep=true;
+       14:   36:   	assert(jeu);
+       14:   37:      add_mirror(jeu, 1, 0, 3);
+       14:   38:      add_mirror(jeu, 0, 3, 3);
+       14:   39:      add_mirror(jeu, 1, 0, 2);
+       14:   40:      add_mirror(jeu, 1, 2, 1);
+       14:   41:      add_mirror(jeu, 0, 3, 1);
+       14:   42:      add_mirror(jeu, 1, 0, 0);
+       14:   43:      add_mirror(jeu, 1, 3, 0);
+        -:   44:
+       14:   45:      add_monster(jeu,ZOMBIE,0,1);
+       14:   46:      add_monster(jeu,ZOMBIE,1,0);
+       14:   47:      add_monster(jeu,GHOST,2,0);
+       14:   48:      add_monster(jeu,GHOST,1,1);
+       14:   49:      add_monster(jeu,ZOMBIE,1,2);
+       14:   50:      add_monster(jeu,ZOMBIE,2,2);
+       14:   51:      add_monster(jeu,ZOMBIE,2,3);
+       14:   52:      add_monster(jeu,VAMPIRE,1,3);
+       14:   53:      add_monster(jeu,VAMPIRE,3,2);
+        -:   54:
+       14:   55:      set_required_nb_monsters(jeu, ZOMBIE,5);
+       14:   56:      set_required_nb_monsters(jeu, VAMPIRE,2);
+       14:   57:      set_required_nb_monsters(jeu, GHOST,2);
+        -:   58:
+       14:   59:      set_required_nb_seen(jeu, N, 0, 0);
+       14:   60:      set_required_nb_seen(jeu, N, 1, 3);
+       14:   61:      set_required_nb_seen(jeu, N, 2, 3);
+       14:   62:      set_required_nb_seen(jeu, N, 3, 0);
+        -:   63:
+       14:   64:      set_required_nb_seen(jeu, S, 0, 0);
+       14:   65:      set_required_nb_seen(jeu, S, 1, 3);
+       14:   66:      set_required_nb_seen(jeu, S, 2, 2);
+       14:   67:      set_required_nb_seen(jeu, S, 3, 3);
+        -:   68:
+       14:   69:      set_required_nb_seen(jeu, W, 3, 3);
+       14:   70:      set_required_nb_seen(jeu, W, 2, 3);
+       14:   71:      set_required_nb_seen(jeu, W, 1, 2);
+       14:   72:      set_required_nb_seen(jeu, W, 0, 0);
+        -:   73:
+       14:   74:      set_required_nb_seen(jeu, E, 3, 2);
+       14:   75:      set_required_nb_seen(jeu, E, 2, 3);
+       14:   76:      set_required_nb_seen(jeu, E, 1, 0);
+       14:   77:      set_required_nb_seen(jeu, E, 0, 0);
+       14:   78:      if(test_add_monster ()==false){
+    #####:   79:          if((get_content(jeu,0,3)!=ANTIMIRROR) || (get_content(jeu,3,3)!=MIRROR) || (get_content(jeu,0,2)!=ANTIMIRROR) ||(get_content(jeu,2,1)!=ANTIMIRROR) || (get_content(jeu,3,1)!=MIRROR) || (get_content(jeu,0,0)!=ANTIMIRROR) || (get_content(jeu,3,0)!=ANTIMIRROR)){
+    #####:   80:                 if(required_nb_monsters(jeu, ZOMBIE)!=5 || required_nb_monsters(jeu,VAMPIRE)!=2||required_nb_monsters(jeu, GHOST)!=2){
+    #####:   81:                      delete_game(jeu);
+    #####:   82:                     fprintf(stderr,("Basic test on is_game_over failed\n"));
+    #####:   83:                     rep=false ;
+        -:   84:                 }
+        -:   85:            }
+        -:   86:
+        -:   87:     }
+        -:   88:
+       14:   89:     delete_game(jeu);
+       14:   90:     return rep;
+        -:   91:
+        -:   92:}
+        -:   93:
+        -:   94:     
+        -:   95:
+        -:   96:
+        -:   97:
+        -:   98:
+       14:   99:int main(void){
+       14:  100:  bool result = true;
+       14:  101:  result =  test_is_game_over () && result;
+       14:  102:  if(result){
+       14:  103:      printf("Tests successfull\n");
+       14:  104:      return EXIT_SUCCESS;
+        -:  105:  }
+        -:  106:  else{
+    #####:  107:      printf("Tests failed\n");
+    #####:  108:      return EXIT_FAILURE;
+        -:  109:  }
+        -:  110:}
