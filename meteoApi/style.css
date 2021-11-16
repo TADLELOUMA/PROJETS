@@ -1,0 +1,130 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    background-image: url("https://source.unsplash.com/1600x900/?bordeaux,city,france");
+}
+
+.navbar {
+    display: flex;
+    background: rgb(0, 0, 0);
+    height: 80px;
+    width: 100%;
+    justify-content: center;
+    ;
+    align-items: center;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    opacity: 80%;
+}
+
+.navbar__container {
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    z-index: 1;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+#navbar__logo {
+    display: flex;
+    background-color: white;
+    margin: 0;
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    align-items: center;
+    text-decoration: none;
+    font-size: 3.5rem;
+}
+
+.searchTerm {
+    position: flex;
+    outline: none;
+    margin: auto;
+    padding: 1em 15em;
+    border-radius: 30px;
+    background: #000;
+    color: white;
+}
+
+.weather {
+    position: flex;
+    color: #fff;
+    opacity: 70%;
+    padding: 0.2rem;
+    text-align: center;
+}
+
+#meteo_icon {
+    border: 0px;
+    position: relative;
+    margin: auto auto;
+    max-width: 100%;
+    height: auto;
+}
+
+#map {
+    height: 500px;
+    width: 500px;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+input {
+    text-align: center;
+}
+
+.future_predictions {
+    padding: 50px 50px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 80%;
+}
+
+.hour_prediction {
+    display: block;
+    margin: auto;
+    padding: 10px 10px;
+    border-radius: 10px;
+    height: 130px;
+    width: auto;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    opacity: 80%;
+    font-size: 75%;
+}
+
+.btns {
+    display: flex;
+    padding: 10px 10px;
+}
+
+.bt {
+    display: none;
+    width: 30rem;
+    height: 2.5rem;
+    margin: auto;
+    align-items: flex-start;
+    text-align: center;
+    border-radius: 4px;
+    background-color: #fff;
+    justify-content: space-between;
+    font-size: 75%rem;
+    background-color: #000;
+    color: #fff;
+    opacity: 80%;
+}

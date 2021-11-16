@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+    <title>Meteo</title>
+    <script src="weather.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+</head>
+
+<body>
+    <!-- Navbar Section -->
+    <nav class="navbar">
+        <div class="navbar__container">
+            <div id="navbar__logo">Météo</div>
+
+
+            <input id="input" type="text" class="searchTerm" placeholder="Rechercher la météo d'une ville">
+
+
+
+        </div>
+
+    </nav>
+
+
+    <div id="map"></div>
+
+
+
+    <div class="weather">
+
+        <div>
+            <h2 id="city"></h2>
+            <img src="" alt="" id="meteo_icon" />
+        </div>
+
+        <div id="sunrise"></div>
+        <div id="sunset"></div>
+        <div id="date"></div>
+        <div id="hour"></div>
+        <div id="temp"></div>
+        <div id="humidity"></div>
+        <div id="wind"></div>
+        <div id="desc"></div>
+
+    </div>
+
+    <div class=future>
+
+        <div class=btns>
+            <button id="j+0" class="bt">Aujourd'hui</button>
+            <button id="j+1" class="bt"></button>
+            <button id="j+2" class="bt"></button>
+            <button id="j+3" class="bt"></button>
+            <button id="j+4" class="bt"></button>
+
+        </div>
+
+
+        <div class="future_predictions">
+
+            <div class=hour_prediction>
+
+                <div id="hour1"></div>
+                <div id="temp1"></div>
+
+                <img src="" alt="" id="meteo_icon1" />
+                <div id="desc1"></div>
+
+            </div>
+
+
+            <div class=hour_prediction>
+
+                <div id="hour3"></div>
+                <div id="temp3"></div>
+
+                <img src="" alt="" id="meteo_icon3" />
+                <div id="desc3"></div>
+
+            </div>
+
+
+
+            <div class=hour_prediction>
+
+                <div id="hour5"></div>
+                <div id="temp5"></div>
+
+                <img src="" alt="" id="meteo_icon5" />
+                <div id="temp5"></div>
+                <div id="desc5"></div>
+
+
+            </div>
+
+            <div class=hour_prediction>
+
+                <div id="hour7"></div>
+                <div id="temp7"></div>
+
+                <img src="" alt="" id="meteo_icon7" />
+                <div id="desc7"></div>
+
+            </div>
+
+            <div class=hour_prediction>
+
+                <div id="hour9"></div>
+                <div id="temp9"></div>
+
+                <img src="" alt="" id="meteo_icon9" />
+                <div id="desc9"></div>
+
+
+            </div>
+
+            <div class=hour_prediction>
+
+                <div id="hour11"></div>
+                <div id="temp11"></div>
+
+                <img src="" alt="" id="meteo_icon11" />
+                <div id="desc11"></div>
+
+            </div>
+
+            <div class=hour_prediction>
+
+                <div id="hour13"></div>
+                <div id="temp13"></div>
+
+                <img src="" alt="" id="meteo_icon13" />
+                <div id="desc13"></div>
+
+            </div>
+
+            <div class=hour_prediction>
+
+                <div id="hour15"></div>
+                <div id="temp15"></div>
+
+                <img src="" alt="" id="meteo_icon15" />
+                <div id="desc15"></div>
+
+            </div>
+
+            <div class=hour_prediction>
+
+                <div id="hour17"></div>
+                <div id="temp17"></div>
+
+                <img src="" alt="" id="meteo_icon17" />
+                <div id="desc17"></div>
+
+            </div>
+
+            <div class=hour_prediction>
+
+                <div id="hour19"></div>
+                <div id="temp19"></div>
+
+                <img src="" alt="" id="meteo_icon19" />
+                <div id="desc19"></div>
+
+            </div>
+
+            <div class=hour_prediction>
+
+                <div id="hour21"></div>
+                <div id="temp21"></div>
+
+                <img src="" alt="" id="meteo_icon21" />
+                <div id="desc21"></div>
+
+            </div>
+
+            <div class=hour_prediction>
+
+                <div id="hour23"></div>
+                <div id="temp23"></div>
+
+                <img src="" alt="" id="meteo_icon23" />
+                <div id="desc23"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+</body>
+
+
+</html>
