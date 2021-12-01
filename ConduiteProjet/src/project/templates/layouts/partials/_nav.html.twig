@@ -1,0 +1,20 @@
+<nav>
+	<ul>
+		<li>
+			<a class="btn btn-success" href="{{ path('app_home') }}">Home</a>
+		</li>
+		{% if app.user %}
+			<li>
+				<a class="btn btn-success" href="{{ path('app_logout') }}">log out</a>
+			</li>
+		{% else %}
+			<li>
+				<a class="btn btn-success" href="{{ path('app_login') }}">Log in</a>
+			</li>
+			<li>
+				<a class="btn btn-success" href="{{ path('app_registrer') }}">Register</a>
+			</li>
+		{% endif %}
+	</ul>
+
+</nav>
