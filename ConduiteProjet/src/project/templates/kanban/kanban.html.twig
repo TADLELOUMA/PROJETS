@@ -1,0 +1,60 @@
+{% extends "layouts/base.html.twig" %}
+
+{% block title %}Hello KanbanController!
+{% endblock %}
+
+{% block body %}
+	<style>
+		.example-wrapper {
+			margin: 1em auto;
+			max-width: 800px;
+			width: 95%;
+			font: 18px / 1.5 sans-serif;
+		}
+		.example-wrapper code {
+			background: #F5F5F5;
+			padding: 2px 6px;
+		}
+	</style>
+
+	{% for column in kanbanColumns %}
+		<div class="column" id="columnid">
+
+			<div class="column_title">
+				column.title
+			</div>
+
+			<div class="tasks">taskList
+
+				{% for task in column.taskList %}
+
+
+					<div class="task" id="taskId">
+
+						<div class="content">
+							task.getContent();
+						</div>
+
+
+						<div class="participants">
+							{% for participant in task.getParticipants() %}
+
+								<div class="participant">
+									participant
+								</div>
+							{% endfor %}
+
+
+						</div>
+					</div>
+
+
+				{% endfor %}
+
+
+			</div>
+
+		</div>
+
+	{% endfor %}
+{% endblock %}
