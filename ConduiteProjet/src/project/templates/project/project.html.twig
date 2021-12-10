@@ -8,130 +8,34 @@
 
 {% block body %}
 
-	<style>
+	{% if projects|length > 0 %}
 
-		.tab {
-			display: flex;
-		}
+		<div class="card-group">
+			{% for project in projects %}
+				<div class="card">
+					<div class="card-body" ">
+						<h5 class="card-title">{{project.title}}</h5>
+						<p class="card-text">
+							{{project.backlogProduct}}</p>
+						<p class="card-text">
+							<small class="text-muted">Created on
+								{{project.creationDate|date("m/d/Y")}}
+							</small>
+						</p>
+						{# {{dump(project)}} #}
+						<a class="btn btn-success" href="{{ path ('app_openedProject', {'projectId' : project.id})}}">open</a>
 
-
-		/* Correspond à une colonne */
-
-		.column {
-			display: inline-table;
-			border: solid;
-			/* padding: auto auto;w */
-			margin: 2rem;
-			background-color: aliceblue;
-			border-radius: 40px;
-			padding: 2rem;
-		}
-
-		.title {
-			position: relative;
-			text-align: center;
-			margin: auto;
-		}
-	</style>
-
-	<div class="example-wrapper">
-		<div class="tab">
-
-
-			<div class="column" style="width: 18rem;">
-				<div class="title">
-					TITRE</div>
-
-				<!-- Tache 1 -->
-				<div class="card bg-light mb-3" ondrop="drop(event)" ondragover="allowDrop(event)" style="max-width: 18rem;">
-					<div class="card-header">Header</div>
-					<div class="card-body">
-						<div class="mb-3">
-							<label for="exampleFormControlInput1" class="form-label">Title</label>
-							<input class="form-control form-control-lg" type="text" placeholder=".Light card title" aria-label=".form-control-lg example">
-
-						</div>
-						<div class="mb-3">
-							<label for="exampleFormControlTextarea1" class="form-label">Description</label>
-							<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-						</div>
 
 					</div>
+
 				</div>
+			{% endfor %}
 
-
-				<!-- Tache 2 -->
-				<div class="card bg-light mb-3" style="max-width: 18rem;">
-					<div class="card-header">Header</div>
-					<div class="card-body">
-						<h5 class="card-title">Light card title</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					</div>
-				</div>
-
-
-				<!-- Tache 3 -->
-				<!-- <div class="card border-success mb-3" style="max-width: 18rem;">
-																																																																																																																																																																																																																																								                <div class="card-header bg-transparent border-success">Header</div>
-																																																																																																																																																																																																																																								                <div class="card-body text-success">
-																																																																																																																																																																																																																																								                    <h5 class="card-title">Success card title</h5>
-																																																																																																																																																																																																																																								                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-																																																																																																																																																																																																																																								                </div>
-																																																																																																																																																																																																																																								                <div class="card-footer bg-transparent border-success">Footer</div>
-																																																																																																																																																																																																																																								            </div> -->
-			</div>
-
-
-			<div class="column" style="width: 18rem;">
-				<div class="title">
-					TITRE</div>
-
-				<!-- Tache 1 -->
-				<div class="card bg-light mb-3" style="max-width: 18rem;">
-					<div class="card-header">Header</div>
-					<div class="card-body">
-						<h5 class="card-title">Light card title</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					</div>
-				</div>
-
-
-				<!-- Tache 2 -->
-				<div class="card bg-light mb-3" style="max-width: 18rem;">
-					<div class="card-header">Header</div>
-					<div class="card-body">
-						<h5 class="card-title">Light card title</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					</div>
-				</div>
-
-
-				<!-- Tache 3 -->
-				<!-- <div class="card border-success mb-3" style="max-width: 18rem;">
-																																																																																																																																																																																																																																								                <div class="card-header bg-transparent border-success">Header</div>
-																																																																																																																																																																																																																																								                <div class="card-body text-success">
-																																																																																																																																																																																																																																								                    <h5 class="card-title">Success card title</h5>
-																																																																																																																																																																																																																																								                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-																																																																																																																																																																																																																																								                </div>
-																																																																																																																																																																																																																																								                <div class="card-footer bg-transparent border-success">Footer</div>
-																																																																																																																																																																																																																																								            </div> -->
-			</div>
-
-			<div class="column" style="width: 18rem;">
-				<div class="title">
-					TITRE</div>
-
-				<!-- Tache 1 -->
-				<div class="card bg-light mb-3" style="max-width: 18rem;">
-					<div class="card-header">Header</div>
-					<div class="card-body">
-						<h5 class="card-title">Light card title</h5>
-						<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-					</div>
-				</div>
-
-
-			</div>
 		</div>
-	</div>
+	{% else %}
+		<p>
+			Sorry no project yet please create a new project to start!
+		</p>
+		<a class="btn btn-success" href="{{ path('app_createProject') }} ">create</a>
+	{% endif %}
 {% endblock %}

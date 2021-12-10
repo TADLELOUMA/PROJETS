@@ -23,12 +23,12 @@ class KanbanColumn
     private $title;
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\Column(type="array")
      */
     private $taskList = [];
 
     /**
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\Column(type="array")
      */
     private $orderList = [];
 
@@ -36,6 +36,18 @@ class KanbanColumn
      * @ORM\Column(type="integer")
      */
     private $nbMaxTasks;
+
+    // public function __construct($title, $nb_max_tasks)
+    // {
+    //     $this->title = $title;
+    //     $this->nbMaxTasks = $nb_max_tasks;
+    // }
+
+    public function __construct()
+    {
+        $this->title = 'title';
+        $this->nbMaxTasks = 2;
+    }
 
     public function getId(): ?int
     {

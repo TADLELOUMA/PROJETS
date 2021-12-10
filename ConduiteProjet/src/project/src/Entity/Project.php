@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\ProjectRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProjectRepository;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * @ORM\Entity(repositoryClass=ProjectRepository::class)
@@ -84,7 +85,6 @@ class Project
     public function setSprintsList(array $sprintsList): self
     {
         $this->sprintsList = $sprintsList;
-
         return $this;
     }
 
@@ -121,6 +121,17 @@ class Project
     {
         $this->SprintsLog = $SprintsLog;
 
+        return $this;
+    }
+
+    // A COMPLETER
+    public function addSprint(Sprint $sprint): self
+    {
+        // if ($this->sprintsList == null) {
+        //     $this->sprintsList = array();
+        // }
+        // dd($sprint->getId());
+        array_push($this->sprintsList, $sprint->getId());
         return $this;
     }
 }

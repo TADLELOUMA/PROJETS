@@ -140,4 +140,12 @@ class Task
 
         return $this;
     }
+    public function addUsers(User $user): self
+    {
+        // if ($this->kanbanTab == null) {
+        //     $this->kanbanTab = array();
+        // }
+        array_push($this->assignation, $user->getUsername());
+        return $this;
+    }
 }

@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\SprintRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\SprintRepository;
+use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * @ORM\Entity(repositoryClass=SprintRepository::class)
@@ -41,6 +44,12 @@ class Sprint
      * @ORM\Column(type="array")
      */
     private $dailyAndRestrospectivePlanning = [];
+
+    public function __construct()
+    {
+        $this->CreationDate = new DateTime();
+        $this->endingDate = new DateTime();
+    }
 
     public function getId(): ?int
     {
@@ -104,6 +113,15 @@ class Sprint
     {
         $this->dailyAndRestrospectivePlanning = $dailyAndRestrospectivePlanning;
 
+        return $this;
+    }
+
+    public function addColumn(KanbanColumn $column): self
+    {
+        // if ($this->kanbanTab == null) {
+        //     $this->kanbanTab = array();
+        // }
+        array_push($this->kanbanTab, $column->getId());
         return $this;
     }
 }
