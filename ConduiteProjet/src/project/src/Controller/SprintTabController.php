@@ -53,7 +53,7 @@ class SprintTabController extends AbstractController
             $taskId[] = $sprint->getTasksList();
             $kanbanTab[] = $sprint->getKanbanTab();
         }
-        dd($kanbanTab);
+        // dd($kanbanTab);
         return $this->render('sprint_tab/kanbanTab.html.twig', ['taskTabs' => $taskId, 'kanbanTabs' => $kanbanTab]);
     }
 }
