@@ -14,4 +14,6 @@ return [
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
     Fidry\PsyshBundle\PsyshBundle::class => ['dev' => true, 'test' => true],
+    Symfony\UX\Chartjs\ChartjsBundle::class => ['all' => true],
+    Symfony\UX\Dropzone\DropzoneBundle::class => ['all' => true],
 ];

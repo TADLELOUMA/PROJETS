@@ -194,6 +194,7 @@ class ProjectController extends AbstractController
             foreach ($users as $user) {
                 $userTab[] = $user->getUsername();
             }
+
             $task->setAssignation($userTab);
             $em->persist($form->getData());
             $em->flush();
