@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\SprintRepository;
 use Symfony\Component\Validator\Constraints\Date;
@@ -30,25 +32,35 @@ class Sprint
      */
     private $endingDate;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $tasksList = [];
-
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $kanbanTab = [];
 
     /**
      * @ORM\Column(type="array")
      */
     private $dailyAndRestrospectivePlanning = [];
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Project::class, inversedBy="sprintList")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $project;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="sprint", orphanRemoval=true)
+     */
+    private $taskList;
+
+    /**
+     * @ORM\OneToMany(targetEntity=KanbanColumn::class, mappedBy="sprint", orphanRemoval=true)
+     */
+    private $kanbanTab;
+
+
     public function __construct()
     {
         $this->CreationDate = new DateTime();
         $this->endingDate = new DateTime();
+        $this->taskList = new ArrayCollection();
+        $this->kanbanTab = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -80,29 +92,7 @@ class Sprint
         return $this;
     }
 
-    public function getTasksList(): ?array
-    {
-        return $this->tasksList;
-    }
 
-    public function setTasksList(array $tasksList): self
-    {
-        $this->tasksList = $tasksList;
-
-        return $this;
-    }
-
-    public function getKanbanTab(): ?array
-    {
-        return $this->kanbanTab;
-    }
-
-    public function setKanbanTab(array $kanbanTab): self
-    {
-        $this->kanbanTab = $kanbanTab;
-
-        return $this;
-    }
 
     public function getDailyAndRestrospectivePlanning(): ?array
     {
@@ -116,12 +106,75 @@ class Sprint
         return $this;
     }
 
-    public function addColumn(KanbanColumn $column): self
+    public function getProject(): ?Project
     {
-        // if ($this->kanbanTab == null) {
-        //     $this->kanbanTab = array();
-        // }
-        array_push($this->kanbanTab, $column->getId());
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): self
+    {
+        $this->project = $project;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Task[]
+     */
+    public function getTaskList(): Collection
+    {
+        return $this->taskList;
+    }
+
+    public function addTaskList(Task $taskList): self
+    {
+        if (!$this->taskList->contains($taskList)) {
+            $this->taskList[] = $taskList;
+            $taskList->setSprint($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTaskList(Task $taskList): self
+    {
+        if ($this->taskList->removeElement($taskList)) {
+            // set the owning side to null (unless already changed)
+            if ($taskList->getSprint() === $this) {
+                $taskList->setSprint(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|KanbanColumn[]
+     */
+    public function getKanbanTab(): Collection
+    {
+        return $this->kanbanTab;
+    }
+
+    public function addKanbanTab(KanbanColumn $kanbanTab): self
+    {
+        if (!$this->kanbanTab->contains($kanbanTab)) {
+            $this->kanbanTab[] = $kanbanTab;
+            $kanbanTab->setSprint($this);
+        }
+
+        return $this;
+    }
+
+    public function removeKanbanTab(KanbanColumn $kanbanTab): self
+    {
+        if ($this->kanbanTab->removeElement($kanbanTab)) {
+            // set the owning side to null (unless already changed)
+            if ($kanbanTab->getSprint() === $this) {
+                $kanbanTab->setSprint(null);
+            }
+        }
+
         return $this;
     }
 }

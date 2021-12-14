@@ -1,5 +1,5 @@
 {% block head %}
-	<title>Bootstrap Example</title>
+	<title>Kanban Table</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -21,119 +21,60 @@
 {% block body %}
 
 	<style src="{{asset('build/kanbanTab.css')}}"></style>
+
+	{# Ne pas Afficher le modèle des colonnes si kanbanTabs est vide #}
+	{# {% if %} #}
+
+	<a class="btn btn-success" href="{{ path ('app_column_create', {'projectId': project.getId(), 'sprintId': sprint.getId() })}}">Create Column</a>
+
+
 	<div class="container-fluid pt-3">
 		<h3 class="font-weight-light text-white">Kanban Board</h3>
 		<div class="small  text-light">Drag and drop between swim lanes</div>
+		{# ########################################################################## #}
+
 		<div class="row flex-row flex-sm-nowrap py-3">
-			<div class="col-sm-6 col-md-4 col-xl-3">
-				<div class="card bg-light">
-					<div class="card-body">
-						<h6 class="card-title text-uppercase text-truncate py-2">À faire</h6>
-						<div class="items border border-light">
-							{% for task in taskTabs %}
-								<div class="card draggable shadow-sm" id="cd1" draggable="true" ondragstart="drag(event)">
-									<div class="card-body p-2">
-										<div class="card-title">
-											<img src="//via.placeholder.com/30" class="rounded-circle float-right">
-											<a href="" class="lead font-weight-light">TSK-154</a>
+			{% for  kanbanColumn in kanbanTabs %}
+				<div class="col-sm-6 col-md-4 col-xl-3">
+					<div class="card bg-light">
+						<div class="card-body">
+							<h6 class="card-title text-uppercase text-truncate py-2">{{kanbanColumn.getTitle}}</h6>
+							<div class="items border border-light">
+
+								{% for task in kanbanColumn.getTaskList() %}
+									<div class="card draggable shadow-sm" id="cd1" draggable="true" ondragstart="drag(event)">
+										<div class="card-body p-2">
+											<div class="card-title">
+												<img src="//via.placeholder.com/30" class="rounded-circle float-right">
+												<a href="" class="lead font-weight-light">{{task.getTitle()}}</a>
+											</div>
+											<div class="card-description">
+												{{task.getDescription()}}
+											</div>
+
+											<button class="btn btn-primary btn-sm">View</button>
 										</div>
-										<p>
-											This is a description of a item on the board.
-										</p>
-										<button class="btn btn-primary btn-sm">View</button>
 									</div>
-								</div>
-								<div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)">
-									&nbsp;
-								</div>
 
-							{% endfor %}
+									<div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)">
+										&nbsp;
+									</div>
 
 
+								{% endfor %}
+
+								<a class="btn btn-success" href="{{ path ('app_createTask', {'projectId': project.getId(), 'sprintId': sprint.getId(), 'columnId' : kanbanColumn.getId() })}}">Create Task</a>
+								{# ############################################################################################################# #}
+
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			{# <div class="col-sm-6 col-md-4 col-xl-3">
-																									<div class="card bg-light">
-																										<div class="card-body">
-																											<h6 class="card-title text-uppercase text-truncate py-2">En cours</h6>
-																											<div class="items border border-light">
-																												{% for task in taskTabs %}
-																													<div class="card draggable shadow-sm" id="cd1" draggable="true" ondragstart="drag(event)">
-																														<div class="card-body p-2">
-																															<div class="card-title">
-																																<img src="//via.placeholder.com/30" class="rounded-circle float-right">
-																																<a href="" class="lead font-weight-light">TSK-152</a>
-																															</div>
-																															<p>
-																																This is a task that is being worked on.
-																															</p>
-																															<button class="btn btn-primary btn-sm">View</button>
-																														</div>
-																													</div>
-																													<div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)">
-																														&nbsp;
-																													</div>
-																												{% endfor %}
-																											</div>
-																										</div>
-																									</div>
-																								</div>
-																								<div class="col-sm-6 col-md-4 col-xl-3">
-																									<div class="card bg-light">
-																										<div class="card-body">
-																											<h6 class="card-title text-uppercase text-truncate py-2">Revision</h6>
-																											<div class="items border border-light">
-																												{% for task in taskTabs %}
-																													<div class="card draggable shadow-sm" id="cd9" draggable="true" ondragstart="drag(event)">
-																														<div class="card-body p-2">
-																															<div class="card-title">
-																																<img src="//via.placeholder.com/30" class="rounded-circle float-right">
-																																<a href="" class="lead font-weight-light">TSK-158</a>
-																															</div>
-																															<p>
-																																This is a description of a item on the board.
-																															</p>
-																															<button class="btn btn-primary btn-sm">View</button>
-																														</div>
-																													</div>
-																													<div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)">
-																														&nbsp;
-																													</div>
-																												{% endfor %}
-																					
-																											</div>
-																										</div>
-																									</div>
-																								</div> #}
-			{# <div class="col-sm-6 col-md-4 col-xl-3">
-																			<div class="card">
-																				<div class="card-body">
-																					<h6 class="card-title text-uppercase text-truncate py-2">Terminé</h6>
-																					<div class="items border border-light">
-																						{% for taks in taskTabs %}
-																							<div class="card draggable shadow-sm" id="cd11" draggable="true" ondragstart="drag(event)">
-																								<div class="card-body p-2">
-																									<div class="card-title">
-																										<img src="//via.placeholder.com/30" class="rounded-circle float-right">
-																										<a href="" class="lead font-weight-light">TSK-144</a>
-																									</div>
-																									<p>
-																										This is a description of an item.
-																									</p>
-																									<button class="btn btn-primary btn-sm">View</button>
-																								</div>
-																							</div>
-																							<div class="dropzone rounded" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="clearDrop(event)">
-																								&nbsp;
-																							</div>
-																						{% endfor %}
-																					</div>
-																				</div>
-																			</div>
-																		</div> #}
+
+
+			{% endfor %}
 		</div>
+
 	</div>
 	{% block javascripts %}
 		<script src="{{ asset ('build/kanbanTab.js')}}"></script>

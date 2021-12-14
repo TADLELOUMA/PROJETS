@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TaskRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,10 +34,6 @@ class Task
      */
     private $description;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $assignation = [];
 
     /**
      * @ORM\Column(type="date")
@@ -51,6 +49,28 @@ class Task
      * @ORM\Column(type="string", length=255)
      */
     private $columnUpdate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=KanbanColumn::class, inversedBy="taskList")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $kanbanColumn;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Sprint::class, inversedBy="taskList")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $sprint;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="tasks")
+     */
+    private $assignation;
+
+    public function __construct()
+    {
+        $this->assignation = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -93,17 +113,7 @@ class Task
         return $this;
     }
 
-    public function getAssignation(): ?array
-    {
-        return $this->assignation;
-    }
 
-    public function setAssignation(?array $assignation): self
-    {
-        $this->assignation = $assignation;
-
-        return $this;
-    }
 
     public function getCreationDate(): ?\DateTimeInterface
     {
@@ -140,12 +150,52 @@ class Task
 
         return $this;
     }
-    public function addUsers(User $user): self
+
+    public function getKanbanColumn(): ?KanbanColumn
     {
-        // if ($this->kanbanTab == null) {
-        //     $this->kanbanTab = array();
-        // }
-        array_push($this->assignation, $user->getUsername());
+        return $this->kanbanColumn;
+    }
+
+    public function setKanbanColumn(?KanbanColumn $kanbanColumn): self
+    {
+        $this->kanbanColumn = $kanbanColumn;
+
+        return $this;
+    }
+
+    public function getSprint(): ?Sprint
+    {
+        return $this->sprint;
+    }
+
+    public function setSprint(?Sprint $sprint): self
+    {
+        $this->sprint = $sprint;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getAssignation(): Collection
+    {
+        return $this->assignation;
+    }
+
+    public function addAssignation(User $assignation): self
+    {
+        if (!$this->assignation->contains($assignation)) {
+            $this->assignation[] = $assignation;
+        }
+
+        return $this;
+    }
+
+    public function removeAssignation(User $assignation): self
+    {
+        $this->assignation->removeElement($assignation);
+
         return $this;
     }
 }

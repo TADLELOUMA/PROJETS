@@ -7,22 +7,18 @@
 
 
 {% block body %}
-	<h2>
-		{{project.title}}</h2>
-	<select name="Sprints" id="sprint-select">
-		<option value="">--Please choose an option--</option>
-		{% for sprint in project.getSprintsList %}
-			<option value={{sprint}}>{{sprint}}</option>
-		{% endfor %}
-
-	</select>
-
-
-	<a class="btn btn-success" href="{{ path ('app_view_tab' , {'sprintId' : project.getId}) }}">Valider</a>
+	<h1>
+		Liste des Sprints
+	</h1>
+	{{ form_start(listSprintForm) }}
+	{{ form_widget(listSprintForm) }}
+	<input class="btn btn-primary" type="submit" value="Select" formnovalidate>
+	{{ form_end(listSprintForm) }}
 
 	<a class="btn btn-success" href="{{ path ('app_sprint_create', {'projectId' : project.getId})}}">Create Sprint</a>
-
-
-	<br>
-	<a class="btn btn-success" href="{{ path('app_createTask') }}" role="dialog">CreateTask</a>
+	{# <a class="btn btn-success" href="{{ path ('app_view_tab' , {'sprintId' : project.getId}) }}">Valider</a>
+														
+														
+															<br>
+															<a class="btn btn-success" href="{{ path('app_createTask') }}" role="dialog">CreateTask</a> #}
 {% endblock %}

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -30,6 +32,23 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $password;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Project::class, mappedBy="userList")
+     */
+    private $projects;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Task::class, mappedBy="assignation")
+     */
+    private $tasks;
+
+    public function __construct()
+    {
+        $this->projects = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -111,5 +130,59 @@ class User implements UserInterface
     public function getUserIdentifier()
     {
         return $this->username;
+    }
+
+    /**
+     * @return Collection|Project[]
+     */
+    public function getProjects(): Collection
+    {
+        return $this->projects;
+    }
+
+    public function addProject(Project $project): self
+    {
+        if (!$this->projects->contains($project)) {
+            $this->projects[] = $project;
+            $project->addUserList($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProject(Project $project): self
+    {
+        if ($this->projects->removeElement($project)) {
+            $project->removeUserList($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Task[]
+     */
+    public function getTasks(): Collection
+    {
+        return $this->tasks;
+    }
+
+    public function addTask(Task $task): self
+    {
+        if (!$this->tasks->contains($task)) {
+            $this->tasks[] = $task;
+            $task->addAssignation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTask(Task $task): self
+    {
+        if ($this->tasks->removeElement($task)) {
+            $task->removeAssignation($this);
+        }
+
+        return $this;
     }
 }

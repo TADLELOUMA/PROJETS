@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProjectRepository;
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -28,15 +30,6 @@ class Project
      */
     private $creationDate;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $sprintsList = [];
-
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $usersList = [];
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -47,6 +40,25 @@ class Project
      * @ORM\Column(type="string", length=255)
      */
     private $SprintsLog;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Sprint::class, mappedBy="project", orphanRemoval=true)
+     */
+    private $sprintList;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="projects")
+     */
+    private $userList;
+
+    public function __construct()
+    {
+        $this->sprintList = new ArrayCollection();
+        $this->userList = new ArrayCollection();
+    }
+
+
+
 
     public function getId(): ?int
     {
@@ -77,28 +89,6 @@ class Project
         return $this;
     }
 
-    public function getSprintsList(): ?array
-    {
-        return $this->sprintsList;
-    }
-
-    public function setSprintsList(array $sprintsList): self
-    {
-        $this->sprintsList = $sprintsList;
-        return $this;
-    }
-
-    public function getUsersList(): ?array
-    {
-        return $this->usersList;
-    }
-
-    public function setUsersList(array $usersList): self
-    {
-        $this->usersList = $usersList;
-
-        return $this;
-    }
 
     public function getBacklogProduct(): ?string
     {
@@ -124,14 +114,57 @@ class Project
         return $this;
     }
 
-    // A COMPLETER
-    public function addSprint(Sprint $sprint): self
+    /**
+     * @return Collection|Sprint[]
+     */
+    public function getSprintList(): Collection
     {
-        // if ($this->sprintsList == null) {
-        //     $this->sprintsList = array();
-        // }
-        // dd($sprint->getId());
-        array_push($this->sprintsList, $sprint->getId());
+        return $this->sprintList;
+    }
+
+    public function addSprintList(Sprint $sprintList): self
+    {
+        if (!$this->sprintList->contains($sprintList)) {
+            $this->sprintList[] = $sprintList;
+            $sprintList->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSprintList(Sprint $sprintList): self
+    {
+        if ($this->sprintList->removeElement($sprintList)) {
+            // set the owning side to null (unless already changed)
+            if ($sprintList->getProject() === $this) {
+                $sprintList->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUserList(): Collection
+    {
+        return $this->userList;
+    }
+
+    public function addUserList(User $userList): self
+    {
+        if (!$this->userList->contains($userList)) {
+            $this->userList[] = $userList;
+        }
+
+        return $this;
+    }
+
+    public function removeUserList(User $userList): self
+    {
+        $this->userList->removeElement($userList);
+
         return $this;
     }
 }

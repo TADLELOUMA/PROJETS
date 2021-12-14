@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\KanbanColumnRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,10 +24,6 @@ class KanbanColumn
      */
     private $title;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private $taskList = [];
 
     /**
      * @ORM\Column(type="array")
@@ -37,16 +35,21 @@ class KanbanColumn
      */
     private $nbMaxTasks;
 
-    // public function __construct($title, $nb_max_tasks)
-    // {
-    //     $this->title = $title;
-    //     $this->nbMaxTasks = $nb_max_tasks;
-    // }
+    /**
+     * @ORM\OneToMany(targetEntity=Task::class, mappedBy="kanbanColumn", orphanRemoval=true)
+     */
+    private $taskList;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Sprint::class, inversedBy="kanbanTab")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $sprint;
 
     public function __construct()
     {
-        $this->title = 'title';
-        $this->nbMaxTasks = 2;
+
+        $this->taskList = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -66,17 +69,7 @@ class KanbanColumn
         return $this;
     }
 
-    public function getTaskList(): ?array
-    {
-        return $this->taskList;
-    }
 
-    public function setTaskList(?array $taskList): self
-    {
-        $this->taskList = $taskList;
-
-        return $this;
-    }
 
     public function getOrderList(): ?array
     {
@@ -98,6 +91,48 @@ class KanbanColumn
     public function setNbMaxTasks(int $nbMaxTasks): self
     {
         $this->nbMaxTasks = $nbMaxTasks;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Task[]
+     */
+    public function getTaskList(): Collection
+    {
+        return $this->taskList;
+    }
+
+    public function addTaskList(Task $taskList): self
+    {
+        if (!$this->taskList->contains($taskList)) {
+            $this->taskList[] = $taskList;
+            $taskList->setKanbanColumn($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTaskList(Task $taskList): self
+    {
+        if ($this->taskList->removeElement($taskList)) {
+            // set the owning side to null (unless already changed)
+            if ($taskList->getKanbanColumn() === $this) {
+                $taskList->setKanbanColumn(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getSprint(): ?Sprint
+    {
+        return $this->sprint;
+    }
+
+    public function setSprint(?Sprint $sprint): self
+    {
+        $this->sprint = $sprint;
 
         return $this;
     }

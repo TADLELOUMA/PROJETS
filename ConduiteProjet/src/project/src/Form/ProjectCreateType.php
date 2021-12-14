@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Project;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,9 +17,21 @@ class ProjectCreateType extends AbstractType
         $builder
             ->add('title')
             ->add('creationDate')
-            // ->add('usersList')
             ->add('backlogProduct')
-            ->add('SprintsLog');
+            ->add('SprintsLog')
+            ->add('userList', EntityType::class, [
+                // looks for choices from this entity
+                'class' => User::class,
+
+                // uses the User.username property as the visible option string
+                'choice_label' => 'username',
+                'label' => 'Assignation',
+                'placeholder' => 'Username',
+
+                // used to render a select box, check boxes or radios
+                'multiple' => true
+                // 'expanded' => true
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
